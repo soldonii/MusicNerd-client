@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import Form from '../layout/Form';
 
-const Signup = ({ error, onSuccess, onFail }) => {
+const Signup = ({ error, onSignupSuccess, onSignupFail }) => {
   const history = useHistory();
   const [ user, setUser ] = useState({
     username: '',
@@ -23,11 +23,11 @@ const Signup = ({ error, onSuccess, onFail }) => {
     try {
       const response = await axios.post('http://localhost:8080/signup', user);
       if (response.status === 200) {
-        onSuccess(response.data.token);
+        onSignupSuccess(response.data.token);
         history.push('/login');
       }
-    } catch(error) {
-      onFail(error.response.data.errorMessage);
+    } catch(err) {
+      onSignupFail(err.response.data.message);
     }
   };
 
@@ -119,8 +119,8 @@ const SignupWrapper = styled.section`
 
 Signup.propTypes = {
   error: PropTypes.string.isRequired,
-  onSuccess: PropTypes.func.isRequired,
-  onFail: PropTypes.func.isRequired
+  onSignupSuccess: PropTypes.func.isRequired,
+  onSignupFail: PropTypes.func.isRequired
 };
 
 export default Signup;

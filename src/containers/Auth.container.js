@@ -3,17 +3,25 @@ import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { signupSuccess, signupFail } from '../actions/auth.actions';
+import { signupSuccess, signupFail, loginSuccess, loginFail } from '../actions/auth.actions';
 import Signup from '../components/auth/Signup';
+import Login from '../components/auth/Login';
 
-const AuthContainer = ({ authError, onSuccess, onFail }) => {
+const AuthContainer = ({ authError, onSignupSuccess, onSignupFail, onLoginSuccess, onLoginFail }) => {
   return (
     <Switch>
       <Route exact path='/signup'>
         <Signup
           error={authError}
-          onSuccess={onSuccess}
-          onFail={onFail}
+          onSignupSuccess={onSignupSuccess}
+          onSignupFail={onSignupFail}
+        />
+      </Route>
+      <Route exact path='/login'>
+        <Login
+          error={authError}
+          onLoginSuccess={onLoginSuccess}
+          onLoginFail={onLoginFail}
         />
       </Route>
 
@@ -23,8 +31,10 @@ const AuthContainer = ({ authError, onSuccess, onFail }) => {
 
 AuthContainer.propTypes = {
   authError: PropTypes.string.isRequired,
-  onSuccess: PropTypes.func.isRequired,
-  onFail: PropTypes.func.isRequired
+  onSignupSuccess: PropTypes.func.isRequired,
+  onSignupFail: PropTypes.func.isRequired,
+  onLoginSuccess: PropTypes.func.isRequired,
+  onLoginFail: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -32,8 +42,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSuccess: signupSuccess(dispatch),
-  onFail: signupFail(dispatch)
+  onSignupSuccess: signupSuccess(dispatch),
+  onSignupFail: signupFail(dispatch),
+  onLoginSuccess: loginSuccess(dispatch),
+  onLoginFail: loginFail(dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthContainer);

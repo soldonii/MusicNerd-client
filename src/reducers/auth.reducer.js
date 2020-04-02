@@ -10,11 +10,11 @@ import {
 } from '../constants/index';
 
 const initialState = {
-  token: '',
-  isAuthenticated: false,
   loading: true,
-  user: '',
-  error: ''
+  token: null,
+  user: null,
+  isAuthenticated: false,
+  error: null
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -29,7 +29,24 @@ export const authReducer = (state = initialState, action) => {
       localStorage.setItem('token', action.token);
       return {
         ...state,
-        token: action.token
+        token: action.token,
+        error: null
+      };
+
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        error: action.message
+      };
+
+    case LOGIN_SUCCESS:
+      localStorage.setItem('token', action.token);
+      return {
+        ...state,
+        token: action.token,
+        user: action.userId,
+        error: null,
+        isAuthenticated: true
       };
 
     default:

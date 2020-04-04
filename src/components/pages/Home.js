@@ -8,11 +8,11 @@ import logo from '../../assets/logo.png';
 const Home = () => (
   <Fragment>
     <Navbar logo={logo}>
-      <Link to='/signup'>Sign Up</Link>
-      <Link to='/login'>Login</Link>
+      <Link to='/auth/signup'>Sign Up</Link>
+      <Link to='/auth/login'>Login</Link>
     </Navbar>
     <Main>
-      <h1 style={titleStyle}>Music Nerd</h1>
+      <h1 style={titleStyle}>MUSIC NERD</h1>
       <p style={descriptionStyle}>Find out how nerdy you are in music.</p>
     </Main>
   </Fragment>

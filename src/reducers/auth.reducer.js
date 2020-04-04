@@ -3,16 +3,17 @@ import {
   SIGNUP_FAILURE,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  LOGOUT,
-  AUTH_ERROR,
+  // LOGOUT,
+  SET_LOADING,
   CLEAR_ERROR,
-  USER_LOADED
 } from '../constants/index';
+import setTokenToHeader from '../lib/setTokenToHeader';
 
 const initialState = {
   token: null,
-  user: null,
+  userId: null,
   isAuthenticated: false,
+  loading: false,
   error: null
 };
 
@@ -21,6 +22,7 @@ export const authReducer = (state = initialState, action) => {
     case SIGNUP_FAILURE:
       return {
         ...state,
+        loading: false,
         error: action.errorMessage
       };
 
@@ -28,23 +30,33 @@ export const authReducer = (state = initialState, action) => {
       localStorage.setItem('token', action.token);
       return {
         ...state,
+        loading: false,
         error: null
       };
 
     case LOGIN_FAILURE:
       return {
         ...state,
+        loading: false,
         error: action.errorMessage
       };
 
     case LOGIN_SUCCESS:
       localStorage.setItem('token', action.token);
+      setTokenToHeader(action.token);
+
       return {
         ...state,
         token: action.token,
-        user: action.userId,
-        error: null,
-        isAuthenticated: true
+        userId: action.userId,
+        isAuthenticated: true,
+        error: null
+      };
+
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true
       };
 
     case CLEAR_ERROR:

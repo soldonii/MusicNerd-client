@@ -15,6 +15,7 @@ const Login = ({ error, onLoginSuccess, onLoginFail, clearError }) => {
     password: '',
   });
 
+  const checkInputCondition = () => (email.includes('@')) && (password.length > 5);
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ const Login = ({ error, onLoginSuccess, onLoginFail, clearError }) => {
       const response = await axios.post('http://localhost:8080/login', user);
       if (response.status === 200) {
         onLoginSuccess(response.data.token, response.data.userId);
-        history.push('/');
+        history.push(`/users/${response.data.userId}/favorites`);
       }
     } catch(err) {
       onLoginFail(err.response.data.errorMessage);
@@ -54,7 +55,7 @@ const Login = ({ error, onLoginSuccess, onLoginFail, clearError }) => {
           required
         />
         <ErrorMessage>{error ? error : null}</ErrorMessage>
-        <SubmitButton type='submit' value='Login' />
+        <SubmitButton type='submit' value='Login' inactive={checkInputCondition()} />
       </Form>
     </LoginWrapper>
   );
@@ -85,10 +86,11 @@ const SubmitButton = styled.input`
   font-size: 2rem;
   padding: 1rem 1.5rem;
   width: 50%;
-  cursor: pointer;
+  cursor: ${props => !props.inactive ? 'normal' : 'pointer'};
+  opacity: ${props => !props.inactive ? 0.5 : 1};
 
   &:hover {
-    box-shadow: 0.3rem 0.3rem 0.3rem #52b7ff;
+    box-shadow: ${props => !props.inactive ? 'none' : '0.3rem 0.3rem 0.3rem #52b7ff'};
     transition: all 0.3s;
   }
 `;

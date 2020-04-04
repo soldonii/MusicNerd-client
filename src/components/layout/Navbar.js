@@ -1,12 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import * as colors from '../../lib/colors';
 
 const Navbar = ({ logo, children}) => {
+  // console.log(localStorage.getItem('token'))
+  // localStorage에 token 없으면 완전 '/'로 이동, 있으면 '/game'으로 이동
+
   return (
     <NavWrapper>
-      <img src={logo} alt='logo'/>
+      <Link to='/'><img src={logo} alt='logo'/></Link>
       <LinkWrapper>
         {children}
       </LinkWrapper>

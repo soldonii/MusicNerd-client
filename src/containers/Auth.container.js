@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,34 +19,34 @@ const AuthContainer = ({
   clearError
 }) => {
   return (
-    <>
-    <Navbar logo={logo}>
-      <Link to='/signup'>Sign Up</Link>
-      <Link to='/login'>Login</Link>
-    </Navbar>
-    <Switch>
-      <Route exact path='/signup'>
-        <Main>
-          <Signup
-            error={authError}
-            onSignupSuccess={onSignupSuccess}
-            onSignupFail={onSignupFail}
-            clearError={clearError}
-          />
-        </Main>
-      </Route>
-      <Route exact path='/login'>
-        <Main>
-          <Login
-            error={authError}
-            onLoginSuccess={onLoginSuccess}
-            onLoginFail={onLoginFail}
-            clearError={clearError}
-          />
-        </Main>
-      </Route>
-    </Switch>
-    </>
+    <Fragment>
+      <Navbar logo={logo}>
+        <Link to='/auth/signup'>Sign Up</Link>
+        <Link to='/auth/login'>Login</Link>
+      </Navbar>
+      <Switch>
+        <Route exact path='/auth/signup'>
+          <Main>
+            <Signup
+              error={authError}
+              onSignupSuccess={onSignupSuccess}
+              onSignupFail={onSignupFail}
+              clearError={clearError}
+            />
+          </Main>
+        </Route>
+        <Route exact path='/auth/login'>
+          <Main>
+            <Login
+              error={authError}
+              onLoginSuccess={onLoginSuccess}
+              onLoginFail={onLoginFail}
+              clearError={clearError}
+            />
+          </Main>
+        </Route>
+      </Switch>
+    </Fragment>
   );
 };
 
@@ -60,7 +60,8 @@ AuthContainer.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  authError: state.auth.error
+  authError: state.auth.error,
+  loading: state.auth.loading
 });
 
 const mapDispatchToProps = dispatch => ({

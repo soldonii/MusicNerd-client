@@ -4,7 +4,8 @@ import { createGlobalStyle } from 'styled-components';
 
 import Home from '../components/pages/Home';
 import AuthContainer from '../containers/Auth.container';
-import GameContainer from '../containers/Game.container';
+import UserContainer from '../containers/User.container';
+// import GameContainer from '../containers/Game.container';
 import * as colors from '../lib/colors';
 
 const App = () => {
@@ -14,8 +15,9 @@ const App = () => {
       <Router>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path='/' component={AuthContainer} />
-          <Route path='/games' component={GameContainer} />
+          <Route path='/auth' component={AuthContainer} />
+          <Route path='/users' component={UserContainer} />
+          {/* <Route path='/games' component={GameContainer} /> */}
         </Switch>
       </Router>
     </Fragment>

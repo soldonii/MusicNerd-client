@@ -3,10 +3,9 @@ import {
   SIGNUP_FAILURE,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  LOGOUT,
-  AUTH_ERROR,
-  CLEAR_ERROR,
-  USER_LOADED
+  // LOGOUT,
+  SET_LOADING,
+  CLEAR_ERROR
 } from '../constants/index';
 
 export const signupSuccess = dispatch => () => {
@@ -23,6 +22,10 @@ export const loginSuccess = dispatch => (token, userId) => {
 
 export const loginFail = dispatch => errorMessage => {
   dispatch({ type: LOGIN_FAILURE, errorMessage });
+};
+
+export const setLoading = dispatch => () => {
+  dispatch({ type: SET_LOADING });
 };
 
 export const clearError = dispatch => () => {

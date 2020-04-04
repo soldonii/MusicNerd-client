@@ -12,18 +12,26 @@ const Signup = ({ error, onSignupSuccess, onSignupFail, clearError }) => {
   const history = useHistory();
   const [ user, setUser ] = useState({
     username: '',
-    gender: '',
     email: '',
     password: '',
     passwordConfirmation: ''
   });
 
+  const { username, email, password, passwordConfirmation } = user;
+
+  const checkInputCondition = () =>
+    (username.length > 1) &&
+    (email.includes('@')) &&
+    (password.length > 5) &&
+    (passwordConfirmation.length > 5);
   const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post('http://localhost:8080/signup', user);
+
+
       if (response.status === 200) {
         onSignupSuccess(response.data.token);
         history.push('/login');
@@ -33,8 +41,6 @@ const Signup = ({ error, onSignupSuccess, onSignupFail, clearError }) => {
       window.setTimeout(() => clearError(), 2000);
     }
   };
-
-  const { username, email, password, passwordConfirmation } = user;
 
   return (
     <SignupWrapper>
@@ -50,7 +56,7 @@ const Signup = ({ error, onSignupSuccess, onSignupFail, clearError }) => {
         <FormInput
           type='email'
           name='email'
-          placeholder='Email address'
+          placeholder='example@example.com'
           value={email}
           onChange={onChange}
           required
@@ -58,7 +64,7 @@ const Signup = ({ error, onSignupSuccess, onSignupFail, clearError }) => {
         <FormInput
           type='password'
           name='password'
-          placeholder='Password'
+          placeholder='Password (over 6 characters)'
           minLength='6'
           value={password}
           onChange={onChange}
@@ -74,7 +80,7 @@ const Signup = ({ error, onSignupSuccess, onSignupFail, clearError }) => {
           required
         />
         <ErrorMessage>{error ? error : null}</ErrorMessage>
-        <SubmitButton type='submit' value='Register' />
+        <SubmitButton type='submit' value='Register' inactive={checkInputCondition()} />
       </Form>
     </SignupWrapper>
   );
@@ -89,7 +95,7 @@ const SignupWrapper = styled.section`
 `;
 
 const ErrorMessage = styled.p`
-  margin: 1rem 0;
+  margin: 2rem 0;
   font-size: 1.6rem;
   height: 3rem;
   width: 70%;
@@ -105,10 +111,11 @@ const SubmitButton = styled.input`
   font-size: 2rem;
   padding: 1rem 1.5rem;
   width: 50%;
-  cursor: pointer;
+  cursor: ${props => !props.inactive ? 'normal' : 'pointer'};
+  opacity: ${props => !props.inactive ? 0.5 : 1};
 
   &:hover {
-    box-shadow: 0.3rem 0.3rem 0.3rem #52b7ff;
+    box-shadow: ${props => !props.inactive ? 'none' : '0.3rem 0.3rem 0.3rem #52b7ff'};
     transition: all 0.3s;
   }
 `;

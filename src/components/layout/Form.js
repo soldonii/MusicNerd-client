@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import * as colors from '../../lib/colors';
 
 const Form = ({ title, onSubmit, children }) => {
   return (
@@ -13,17 +14,16 @@ const Form = ({ title, onSubmit, children }) => {
 const FormWrapper = styled.form`
   width: 40vw;
   height: 70vh;
-  background-color: white;
-  border: 0.2rem solid black;
-  border-radius: 0.5rem;
-  box-shadow: 0.2rem 0.2rem 0.5rem grey;
+  color: ${colors.FORM_TEXT_COLOR};
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: black;
+
   & h1 {
-    font-size: 3rem;
+    font-size: 4rem;
+    margin-bottom: 4rem;
   }
 `;
 

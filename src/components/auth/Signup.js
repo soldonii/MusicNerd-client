@@ -1,12 +1,14 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import Form from '../layout/Form';
+import FormInput from '../layout/FormInput';
+import * as colors from '../../lib/colors';
 
-const Signup = ({ error, onSignupSuccess, onSignupFail }) => {
+const Signup = ({ error, onSignupSuccess, onSignupFail, clearError }) => {
   const history = useHistory();
   const [ user, setUser ] = useState({
     username: '',
@@ -26,8 +28,9 @@ const Signup = ({ error, onSignupSuccess, onSignupFail }) => {
         onSignupSuccess(response.data.token);
         history.push('/login');
       }
-    } catch(err) {
-      onSignupFail(err.response.data.message);
+    } catch (err) {
+      onSignupFail(err.response.data.errorMessage);
+      window.setTimeout(() => clearError(), 2000);
     }
   };
 
@@ -35,92 +38,86 @@ const Signup = ({ error, onSignupSuccess, onSignupFail }) => {
 
   return (
     <SignupWrapper>
-      <Form title='회원가입' onSubmit={onSubmit}>
-        <div>
-          <label htmlFor='username'>Username</label>
-          <input
-            type='text'
-            name='username'
-            value={username}
-            onChange={onChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor='gender'>Gender</label>
-          <label htmlFor='male'>
-            <input
-              type='radio'
-              name='gender'
-              value='male'
-              onChange={onChange}
-              required
-            />Male
-          </label>
-          <label htmlFor='female'>
-            <input
-              type='radio'
-              name='gender'
-              value='female'
-              onChange={onChange}
-              required
-            />Female
-          </label>
-        </div>
-        <div>
-          <label htmlFor='email'>Email Address</label>
-          <input
-            type='email'
-            name='email'
-            value={email}
-            onChange={onChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor='password'>Password</label>
-          <input
-            type='password'
-            name='password'
-            value={password}
-            onChange={onChange}
-            required
-            minLength='6'
-          />
-        </div>
-        <div>
-          <label htmlFor='passwordConfirmation'>Confirm Password</label>
-          <input
-            type='password'
-            name='passwordConfirmation'
-            value={passwordConfirmation}
-            onChange={onChange}
-            required
-            minLength='6'
-          />
-        </div>
-        {error && <h2>{error}</h2>}
-        <input
-          type='submit'
-          value='회원가입'
+      <Form title='Sign Up' onSubmit={onSubmit}>
+        <FormInput
+          type='text'
+          name='username'
+          placeholder='Username'
+          value={username}
+          onChange={onChange}
+          required
         />
+        <FormInput
+          type='email'
+          name='email'
+          placeholder='Email address'
+          value={email}
+          onChange={onChange}
+          required
+        />
+        <FormInput
+          type='password'
+          name='password'
+          placeholder='Password'
+          minLength='6'
+          value={password}
+          onChange={onChange}
+          required
+        />
+        <FormInput
+          type='password'
+          name='passwordConfirmation'
+          placeholder='Confirm password'
+          minLength='6'
+          value={passwordConfirmation}
+          onChange={onChange}
+          required
+        />
+        <ErrorMessage>{error ? error : null}</ErrorMessage>
+        <SubmitButton type='submit' value='Register' />
       </Form>
     </SignupWrapper>
   );
 };
 
 const SignupWrapper = styled.section`
-  width: 30vw;
+  width: 35vw;
   height: 100vh;
-  margin-left: 60vw;
+  margin: 0 auto;
   display: flex;
   align-items: center;
 `;
 
+const ErrorMessage = styled.p`
+  margin: 1rem 0;
+  font-size: 1.6rem;
+  height: 3rem;
+  width: 70%;
+  text-align: center;
+  color: red;
+`;
+
+const SubmitButton = styled.input`
+  border: none;
+  border-radius: 2rem;
+  background-color: ${colors.HIGHLIGHT};
+  color: ${colors.MAIN_TEXT_COLOR};
+  font-size: 2rem;
+  padding: 1rem 1.5rem;
+  width: 50%;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0.3rem 0.3rem 0.3rem #52b7ff;
+    transition: all 0.3s;
+  }
+`;
+
 Signup.propTypes = {
-  error: PropTypes.string.isRequired,
+  error: PropTypes.string,
   onSignupSuccess: PropTypes.func.isRequired,
-  onSignupFail: PropTypes.func.isRequired
+  onSignupFail: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired
 };
 
 export default Signup;

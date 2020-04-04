@@ -1,33 +1,62 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
+import Home from '../components/pages/Home';
 import AuthContainer from '../containers/Auth.container';
+import GameContainer from '../containers/Game.container';
+import * as colors from '../lib/colors';
 
 const App = () => {
   return (
     <Fragment>
       <GlobalStyle />
       <Router>
-        <AuthContainer />
+        <Switch>
+          <Route exact path='/' component={Home} />
+          <Route path='/' component={AuthContainer} />
+          <Route path='/games' component={GameContainer} />
+        </Switch>
       </Router>
     </Fragment>
   );
 }
 
 const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: 'Noto Sans KR';
+    src: url('../assets/fonts/Ubuntu-Medium.ttf');
+  }
+
   html {
-    background-color: #111626;
     font-size: 10px;
   }
+
   body {
     min-height: 100vh;
     margin: 0;
-    color: #eee;
-    font-family: 'Noto Sans KR', sans-serif;
+    color: black;
+    background-color: black;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6, p {
     margin: 0;
+  }
+
+  a, a:link, a:visited {
+    text-decoration: none;
+    color: black;
+    margin: 0 1rem;
+  }
+
+  a:hover {
+    color: ${colors.HIGHLIGHT};
+    transition: all 0.3s;
   }
 `;
 

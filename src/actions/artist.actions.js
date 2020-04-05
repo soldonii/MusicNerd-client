@@ -4,7 +4,10 @@ import {
   FETCH_ARTISTS_SUCCESS,
   FETCH_ARTISTS_FAILURE,
   SELECT_FAVORITE_ARTIST,
-  DESELECT_FAVORITE_ARTIST
+  DESELECT_FAVORITE_ARTIST,
+  REQUEST_FAVORITE_ARTISTS_START,
+  REQUEST_FAVORITE_ARTISTS_SUCCESS,
+  REQUEST_FAVORITE_ARTISTS_FAILURE
 } from '../constants/index';
 
 export const fetchArtists = dispatch => async userId => {
@@ -26,3 +29,17 @@ export const deselectArtist = dispatch => artistId => {
   dispatch({ type: DESELECT_FAVORITE_ARTIST, artistId });
 };
 
+export const saveFavoriteArtists = dispatch => async (userId, selectedArtists) => {
+  dispatch({ type: REQUEST_FAVORITE_ARTISTS_START });
+
+  try {
+    await axios.post(
+      `http://localhost:8080/users/${userId}/favorites`,
+      selectedArtists
+    );
+
+    dispatch({ type: REQUEST_FAVORITE_ARTISTS_SUCCESS });
+  } catch (err) {
+    dispatch({ type: REQUEST_FAVORITE_ARTISTS_FAILURE, error: err.response.data.errorMessage });
+  }
+};

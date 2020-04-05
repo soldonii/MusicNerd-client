@@ -3,7 +3,10 @@ import {
   FETCH_ARTISTS_SUCCESS,
   FETCH_ARTISTS_FAILURE,
   SELECT_FAVORITE_ARTIST,
-  DESELECT_FAVORITE_ARTIST
+  DESELECT_FAVORITE_ARTIST,
+  REQUEST_FAVORITE_ARTISTS_START,
+  REQUEST_FAVORITE_ARTISTS_SUCCESS,
+  REQUEST_FAVORITE_ARTISTS_FAILURE
 } from '../constants/index';
 
 const initialState = {
@@ -11,7 +14,8 @@ const initialState = {
   loading: false,
   error: null,
   artistList: [],
-  selectedArtists: {}
+  selectedArtists: {},
+  result: ''
 };
 
 export const artistReducer = (state = initialState, action) => {
@@ -54,6 +58,30 @@ export const artistReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedArtists
+      };
+
+    case REQUEST_FAVORITE_ARTISTS_START:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case REQUEST_FAVORITE_ARTISTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        artistList: [],
+        selectedArtists: {},
+        result: 'success'
+      };
+
+    case REQUEST_FAVORITE_ARTISTS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+        result: 'failure'
       };
 
     default:

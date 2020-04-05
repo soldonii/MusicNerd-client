@@ -3,7 +3,7 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { signupSuccess, signupFail, loginSuccess, loginFail, clearError } from '../actions/auth.actions';
+import { requestSignup, requestLogin, clearError } from '../actions/auth.actions';
 import Signup from '../components/auth/Signup';
 import Login from '../components/auth/Login';
 import Main from '../components/layout/Main';
@@ -11,11 +11,13 @@ import Navbar from '../components/layout/Navbar';
 import logo from '../assets/logo.png';
 
 const AuthContainer = ({
-  authError,
-  onSignupSuccess,
-  onSignupFail,
-  onLoginSuccess,
-  onLoginFail,
+  userId,
+  hasSignedUp,
+  isAuthenticated,
+  error,
+  loading,
+  requestSignup,
+  requestLogin,
   clearError
 }) => {
   return (
@@ -28,9 +30,10 @@ const AuthContainer = ({
         <Route exact path='/auth/signup'>
           <Main>
             <Signup
-              error={authError}
-              onSignupSuccess={onSignupSuccess}
-              onSignupFail={onSignupFail}
+              hasSignedUp={hasSignedUp}
+              error={error}
+              loading={loading}
+              requestSignup={requestSignup}
               clearError={clearError}
             />
           </Main>
@@ -38,9 +41,11 @@ const AuthContainer = ({
         <Route exact path='/auth/login'>
           <Main>
             <Login
-              error={authError}
-              onLoginSuccess={onLoginSuccess}
-              onLoginFail={onLoginFail}
+              userId={userId}
+              isAuthenticated={isAuthenticated}
+              error={error}
+              loading={loading}
+              requestLogin={requestLogin}
               clearError={clearError}
             />
           </Main>
@@ -50,26 +55,29 @@ const AuthContainer = ({
   );
 };
 
-AuthContainer.propTypes = {
-  authError: PropTypes.string,
-  onSignupSuccess: PropTypes.func.isRequired,
-  onSignupFail: PropTypes.func.isRequired,
-  onLoginSuccess: PropTypes.func.isRequired,
-  onLoginFail: PropTypes.func.isRequired,
-  clearError: PropTypes.func.isRequired
-};
-
 const mapStateToProps = state => ({
-  authError: state.auth.error,
+  userId: state.auth.userId,
+  hasSignedUp: state.auth.hasSignedUp,
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.auth.error,
   loading: state.auth.loading
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSignupSuccess: signupSuccess(dispatch),
-  onSignupFail: signupFail(dispatch),
-  onLoginSuccess: loginSuccess(dispatch),
-  onLoginFail: loginFail(dispatch),
+  requestSignup: requestSignup(dispatch),
+  requestLogin: requestLogin(dispatch),
   clearError: clearError(dispatch)
 });
+
+AuthContainer.propTypes = {
+  userId: PropTypes.string.isRequired,
+  hasSignedUp: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  requestSignup: PropTypes.func.isRequired,
+  requestLogin: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthContainer);

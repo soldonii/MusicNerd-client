@@ -2,8 +2,8 @@ import {
   FETCH_ARTISTS_START,
   FETCH_ARTISTS_SUCCESS,
   FETCH_ARTISTS_FAILURE,
-  // SELECT_FAVORITE_ARTIST,
-  // DESELECT_FAVORITE_ARTIST
+  SELECT_FAVORITE_ARTIST,
+  DESELECT_FAVORITE_ARTIST
 } from '../constants/index';
 
 const initialState = {
@@ -11,7 +11,7 @@ const initialState = {
   loading: false,
   error: null,
   artistList: [],
-  selectedArists: {}
+  selectedArtists: {}
 };
 
 export const artistReducer = (state = initialState, action) => {
@@ -36,6 +36,24 @@ export const artistReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: action.error
+      };
+
+    case SELECT_FAVORITE_ARTIST:
+      return {
+        ...state,
+        selectedArtists: {
+          ...state.selectedArtists,
+          [action.artistId]: true
+        }
+      };
+
+    case DESELECT_FAVORITE_ARTIST:
+      const selectedArtists = {...state.selectedArtists};
+      delete selectedArtists[action.artistId];
+
+      return {
+        ...state,
+        selectedArtists
       };
 
     default:

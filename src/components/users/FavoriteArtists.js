@@ -5,13 +5,18 @@ import PropTypes from 'prop-types';
 import Main from '../layout/Main';
 import ArtistCard from '../layout/ArtistCard';
 
-const FavoriteArtists = ({ userId, artistList, requestData }) => {
+const FavoriteArtists = ({
+  userId,
+  artistList,
+  selectedArtists,
+  requestData,
+  onSelect,
+  onDeselect
+}) => {
   useEffect(() => {
     requestData(userId);
     // eslint-disable-next-line
   }, [userId]);
-
-  console.log('artist List', artistList);
 
   return (
     <Main>
@@ -25,8 +30,12 @@ const FavoriteArtists = ({ userId, artistList, requestData }) => {
               return (
                 <ArtistCard
                   key={artistId}
+                  dataId={artistId}
+                  selectedArtists={selectedArtists}
                   thumbnailUrl={url}
                   name={names[0]}
+                  onSelect={onSelect}
+                  onDeselect={onDeselect}
                 />
               );
             })

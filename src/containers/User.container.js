@@ -3,12 +3,19 @@ import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { fetchArtists } from '../actions/artist.actions';
+import { fetchArtists, selectArtist, deselectArtist } from '../actions/artist.actions';
 import Navbar from '../components/layout/Navbar';
 import logo from '../assets/logo.png';
 import FavoriteArtists from '../components/users/FavoriteArtists';
 
-const UserContainer = ({ userId, artistList, requestData }) => {
+const UserContainer = ({
+  userId,
+  artistList,
+  selectedArtists,
+  requestData,
+  onSelect,
+  onDeselect
+}) => {
   return (
     <Fragment>
       <Navbar logo={logo} />
@@ -17,7 +24,10 @@ const UserContainer = ({ userId, artistList, requestData }) => {
           <FavoriteArtists
             userId={userId}
             artistList={artistList}
+            selectedArtists={selectedArtists}
             requestData={requestData}
+            onSelect={onSelect}
+            onDeselect={onDeselect}
           />
         </Route>
       </Switch>
@@ -27,17 +37,23 @@ const UserContainer = ({ userId, artistList, requestData }) => {
 
 const mapStateToProps = state => ({
   userId: state.auth.userId,
-  artistList: state.artist.artistList
+  artistList: state.artist.artistList,
+  selectedArtists: state.artist.selectedArtists
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestData: fetchArtists(dispatch)
+  requestData: fetchArtists(dispatch),
+  onSelect: selectArtist(dispatch),
+  onDeselect: deselectArtist(dispatch)
 });
 
 UserContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   artistList: PropTypes.array.isRequired,
-  requestData: PropTypes.func.isRequired
+  selectedArtists: PropTypes.object.isRequired,
+  requestData: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  onDeselect: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

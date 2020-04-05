@@ -1,19 +1,24 @@
-import React, { useState, Fragment } from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
+import { fetchArtists } from '../actions/artist.actions';
 import Navbar from '../components/layout/Navbar';
 import logo from '../assets/logo.png';
 import FavoriteArtists from '../components/users/FavoriteArtists';
 
-const UserContainer = ({ userId }) => {
+const UserContainer = ({ userId, artistList, requestData }) => {
   return (
     <Fragment>
       <Navbar logo={logo} />
       <Switch>
         <Route exact path={`/users/${userId}/favorites`}>
-          <FavoriteArtists userId={userId} />
+          <FavoriteArtists
+            userId={userId}
+            artistList={artistList}
+            requestData={requestData}
+          />
         </Route>
       </Switch>
     </Fragment>
@@ -21,7 +26,18 @@ const UserContainer = ({ userId }) => {
 };
 
 const mapStateToProps = state => ({
-  userId: state.auth.userId
+  userId: state.auth.userId,
+  artistList: state.artist.artistList
 });
 
-export default connect(mapStateToProps, null)(UserContainer);
+const mapDispatchToProps = dispatch => ({
+  requestData: fetchArtists(dispatch)
+});
+
+UserContainer.propTypes = {
+  userId: PropTypes.string.isRequired,
+  artistList: PropTypes.array.isRequired,
+  requestData: PropTypes.func.isRequired
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

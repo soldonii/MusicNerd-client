@@ -34,7 +34,7 @@ const Signup = ({ error, onSignupSuccess, onSignupFail, clearError }) => {
 
       if (response.status === 200) {
         onSignupSuccess(response.data.token);
-        history.push('/login');
+        history.push('/auth/login');
       }
     } catch (err) {
       onSignupFail(err.response.data.errorMessage);

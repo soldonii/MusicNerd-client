@@ -21,7 +21,7 @@ const MainWrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  min-width: 100vw;
+  max-width: 100vw;
   color: ${colors.MAIN_TEXT_COLOR};
 `;
 

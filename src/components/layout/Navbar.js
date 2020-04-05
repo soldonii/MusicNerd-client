@@ -20,7 +20,7 @@ const Navbar = ({ logo, children}) => {
 
 const NavWrapper = styled.nav`
   height: 10vh;
-  min-width: 100vw;
+  width: 100%;
   background-color: transparent;
   position: absolute;
   display: flex;

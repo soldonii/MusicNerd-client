@@ -1,10 +1,10 @@
 import {
-  REQUEST_SIGNUP_START,
-  REQUEST_SIGNUP_SUCCESS,
-  REQUEST_SIGNUP_FAILURE,
-  REQUEST_LOGIN_START,
-  REQUEST_LOGIN_SUCCESS,
-  REQUEST_LOGIN_FAILURE,
+  SIGNUP_REQUEST,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILED,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILED,
   LOGOUT,
   CLEAR_ERROR,
 } from '../constants/index';
@@ -21,33 +21,33 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case REQUEST_SIGNUP_START:
+    case SIGNUP_REQUEST:
       return {
         ...state,
         loading: true
       };
 
-    case REQUEST_SIGNUP_SUCCESS:
+    case SIGNUP_SUCCESS:
       return {
         ...state,
         loading: false,
         hasSignedUp: true
       };
 
-    case REQUEST_SIGNUP_FAILURE:
+    case SIGNUP_FAILED:
       return {
         ...state,
         loading: false,
         error: action.error
       };
 
-    case REQUEST_LOGIN_START:
+    case LOGIN_REQUEST:
       return {
         ...state,
         loading: true
       };
 
-    case REQUEST_LOGIN_SUCCESS:
+    case LOGIN_SUCCESS:
       localStorage.setItem('token', action.token);
       setTokenToHeader(action.token);
 
@@ -59,7 +59,7 @@ export const authReducer = (state = initialState, action) => {
         isAuthenticated: true
       };
 
-    case REQUEST_LOGIN_FAILURE:
+    case LOGIN_FAILED:
       return {
         ...state,
         loading: false,

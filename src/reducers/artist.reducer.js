@@ -1,12 +1,12 @@
 import {
-  FETCH_ARTISTS_START,
+  FETCH_ARTISTS_REQUEST,
   FETCH_ARTISTS_SUCCESS,
-  FETCH_ARTISTS_FAILURE,
+  FETCH_ARTISTS_FAILED,
   SELECT_FAVORITE_ARTIST,
   DESELECT_FAVORITE_ARTIST,
-  REQUEST_FAVORITE_ARTISTS_START,
-  REQUEST_FAVORITE_ARTISTS_SUCCESS,
-  REQUEST_FAVORITE_ARTISTS_FAILURE
+  SAVE_ARTISTS_REQUEST,
+  SAVE_ARTISTS_SUCCESS,
+  SAVE_ARTISTS_FAILED
 } from '../constants/index';
 
 const initialState = {
@@ -20,7 +20,7 @@ const initialState = {
 
 export const artistReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_ARTISTS_START:
+    case FETCH_ARTISTS_REQUEST:
       return {
         ...state,
         userId: action.userId,
@@ -36,7 +36,7 @@ export const artistReducer = (state = initialState, action) => {
         selectedArtists: action.selectedArtists
       };
 
-    case FETCH_ARTISTS_FAILURE:
+    case FETCH_ARTISTS_FAILED:
       return {
         ...state,
         loading: false,
@@ -61,13 +61,13 @@ export const artistReducer = (state = initialState, action) => {
         selectedArtists
       };
 
-    case REQUEST_FAVORITE_ARTISTS_START:
+    case SAVE_ARTISTS_REQUEST:
       return {
         ...state,
         loading: true
       };
 
-    case REQUEST_FAVORITE_ARTISTS_SUCCESS:
+    case SAVE_ARTISTS_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -77,7 +77,7 @@ export const artistReducer = (state = initialState, action) => {
         result: 'success'
       };
 
-    case REQUEST_FAVORITE_ARTISTS_FAILURE:
+    case SAVE_ARTISTS_FAILED:
       return {
         ...state,
         loading: false,

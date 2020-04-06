@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 
 import DefaultLayout from '../layout/DefaultLayout';
 import ProgressBar from '../layout/ProgressBar';
-import ArtistCard from './ArtistCard';
 import Loading from '../layout/Loading';
+import ArtistCard from './ArtistCard';
 
 const FavoriteArtists = ({
   userId,
@@ -22,7 +22,7 @@ const FavoriteArtists = ({
 
   useEffect(() => {
     if (postResult === 'success') {
-      return history.push('/waiting');
+      history.push('/waiting');
     }
     requestData(userId);
 

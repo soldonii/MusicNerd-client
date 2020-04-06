@@ -1,42 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-const GameCard = ({ gameId, isPlaying, participants, gameTitle, thumbnail }) => {
-  const history = useHistory();
-  const [ error, setError ] = useState('');
-
-  const enterGameRoom = async () => {
-    const { data: result, errorMessage } = await axios.put('http://localhost:8080/games', { gameId });
-    if (result === 'success') {
-      return history.push(`/games/${gameId}`);
-    }
-
-    setError(errorMessage);
-  };
-
-  useEffect(() => {
-    console.log(error);
-    if (error) {
-      window.alert('해당 방에 입장할 수 없습니다.');
-    }
-  }, [ error ]);
-
-  return (
-    <GameCardWrapper
-      onClick={enterGameRoom}
-      thumbnail={thumbnail}
-      data-id={gameId}
-    >
-      <h1>{gameTitle}</h1>
-      <GameStatus>
-        <h3>{isPlaying ? 'Playing' : 'Available'}</h3>
-        <h3>{participants.length} players</h3>
-      </GameStatus>
-    </GameCardWrapper>
-  );
-};
+const GameCard = ({
+  gameId,
+  isPlaying,
+  participants,
+  gameTitle,
+  thumbnail,
+  enterGame
+}) => (
+  <GameCardWrapper
+    onClick={() => enterGame(gameId)}
+    thumbnail={thumbnail}
+  >
+    <h1>{gameTitle}</h1>
+    <GameStatus>
+      <h3>{isPlaying ? 'Playing' : 'Available'}</h3>
+      <h3>{participants.length} players</h3>
+    </GameStatus>
+  </GameCardWrapper>
+);
 
 const GameCardWrapper = styled.div`
   padding: 1rem;
@@ -62,5 +46,14 @@ const GameStatus = styled.div`
   width: 100%;
   height: 10rem;
 `;
+
+GameCard.propTypes = {
+  gameId: PropTypes.string.isRequired,
+  isPlaying: PropTypes.bool.isRequired,
+  participants: PropTypes.array.isRequired,
+  gameTitle: PropTypes.string.isRequired,
+  thumbnail: PropTypes.string.isRequired,
+  enterGame: PropTypes.func.isRequired,
+};
 
 export default GameCard;

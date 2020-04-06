@@ -12,9 +12,7 @@ const ArtistCard = ({
 }) => {
   const [ isSelected, setIsSelected ] = useState(false);
 
-  console.log(artistId)
-
-  const onClick = (artistId) => {
+  const onClick = artistId => {
     if (artistId in selectedArtists) {
       setIsSelected(false);
       onDeselect(artistId);

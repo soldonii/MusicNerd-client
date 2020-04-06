@@ -1,13 +1,13 @@
-import React, { Fragment } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React, { useEffect, Fragment } from 'react';
+import { Route, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Navbar from '../components/layout/Navbar';
 import FavoriteArtists from '../components/users/FavoriteArtists';
+import logo from '../assets/logo.png';
 
 import { fetchArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/artist.actions';
-import logo from '../assets/logo.png';
 
 const UserContainer = ({
   userId,
@@ -19,13 +19,24 @@ const UserContainer = ({
   onSelect,
   onDeselect,
   postData
-}) => (
-  <Fragment>
-    <Navbar logo={logo}>
-      {Object.keys(selectedArtists).length >= 5
-        && <button onClick={() => postData(userId, selectedArtists)}>Next</button>}
-    </Navbar>
-    <Switch>
+}) => {
+  const token = localStorage.getItem('token');
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!token || !userId ) {
+      history.push('/');
+    }
+
+    // eslint-disable-next-line
+  }, [ token, userId ]);
+
+  return (
+    <Fragment>
+      <Navbar logo={logo}>
+        {Object.keys(selectedArtists).length >= 5
+          && <button onClick={() => postData(userId, selectedArtists)}>Next</button>}
+      </Navbar>
       <Route exact path={`/users/${userId}/favorites`}>
         <FavoriteArtists
           userId={userId}
@@ -38,9 +49,9 @@ const UserContainer = ({
           onDeselect={onDeselect}
         />
       </Route>
-    </Switch>
-  </Fragment>
-);
+    </Fragment>
+  );
+};
 
 const mapStateToProps = state => ({
   userId: state.auth.userId,

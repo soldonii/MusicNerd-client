@@ -6,23 +6,22 @@ import HomeContainer from '../containers/Home.container';
 import AuthContainer from '../containers/Auth.container';
 import UserContainer from '../containers/User.container';
 import WaitingContainer from '../containers/Waiting.container';
+
 import * as colors from '../lib/colors';
 
-const App = () => {
-  return (
-    <Fragment>
-      <GlobalStyle />
-      <Router>
-        <Switch>
-          <Route exact path='/' component={HomeContainer} />
-          <Route path='/auth' component={AuthContainer} />
-          <Route path='/users' component={UserContainer} />
-          <Route path='/waiting' component={WaitingContainer} />
-        </Switch>
-      </Router>
-    </Fragment>
-  );
-};
+const App = () => (
+  <Fragment>
+    <GlobalStyle />
+    <Router>
+      <Switch>
+        <Route exact path='/' component={HomeContainer} />
+        <Route path='/auth' component={AuthContainer} />
+        <Route path='/users' component={UserContainer} />
+        <Route path='/waiting' component={WaitingContainer} />
+      </Switch>
+    </Router>
+  </Fragment>
+);
 
 const GlobalStyle = createGlobalStyle`
   @font-face {

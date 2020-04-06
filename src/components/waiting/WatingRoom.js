@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import Modal from '../layout/Modal';
 import Form from '../layout/Form';
@@ -8,32 +9,42 @@ import FormInput from '../layout/FormInput';
 import GameCard from './GameCard';
 import * as colors from '../../lib/colors';
 
-const WatingRoom = ({ userId, gameId, loading, error, allGames, requestMakeGame, fetchGames }) => {
+const WatingRoom = ({
+  userId,
+  createdGameId,
+  enterGameId,
+  allGames,
+  loading,
+  error,
+  postGame,
+  fetchGames,
+  enterGame
+}) => {
   const history = useHistory();
   const [ shouldModalOpen, setShouldModalOpen ] = useState(false);
   const [ gameTitle, setGameTitle ] = useState('');
 
   useEffect(() => {
-    if (gameId) {
-      history.push(`/games/${gameId}`);
+    if (createdGameId) {
+      history.push(`/games/${createdGameId}`);
+    }
+    if (enterGameId) {
+      history.push(`/games/${enterGameId}`);
     }
     fetchGames();
 
     // eslint-disable-next-line
-  }, [ gameId ]);
+  }, [ createdGameId, enterGameId ]);
 
   const onSubmit = e => {
     e.preventDefault();
-    requestMakeGame(userId, gameTitle);
-
-    // setShouldModalOpen(false);
+    postGame(userId, gameTitle);
   };
 
   return (
     <Fragment>
       <Modal
         loading={loading}
-        error={error}
         shouldModalOpen={shouldModalOpen}
         setShouldModalOpen={setShouldModalOpen}
         title='Create Room'
@@ -51,8 +62,8 @@ const WatingRoom = ({ userId, gameId, loading, error, allGames, requestMakeGame,
         </GameListNav>
         <GameCardWrapper>
           {
-            // !allGames.length ?
-            //   <h1>There is no room!</h1> :
+            !allGames.length ?
+              <h1 style={{ textAlign: 'center' }}>There is no room!</h1> :
               allGames.map(game => {
                 const { _id: gameId, is_playing: isPlaying, participants, game_title: gameTitle, thumbnail } = game;
 
@@ -64,6 +75,7 @@ const WatingRoom = ({ userId, gameId, loading, error, allGames, requestMakeGame,
                     participants={participants}
                     gameTitle={gameTitle}
                     thumbnail={thumbnail}
+                    enterGame={enterGame}
                   />
                 )
               })
@@ -126,5 +138,16 @@ const SubmitButton = styled.input`
     transition: all 0.3s;
   }
 `;
+
+WatingRoom.propTypes = {
+  userId: PropTypes.string.isRequired,
+  gameId: PropTypes.string.isRequired,
+  allGames: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  postGame: PropTypes.func.isRequired,
+  fetchGames: PropTypes.func.isRequired,
+  enterGame: PropTypes.func.isRequired,
+};
 
 export default WatingRoom;

@@ -3,13 +3,13 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Navbar from '../components/layout/Navbar';
 import Signup from '../components/auth/Signup';
 import Login from '../components/auth/Login';
 import DefaultLayout from '../components/layout/DefaultLayout';
-import Navbar from '../components/layout/Navbar';
-
-import { requestSignup, requestLogin, clearError, requestLogout } from '../actions/auth.actions';
 import logo from '../assets/logo.png';
+
+import { requestSignup, requestLogin, clearError, logout } from '../actions/auth.actions';
 
 const AuthContainer = ({
   userId,
@@ -19,7 +19,7 @@ const AuthContainer = ({
   loading,
   requestSignup,
   requestLogin,
-  requestLogout,
+  logout,
   clearError
 }) => {
   const token = localStorage.getItem('token');
@@ -28,11 +28,11 @@ const AuthContainer = ({
     <Fragment>
       <Navbar logo={logo}>
         <Link to='/auth/signup'>Sign Up</Link>
-        {token ? <button onClick={requestLogout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
+        {token ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
       </Navbar>
-      <Switch>
-        <Route exact path='/auth/signup'>
-          <DefaultLayout>
+      <DefaultLayout>
+        <Switch>
+          <Route exact path='/auth/signup'>
             <Signup
               hasSignedUp={hasSignedUp}
               signupError={error}
@@ -40,10 +40,8 @@ const AuthContainer = ({
               requestSignup={requestSignup}
               clearError={clearError}
             />
-          </DefaultLayout>
-        </Route>
-        <Route exact path='/auth/login'>
-          <DefaultLayout>
+          </Route>
+          <Route exact path='/auth/login'>
             <Login
               userId={userId}
               isAuthenticated={isAuthenticated}
@@ -52,9 +50,9 @@ const AuthContainer = ({
               requestLogin={requestLogin}
               clearError={clearError}
             />
-          </DefaultLayout>
-        </Route>
-      </Switch>
+          </Route>
+        </Switch>
+      </DefaultLayout>
     </Fragment>
   );
 };
@@ -70,7 +68,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   requestSignup: requestSignup(dispatch),
   requestLogin: requestLogin(dispatch),
-  requestLogout: requestLogout(dispatch),
+  logout: logout(dispatch),
   clearError: clearError(dispatch)
 });
 
@@ -82,7 +80,7 @@ AuthContainer.propTypes = {
   loading: PropTypes.bool.isRequired,
   requestSignup: PropTypes.func.isRequired,
   requestLogin: PropTypes.func.isRequired,
-  requestLogout: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
   clearError: PropTypes.func.isRequired
 };
 

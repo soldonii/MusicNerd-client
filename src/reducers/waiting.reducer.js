@@ -1,28 +1,32 @@
 import {
-  REQUEST_MAKE_GAME_START,
-  REQUEST_MAKE_GAME_SUCCESS,
-  REQUEST_MAKE_GAME_FAILURE,
-  FETCH_GAMES_START,
+  CREATE_GAME_REQUEST,
+  CREATE_GAME_SUCCESS,
+  CREATE_GAME_FAILED,
+  FETCH_GAMES_REQUEST,
   FETCH_GAMES_SUCCESS,
   FETCH_GAMES_FAILURE,
+  ENTER_GAME_REQUEST,
+  ENTER_GAME_SUCCESS,
+  ENTER_GAME_FAILED
 } from '../constants/index';
 
 const initialState = {
   createdGameId: '',
   allGames: [],
+  enterGameId: '',
   loading: false,
   error: null
 };
 
 export const waitingReducer = (state = initialState, action) => {
   switch (action.type) {
-    case REQUEST_MAKE_GAME_START:
+    case CREATE_GAME_REQUEST:
       return {
         ...state,
         loading: true
       };
 
-    case REQUEST_MAKE_GAME_SUCCESS:
+    case CREATE_GAME_SUCCESS:
       return {
         ...state,
         createdGameId: action.createdGameId,
@@ -30,7 +34,7 @@ export const waitingReducer = (state = initialState, action) => {
         error: null
       };
 
-    case REQUEST_MAKE_GAME_FAILURE:
+    case CREATE_GAME_FAILED:
       return {
         ...state,
         loading: false,
@@ -38,7 +42,7 @@ export const waitingReducer = (state = initialState, action) => {
         error: action.error
       };
 
-    case FETCH_GAMES_START:
+    case FETCH_GAMES_REQUEST:
       return {
         ...state,
         loading: true
@@ -55,6 +59,27 @@ export const waitingReducer = (state = initialState, action) => {
       return {
         ...state,
         allGames: [],
+        loading: false,
+        error: action.error
+      };
+
+    case ENTER_GAME_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case ENTER_GAME_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        enterGameId: action.gameId
+      };
+
+    case ENTER_GAME_FAILED:
+      return {
+        ...state,
         loading: false,
         error: action.error
       };

@@ -1,31 +1,34 @@
 import axios from 'axios';
 import {
-  REQUEST_MAKE_GAME_START,
-  REQUEST_MAKE_GAME_SUCCESS,
-  REQUEST_MAKE_GAME_FAILURE,
-  FETCH_GAMES_START,
+  CREATE_GAME_REQUEST,
+  CREATE_GAME_SUCCESS,
+  CREATE_GAME_FAILED,
+  FETCH_GAMES_REQUEST,
   FETCH_GAMES_SUCCESS,
   FETCH_GAMES_FAILURE,
+  ENTER_GAME_REQUEST,
+  ENTER_GAME_SUCCESS,
+  ENTER_GAME_FAILED
 } from '../constants/index';
 
-export const requestMakeGame = dispatch => async (userId, gameTitle) => {
+export const postGame = dispatch => async (userId, gameTitle) => {
   try {
-    dispatch({ type: REQUEST_MAKE_GAME_START, userId, gameTitle });
+    dispatch({ type: CREATE_GAME_REQUEST, userId, gameTitle });
 
     const { data: { createdGameId } } = await axios.post(`http://localhost:8080/waiting`, {
       userId,
       gameTitle
     });
 
-    dispatch({ type: REQUEST_MAKE_GAME_SUCCESS, createdGameId });
+    dispatch({ type: CREATE_GAME_SUCCESS, createdGameId });
   } catch (err) {
-    dispatch({ type: REQUEST_MAKE_GAME_FAILURE, error: err.response.data.errorMessage });
+    dispatch({ type: CREATE_GAME_FAILED, error: err.response.data.errorMessage });
   }
 };
 
 export const fetchGames = dispatch => async () => {
   try {
-    dispatch({ type: FETCH_GAMES_START });
+    dispatch({ type: FETCH_GAMES_REQUEST });
 
     const { data: { allGames } } = await axios.get('http://localhost:8080/waiting');
     dispatch({ type: FETCH_GAMES_SUCCESS, allGames });
@@ -34,3 +37,13 @@ export const fetchGames = dispatch => async () => {
   }
 };
 
+export const enterGame = dispatch => async gameId => {
+  try {
+    dispatch({ type: ENTER_GAME_REQUEST });
+    await axios.put('http://localhost:8080/games', { gameId });
+
+    dispatch({ type: ENTER_GAME_SUCCESS, gameId });
+  } catch (err) {
+    dispatch({ type: ENTER_GAME_FAILED, error: err.response.data.errorMessage });
+  }
+};

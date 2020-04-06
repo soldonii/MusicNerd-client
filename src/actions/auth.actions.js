@@ -1,39 +1,39 @@
 import axios from 'axios';
 import {
-  REQUEST_SIGNUP_START,
-  REQUEST_SIGNUP_SUCCESS,
-  REQUEST_SIGNUP_FAILURE,
-  REQUEST_LOGIN_START,
-  REQUEST_LOGIN_SUCCESS,
-  REQUEST_LOGIN_FAILURE,
+  SIGNUP_REQUEST,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILED,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILED,
   LOGOUT,
   CLEAR_ERROR
 } from '../constants/index';
 
 export const requestSignup = dispatch => async user => {
   try {
-    dispatch({ type: REQUEST_SIGNUP_START });
+    dispatch({ type: SIGNUP_REQUEST });
 
     await axios.post('http://localhost:8080/auth/signup', user);
-    dispatch({ type: REQUEST_SIGNUP_SUCCESS });
+    dispatch({ type: SIGNUP_SUCCESS });
   } catch (err) {
-    dispatch({ type: REQUEST_SIGNUP_FAILURE, error: err.response.data.errorMessage});
+    dispatch({ type: SIGNUP_FAILED, error: err.response.data.errorMessage});
   }
 };
 
 export const requestLogin = dispatch => async user => {
   try {
-    dispatch({ type: REQUEST_LOGIN_START });
+    dispatch({ type: LOGIN_REQUEST });
 
     const response = await axios.post('http://localhost:8080/auth/login', user);
     const { token, userId } = response.data;
-    dispatch({ type: REQUEST_LOGIN_SUCCESS, token, userId });
+    dispatch({ type: LOGIN_SUCCESS, token, userId });
   } catch (err) {
-    dispatch({ type: REQUEST_LOGIN_FAILURE, error: err.response.data.errorMessage });
+    dispatch({ type: LOGIN_FAILED, error: err.response.data.errorMessage });
   }
 };
 
-export const requestLogout = dispatch => () => {
+export const logout = dispatch => () => {
   dispatch({ type: LOGOUT });
 };
 

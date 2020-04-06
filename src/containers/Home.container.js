@@ -6,25 +6,25 @@ import PropTypes from 'prop-types';
 
 import Navbar from '../components/layout/Navbar';
 import DefaultLayout from '../components/layout/DefaultLayout';
-
-import { requestLogout } from '../actions/auth.actions';
 import logo from '../assets/logo.png';
 
-const HomeContainer = ({ requestLogout }) => {
+import { logout } from '../actions/auth.actions';
+
+const HomeContainer = ({ userId, logout }) => {
   const token = localStorage.getItem('token');
   const history = useHistory();
 
   useEffect(() => {
-    token && history.push('/games');
+    (token && userId) && history.push('/games');
 
     // eslint-disable-next-line
-  }, [ token ]);
+  }, [ token, userId ]);
 
   return (
     <Fragment>
       <Navbar logo={logo}>
         <Link to='/auth/signup'>Sign Up</Link>
-        {token ? <button onClick={requestLogout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
+        {token ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
       </Navbar>
       <DefaultLayout>
         <Title>MUSIC NERD</Title>
@@ -43,12 +43,17 @@ const SubTitle = styled.p`
   margin-top: 2rem;
 `;
 
+const mapStateToProps = state => ({
+  userId: state.auth.userId
+});
+
 const mapDispatchToProps = dispatch => ({
-  requestLogout: requestLogout(dispatch)
+  logout: logout(dispatch)
 });
 
 HomeContainer.propTypes = {
-  requestLogout: PropTypes.func.isRequired
+  userId: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
-export default connect(null, mapDispatchToProps)(HomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

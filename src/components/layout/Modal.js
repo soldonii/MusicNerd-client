@@ -3,7 +3,13 @@ import styled from 'styled-components';
 
 import Loading from './Loading';
 
-const Modal = ({ loading, error, shouldModalOpen, setShouldModalOpen, title, children }) => {
+const Modal = ({
+  loading,
+  shouldModalOpen,
+  setShouldModalOpen,
+  title,
+  children
+}) => {
   const modalStyle = shouldModalOpen ? { display: 'block' } : { display: 'none' };
 
   return (

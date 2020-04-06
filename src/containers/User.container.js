@@ -18,31 +18,28 @@ const UserContainer = ({
   onSelect,
   onDeselect,
   postData
-}) => {
-  const selectedLength = Object.keys(selectedArtists).length;
-
-  return (
-    <Fragment>
-      <Navbar logo={logo}>
-        {selectedLength >= 5 && <Link to='#' onClick={() => postData(userId, selectedArtists)}>Next</Link>}
-      </Navbar>
-      <Switch>
-        <Route exact path={`/users/${userId}/favorites`}>
-          <FavoriteArtists
-            userId={userId}
-            loading={loading}
-            artistList={artistList}
-            selectedArtists={selectedArtists}
-            postResult={postResult}
-            requestData={requestData}
-            onSelect={onSelect}
-            onDeselect={onDeselect}
-          />
-        </Route>
-      </Switch>
-    </Fragment>
-  );
-};
+}) => (
+  <Fragment>
+    <Navbar logo={logo}>
+      {Object.keys(selectedArtists).length >= 5
+        && <Link to='#' onClick={() => postData(userId, selectedArtists)}>Next</Link>}
+    </Navbar>
+    <Switch>
+      <Route exact path={`/users/${userId}/favorites`}>
+        <FavoriteArtists
+          userId={userId}
+          loading={loading}
+          artistList={artistList}
+          selectedArtists={selectedArtists}
+          postResult={postResult}
+          requestData={requestData}
+          onSelect={onSelect}
+          onDeselect={onDeselect}
+        />
+      </Route>
+    </Switch>
+  </Fragment>
+);
 
 const mapStateToProps = state => ({
   userId: state.auth.userId,

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import Main from '../layout/Main';
 import ProgressBar from '../layout/ProgressBar';
-import ArtistCard from '../layout/ArtistCard';
+import ArtistCard from './ArtistCard';
 import Loading from '../layout/Loading';
 
 const FavoriteArtists = ({
@@ -21,12 +21,13 @@ const FavoriteArtists = ({
   const history = useHistory();
 
   useEffect(() => {
-    requestData(userId);
     if (postResult === 'success') {
       history.push('/games');
     }
+    requestData(userId);
+
     // eslint-disable-next-line
-  }, [userId, postResult]);
+  }, [ userId, postResult ]);
 
   const selectedLength = Object.keys(selectedArtists).length;
 
@@ -42,7 +43,7 @@ const FavoriteArtists = ({
                 `${selectedLength} Artists selected!`}
             </h3>
             <ProgressBar
-              lengthLimit='10'
+              lengthLimit={10}
               selectedLength={selectedLength}
             />
             <ArtistList>
@@ -53,7 +54,7 @@ const FavoriteArtists = ({
                   return (
                     <ArtistCard
                       key={artistId}
-                      dataId={artistId}
+                      artistId={artistId}
                       selectedArtists={selectedArtists}
                       thumbnailUrl={url}
                       name={names[0]}
@@ -68,11 +69,6 @@ const FavoriteArtists = ({
       }
     </Main>
   );
-};
-
-FavoriteArtists.propTypes = {
-  userId: PropTypes.string.isRequired,
-  requestData: PropTypes.func.isRequired
 };
 
 const ArtistWrapper = styled.section`
@@ -91,6 +87,15 @@ const ArtistList = styled.div`
   grid-template-columns: repeat(6, 18rem);
 `;
 
+FavoriteArtists.propTypes = {
+  userId: PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  artistList: PropTypes.array.isRequired,
+  selectedArtists: PropTypes.object.isRequired,
+  postResult: PropTypes.string.isRequired,
+  requestData: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  onDeselect: PropTypes.func.isRequired,
+};
+
 export default FavoriteArtists;
-
-

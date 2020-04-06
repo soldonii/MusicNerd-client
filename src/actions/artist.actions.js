@@ -14,8 +14,12 @@ export const fetchArtists = dispatch => async userId => {
   dispatch({ type: FETCH_ARTISTS_START, userId });
 
   try {
-    const { data: { artistList }} = await axios.get(`http://localhost:8080/users/${userId}/favorites`);
-    dispatch({ type: FETCH_ARTISTS_SUCCESS, artistList });
+    const { data: { artistList, favoriteArtists }} = await axios.get(`http://localhost:8080/users/${userId}/favorites`);
+    const selectedArtists = {};
+    favoriteArtists.forEach(artistId => selectedArtists[artistId] = true);
+
+
+    dispatch({ type: FETCH_ARTISTS_SUCCESS, artistList, selectedArtists });
   } catch (err) {
     dispatch({ type: FETCH_ARTISTS_FAILURE, error: err.response.data.errorMessage });
   }

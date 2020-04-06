@@ -1,16 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import coverImage from '../../assets/coverImage.jpg';
 import * as colors from '../../lib/colors';
 
-const Main = ({ children }) => {
-  return (
-    <MainWrapper>
-      {children}
-    </MainWrapper>
-  )
-};
+const Main = ({ children }) => (
+  <MainWrapper>
+    {children}
+  </MainWrapper>
+);
 
 const MainWrapper = styled.div`
   background-image: url(${coverImage});
@@ -24,5 +23,9 @@ const MainWrapper = styled.div`
   max-width: 100vw;
   color: ${colors.MAIN_TEXT_COLOR};
 `;
+
+Main.propTypes = {
+  children: PropTypes.node
+};
 
 export default Main;

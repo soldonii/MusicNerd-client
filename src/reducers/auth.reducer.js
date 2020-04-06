@@ -5,7 +5,7 @@ import {
   REQUEST_LOGIN_START,
   REQUEST_LOGIN_SUCCESS,
   REQUEST_LOGIN_FAILURE,
-  // LOGOUT,
+  LOGOUT,
   CLEAR_ERROR,
 } from '../constants/index';
 import setTokenToHeader from '../lib/setTokenToHeader';
@@ -69,6 +69,17 @@ export const authReducer = (state = initialState, action) => {
     case CLEAR_ERROR:
       return {
         ...state,
+        loading: false,
+        error: null
+      };
+
+    case LOGOUT:
+      localStorage.removeItem('token');
+      return {
+        token: '',
+        userId: '',
+        hasSignedUp: false,
+        isAuthenticated: false,
         loading: false,
         error: null
       };

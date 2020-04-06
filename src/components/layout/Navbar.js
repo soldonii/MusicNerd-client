@@ -1,22 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import * as colors from '../../lib/colors';
 
-const Navbar = ({ logo, children}) => {
-  // console.log(localStorage.getItem('token'))
-  // localStorage에 token 없으면 완전 '/'로 이동, 있으면 '/game'으로 이동
-
-  return (
-    <NavWrapper>
-      <Link to='/'><img src={logo} alt='logo'/></Link>
-      <LinkWrapper>
-        {children}
-      </LinkWrapper>
-    </NavWrapper>
-  );
-};
+const Navbar = ({ logo, children}) => (
+  <NavWrapper>
+    <Link to={localStorage.getItem('token') ? '/games' : '/'}>
+      <img src={logo} alt='logo'/>
+    </Link>
+    <LinkWrapper>
+      {children}
+    </LinkWrapper>
+  </NavWrapper>
+);
 
 const NavWrapper = styled.nav`
   height: 10vh;
@@ -48,5 +46,9 @@ const LinkWrapper = styled.div`
   }
 `;
 
+Navbar.propTypes = {
+  logo: PropTypes.string.isRequired,
+  children: PropTypes.node
+};
 
 export default Navbar;

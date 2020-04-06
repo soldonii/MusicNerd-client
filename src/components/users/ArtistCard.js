@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const ArtistCard = ({
-  dataId,
+  artistId,
   selectedArtists,
   thumbnailUrl,
   name,
@@ -17,7 +18,7 @@ const ArtistCard = ({
       onDeselect(artistId);
     } else {
       if (Object.keys(selectedArtists).length === 10) {
-        return window.alert('최대 10명까지만 선택할 수 있습니다!');
+        return window.alert('최대 10명까지만 선택할 수 있습니다.');
       }
       setIsSelected(true);
       onSelect(artistId);
@@ -26,9 +27,9 @@ const ArtistCard = ({
 
   return (
     <CardWrapper
-      data-id={dataId}
+      data-id={artistId}
       onClick={e => onClick(e.currentTarget.dataset.id)}
-      style={isSelected ? selectedStyle : deselectedStyle}
+      style={isSelected || artistId in selectedArtists ? selectedStyle : deselectedStyle}
     >
       <img src={thumbnailUrl} alt="thumbnail"/>
       <h1>{name.toUpperCase()}</h1>
@@ -64,7 +65,13 @@ const CardWrapper = styled.div`
   }
 `;
 
-// 선택된 것 색상
-
+ArtistCard.propTypes = {
+  artistId: PropTypes.string.isRequired,
+  selectedArtists: PropTypes.object.isRequired,
+  thumbnailUrl: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  onDeselect: PropTypes.func.isRequired
+};
 
 export default ArtistCard;

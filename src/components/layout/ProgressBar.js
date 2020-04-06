@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const ProgressBar = ({ lengthLimit, selectedLength }) => (
   <Bar>
@@ -21,5 +22,9 @@ const Progress = styled.div`
   background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 `;
 
+ProgressBar.propTypes = {
+  lengthLimit: PropTypes.number.isRequired,
+  selectedLength: PropTypes.number.isRequired
+};
 
 export default ProgressBar;

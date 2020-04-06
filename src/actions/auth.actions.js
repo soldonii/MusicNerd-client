@@ -6,7 +6,7 @@ import {
   REQUEST_LOGIN_START,
   REQUEST_LOGIN_SUCCESS,
   REQUEST_LOGIN_FAILURE,
-  // LOGOUT,
+  LOGOUT,
   CLEAR_ERROR
 } from '../constants/index';
 
@@ -33,10 +33,6 @@ export const requestLogin = dispatch => async user => {
   }
 };
 
-// export const requestLogout = dispatch => () => {
+export const requestLogout = dispatch => () => dispatch({ type: LOGOUT });
 
-// };
-
-export const clearError = dispatch => () => {
-  dispatch({ type: CLEAR_ERROR });
-};
+export const clearError = dispatch => () => dispatch({ type: CLEAR_ERROR });

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
-import Home from '../components/pages/Home';
+import HomeContainer from '../containers/Home.container';
 import AuthContainer from '../containers/Auth.container';
 import UserContainer from '../containers/User.container';
 import GameContainer from '../containers/Game.container';
@@ -14,7 +14,7 @@ const App = () => {
       <GlobalStyle />
       <Router>
         <Switch>
-          <Route exact path='/' component={Home} />
+          <Route exact path='/' component={HomeContainer} />
           <Route path='/auth' component={AuthContainer} />
           <Route path='/users' component={UserContainer} />
           <Route path='/games' component={GameContainer} />

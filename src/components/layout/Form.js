@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
 import * as colors from '../../lib/colors';
 
-const Form = ({ title, onSubmit, children }) => {
-  return (
-    <FormWrapper onSubmit={onSubmit}>
-      <h1>{title}</h1>
-      {children}
-    </FormWrapper>
-  );
-};
+const Form = ({ title, onSubmit, style, children }) => (
+  <FormWrapper style={style} onSubmit={onSubmit}>
+    {title ? <h1>{title}</h1> : null}
+    {children}
+  </FormWrapper>
+);
 
 const FormWrapper = styled.form`
   width: 40vw;
@@ -26,5 +26,11 @@ const FormWrapper = styled.form`
     margin-bottom: 4rem;
   }
 `;
+
+Form.propTypes = {
+  title: PropTypes.string,
+  onSubmit: PropTypes.func,
+  children: PropTypes.node
+};
 
 export default Form;

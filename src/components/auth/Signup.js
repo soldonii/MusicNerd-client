@@ -26,6 +26,7 @@ const Signup = ({
   useEffect(() => {
     hasSignedUp && history.push('/auth/login');
     error && window.setTimeout(() => clearError(), 2000);
+
     // eslint-disable-next-line
   }, [ hasSignedUp, error ]);
 

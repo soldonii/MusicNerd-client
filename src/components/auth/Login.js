@@ -25,6 +25,7 @@ const Login = ({
   useEffect(() => {
     isAuthenticated && history.push(`/users/${userId}/favorites`);
     error && window.setTimeout(() => clearError(), 2000);
+
     // eslint-disable-next-line
   }, [ userId, isAuthenticated, error ]);
 

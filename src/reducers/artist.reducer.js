@@ -32,7 +32,8 @@ export const artistReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: null,
-        artistList: action.artistList
+        artistList: action.artistList,
+        selectedArtists: action.selectedArtists
       };
 
     case FETCH_ARTISTS_FAILURE:

@@ -34,6 +34,20 @@ const NavWrapper = styled.nav`
 const LinkWrapper = styled.div`
   font-size: 1.5rem;
 
+  button {
+    background-color: ${colors.WHITE};
+    padding: 0.9rem 1.7rem;
+    border: 0;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+  }
+
+  button:hover {
+    color: ${colors.WHITE};
+    background-color: ${colors.HIGHLIGHT};
+  }
+
   & a {
     background-color: ${colors.WHITE};
     padding: 0.9rem 1.7rem;

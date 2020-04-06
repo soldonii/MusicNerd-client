@@ -1,4 +1,5 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Modal from '../layout/Modal';
@@ -7,26 +8,40 @@ import FormInput from '../layout/FormInput';
 import GameCard from './GameCard';
 import * as colors from '../../lib/colors';
 
-const WatingRoom = ({ userId, requestMakeGame }) => {
+const WatingRoom = ({ userId, gameId, loading, error, allGames, requestMakeGame, fetchGames }) => {
+  const history = useHistory();
   const [ shouldModalOpen, setShouldModalOpen ] = useState(false);
   const [ gameTitle, setGameTitle ] = useState('');
 
+  useEffect(() => {
+    if (gameId) {
+      history.push(`/games/${gameId}`);
+    }
+    fetchGames();
+
+    // eslint-disable-next-line
+  }, [ gameId ]);
+
   const onSubmit = e => {
     e.preventDefault();
-    setShouldModalOpen(false);
     requestMakeGame(userId, gameTitle);
+
+    // setShouldModalOpen(false);
   };
 
   return (
     <Fragment>
       <Modal
+        loading={loading}
+        error={error}
         shouldModalOpen={shouldModalOpen}
         setShouldModalOpen={setShouldModalOpen}
         title='Create Room'
       >
         <Form style={{ height: '30vh' }} onSubmit={onSubmit}>
           <FormInput type='text' onChange={e => setGameTitle(e.target.value)} />
-          <SubmitButton type='submit' value='Login' />
+          <ErrorMessage>{error ? error : null}</ErrorMessage>
+          <SubmitButton type='submit' value='Create' />
         </Form>
       </Modal>
       <GameListWrapper>
@@ -35,10 +50,24 @@ const WatingRoom = ({ userId, requestMakeGame }) => {
           <button>다음 페이지</button>
         </GameListNav>
         <GameCardWrapper>
-          <GameCard />
-          <GameCard />
-          <GameCard />
-          <GameCard />
+          {
+            // !allGames.length ?
+            //   <h1>There is no room!</h1> :
+              allGames.map(game => {
+                const { _id: gameId, is_playing: isPlaying, participants, game_title: gameTitle, thumbnail } = game;
+
+                return (
+                  <GameCard
+                    key={gameId}
+                    gameId={gameId}
+                    isPlaying={isPlaying}
+                    participants={participants}
+                    gameTitle={gameTitle}
+                    thumbnail={thumbnail}
+                  />
+                )
+              })
+          }
         </GameCardWrapper>
       </GameListWrapper>
     </Fragment>
@@ -68,8 +97,18 @@ const GameCardWrapper = styled.div`
   width: 100%;
   height: 90%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  position: relative;
+`;
+
+const ErrorMessage = styled.p`
+  margin: 2rem 0;
+  font-size: 1.6rem;
+  height: 3rem;
+  width: 70%;
+  text-align: center;
+  color: red;
 `;
 
 const SubmitButton = styled.input`

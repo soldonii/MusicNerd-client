@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 import coverImage from '../../assets/coverImage.jpg';
 import * as colors from '../../lib/colors';
 
-const Main = ({ children }) => (
-  <MainWrapper>
+const DefaultLayout = ({ children }) => (
+  <Wrapper>
     {children}
-  </MainWrapper>
+  </Wrapper>
 );
 
-const MainWrapper = styled.div`
+const Wrapper = styled.section`
   background-image: url(${coverImage});
   background-size: cover;
   background-position: center;
@@ -24,8 +24,8 @@ const MainWrapper = styled.div`
   color: ${colors.MAIN_TEXT_COLOR};
 `;
 
-Main.propTypes = {
+DefaultLayout.propTypes = {
   children: PropTypes.node
 };
 
-export default Main;
+export default DefaultLayout;

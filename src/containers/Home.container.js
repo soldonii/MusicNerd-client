@@ -1,27 +1,47 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { requestLogout } from '../actions/auth.actions';
 import Navbar from '../components/layout/Navbar';
-import Main from '../components/layout/Main';
+import DefaultLayout from '../components/layout/DefaultLayout';
+
+import { requestLogout } from '../actions/auth.actions';
 import logo from '../assets/logo.png';
 
-const token = localStorage.getItem('token');
+const HomeContainer = ({ requestLogout }) => {
+  const token = localStorage.getItem('token');
+  const history = useHistory();
 
-const HomeContainer = ({ requestLogout }) => (
-  <Fragment>
-    <Navbar logo={logo}>
-      <Link to='/auth/signup'>Sign Up</Link>
-      {token ? <Link to='#' onClick={requestLogout()}>Logout</Link> : <Link to='/auth/login'>Login</Link>}
-    </Navbar>
-    <Main>
-      <h1 style={{ fontSize: '8rem' }}>MUSIC NERD</h1>
-      <p style={{ fontSize: '3rem', marginTop: '2rem' }}>Find out how nerdy you are in music.</p>
-    </Main>
-  </Fragment>
-);
+  useEffect(() => {
+    token && history.push('/games');
+
+    // eslint-disable-next-line
+  }, [ token ]);
+
+  return (
+    <Fragment>
+      <Navbar logo={logo}>
+        <Link to='/auth/signup'>Sign Up</Link>
+        {token ? <button onClick={requestLogout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
+      </Navbar>
+      <DefaultLayout>
+        <Title>MUSIC NERD</Title>
+        <SubTitle>Find out how nerdy you are in music.</SubTitle>
+      </DefaultLayout>
+    </Fragment>
+  );
+};
+
+const Title = styled.h1`
+  font-size: 8rem;
+`;
+
+const SubTitle = styled.p`
+  font-size: 3rem;
+  margin-top: 2rem;
+`;
 
 const mapDispatchToProps = dispatch => ({
   requestLogout: requestLogout(dispatch)

@@ -6,11 +6,12 @@ import PropTypes from 'prop-types';
 import Loading from '../layout/Loading';
 import Form from '../layout/Form';
 import FormInput from '../layout/FormInput';
+
 import * as colors from '../../lib/colors';
 
 const Signup = ({
   hasSignedUp,
-  error,
+  signupError,
   loading,
   requestSignup,
   clearError
@@ -25,10 +26,10 @@ const Signup = ({
 
   useEffect(() => {
     hasSignedUp && history.push('/auth/login');
-    error && window.setTimeout(() => clearError(), 2000);
+    signupError && window.setTimeout(() => clearError(), 2000);
 
     // eslint-disable-next-line
-  }, [ hasSignedUp, error ]);
+  }, [ hasSignedUp, signupError ]);
 
   const { username, email, password, confirmationPassword } = user;
 
@@ -38,16 +39,12 @@ const Signup = ({
     (password.length > 5) &&
     (confirmationPassword.length > 5);
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
-  const onSubmit = async e => {
-    e.preventDefault();
-    requestSignup(user);
-  };
 
   return (
     loading ?
       <Loading /> :
       <SignupWrapper>
-        <Form title='Sign Up' onSubmit={onSubmit}>
+        <Form title='Sign Up' onSubmit={() => requestSignup(user)}>
           <FormInput
             type='text'
             name='username'
@@ -82,7 +79,7 @@ const Signup = ({
             onChange={onChange}
             required
           />
-          <ErrorMessage>{error ? error : null}</ErrorMessage>
+          <ErrorMessage>{signupError ? signupError : null}</ErrorMessage>
           <SubmitButton type='submit' value='Register' isActive={checkInputCondition()} />
         </Form>
       </SignupWrapper>
@@ -125,7 +122,7 @@ const SubmitButton = styled.input`
 
 Signup.propTypes = {
   hasSignedUp: PropTypes.bool.isRequired,
-  error: PropTypes.string,
+  signupError: PropTypes.string,
   loading: PropTypes.bool.isRequired,
   requestSignup: PropTypes.func.isRequired,
   clearError: PropTypes.func.isRequired

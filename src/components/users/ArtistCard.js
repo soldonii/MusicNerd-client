@@ -12,6 +12,8 @@ const ArtistCard = ({
 }) => {
   const [ isSelected, setIsSelected ] = useState(false);
 
+  console.log(artistId)
+
   const onClick = (artistId) => {
     if (artistId in selectedArtists) {
       setIsSelected(false);
@@ -34,7 +36,7 @@ const ArtistCard = ({
       <img src={thumbnailUrl} alt="thumbnail"/>
       <h1>{name.toUpperCase()}</h1>
     </CardWrapper>
-  )
+  );
 };
 
 const selectedStyle = {

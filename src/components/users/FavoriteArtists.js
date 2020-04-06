@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import Main from '../layout/Main';
+import DefaultLayout from '../layout/DefaultLayout';
 import ProgressBar from '../layout/ProgressBar';
 import ArtistCard from './ArtistCard';
 import Loading from '../layout/Loading';
@@ -22,29 +22,28 @@ const FavoriteArtists = ({
 
   useEffect(() => {
     if (postResult === 'success') {
-      history.push('/games');
+      return history.push('/waiting');
     }
     requestData(userId);
 
     // eslint-disable-next-line
   }, [ userId, postResult ]);
 
-  const selectedLength = Object.keys(selectedArtists).length;
+  const selectedArtistLength = Object.keys(selectedArtists).length;
+  const message = selectedArtistLength === 0 ?
+    'Choose your favorite artists from 5 to 10.' :
+    `${selectedArtistLength} Artists selected!`;
 
   return (
-    <Main>
+    <DefaultLayout>
       {
         loading ?
           <Loading /> :
           <ArtistWrapper>
-            <h3>
-              {selectedLength === 0 ?
-                'Choose your favorite artists from 5 to 10.' :
-                `${selectedLength} Artists selected!`}
-            </h3>
+            <h3>{message}</h3>
             <ProgressBar
               lengthLimit={10}
-              selectedLength={selectedLength}
+              currentLength={selectedArtistLength}
             />
             <ArtistList>
               {
@@ -67,7 +66,7 @@ const FavoriteArtists = ({
             </ArtistList>
           </ArtistWrapper>
       }
-    </Main>
+    </DefaultLayout>
   );
 };
 

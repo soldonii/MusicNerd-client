@@ -5,7 +5,7 @@ import { createGlobalStyle } from 'styled-components';
 import HomeContainer from '../containers/Home.container';
 import AuthContainer from '../containers/Auth.container';
 import UserContainer from '../containers/User.container';
-import GameContainer from '../containers/Game.container';
+import WaitingContainer from '../containers/Waiting.container';
 import * as colors from '../lib/colors';
 
 const App = () => {
@@ -17,12 +17,12 @@ const App = () => {
           <Route exact path='/' component={HomeContainer} />
           <Route path='/auth' component={AuthContainer} />
           <Route path='/users' component={UserContainer} />
-          <Route path='/games' component={GameContainer} />
+          <Route path='/waiting' component={WaitingContainer} />
         </Switch>
       </Router>
     </Fragment>
   );
-}
+};
 
 const GlobalStyle = createGlobalStyle`
   @font-face {

@@ -1,8 +1,11 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 
-const Modal = ({ shouldModalOpen, setShouldModalOpen, title, children }) => {
+import Loading from './Loading';
+
+const Modal = ({ loading, error, shouldModalOpen, setShouldModalOpen, title, children }) => {
   const modalStyle = shouldModalOpen ? { display: 'block' } : { display: 'none' };
+
   return (
     <Fragment>
       <ModalOverlay
@@ -10,13 +13,19 @@ const Modal = ({ shouldModalOpen, setShouldModalOpen, title, children }) => {
         onClick={() => setShouldModalOpen(false)}
       />
       <ModalWindow style={modalStyle}>
-        <ModalHeader>
-          <h1>{title}</h1>
-          <h3 onClick={() => setShouldModalOpen(false)}>X</h3>
-        </ModalHeader>
-        <ModalContent>
-          {children}
-        </ModalContent>
+        {
+          loading ?
+            <Loading color='black' /> :
+            <Fragment>
+              <ModalHeader>
+                <h1>{title}</h1>
+                <h3 onClick={() => setShouldModalOpen(false)}>X</h3>
+              </ModalHeader>
+              <ModalContent>
+                {children}
+              </ModalContent>
+            </Fragment>
+        }
       </ModalWindow>
     </Fragment>
   );
@@ -27,6 +36,7 @@ const ModalOverlay = styled.div`
   position: absolute;
   height: 100vh;
   width: 100vw;
+  z-index: 1;
 `;
 
 const ModalWindow = styled.div`
@@ -35,6 +45,7 @@ const ModalWindow = styled.div`
   background-color: white;
   color: black;
   text-align: center;
+  z-index: 2
 `;
 
 const ModalHeader = styled.div`

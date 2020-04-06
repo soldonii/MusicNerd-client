@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Loading from '../layout/Loading';
 import Form from '../layout/Form';
 import FormInput from '../layout/FormInput';
+
 import * as colors from '../../lib/colors';
 
 const Login = ({
@@ -29,13 +30,8 @@ const Login = ({
     // eslint-disable-next-line
   }, [ userId, isAuthenticated, error ]);
 
-
   const checkInputCondition = () => (email.includes('@')) && (password.length > 5);
-  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    requestLogin(user);
-  };
+  const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
 
   const { email, password } = user;
 
@@ -43,7 +39,7 @@ const Login = ({
     loading ?
       <Loading /> :
       <LoginWrapper>
-        <Form title='Login' onSubmit={onSubmit}>
+        <Form title='Login' onSubmit={() => requestLogin(user)}>
           <FormInput
             type='email'
             name='email'

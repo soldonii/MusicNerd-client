@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { fetchArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/artist.actions';
 import Navbar from '../components/layout/Navbar';
-import logo from '../assets/logo.png';
 import FavoriteArtists from '../components/users/FavoriteArtists';
+
+import { fetchArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/artist.actions';
+import logo from '../assets/logo.png';
 
 const UserContainer = ({
   userId,
@@ -22,7 +23,7 @@ const UserContainer = ({
   <Fragment>
     <Navbar logo={logo}>
       {Object.keys(selectedArtists).length >= 5
-        && <Link to='#' onClick={() => postData(userId, selectedArtists)}>Next</Link>}
+        && <button onClick={() => postData(userId, selectedArtists)}>Next</button>}
     </Navbar>
     <Switch>
       <Route exact path={`/users/${userId}/favorites`}>

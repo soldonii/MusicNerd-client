@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const ProgressBar = ({ lengthLimit, selectedLength }) => (
+const ProgressBar = ({ lengthLimit, currentLength }) => (
   <Bar>
-    <Progress style={{ width: `${selectedLength / lengthLimit * 100}%` }} />
+    <Progress style={{ width: `${currentLength / lengthLimit * 100}%` }} />
   </Bar>
 );
 
@@ -24,7 +24,7 @@ const Progress = styled.div`
 
 ProgressBar.propTypes = {
   lengthLimit: PropTypes.number.isRequired,
-  selectedLength: PropTypes.number.isRequired
+  currentLength: PropTypes.number.isRequired
 };
 
 export default ProgressBar;

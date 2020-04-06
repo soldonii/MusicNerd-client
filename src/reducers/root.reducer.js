@@ -1,10 +1,18 @@
 import { combineReducers } from 'redux';
 import { authReducer } from './auth.reducer';
 import { artistReducer } from './artist.reducer';
-import { gameReducer } from './game.reducer';
+import { waitingReducer } from './waiting.reducer';
 
-export default combineReducers({
+const appReducer = combineReducers({
   auth: authReducer,
   artist: artistReducer,
-  game: gameReducer
- });
+  waiting: waitingReducer
+});
+
+export const rootReducer = (state, action) => {
+  if (action.type === 'LOGOUT') {
+    state = undefined;
+  }
+
+  return appReducer(state, action);
+};

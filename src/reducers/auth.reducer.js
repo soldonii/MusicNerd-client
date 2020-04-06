@@ -8,7 +8,7 @@ import {
   LOGOUT,
   CLEAR_ERROR,
 } from '../constants/index';
-import setTokenToHeader from '../lib/setTokenToHeader';
+import { setTokenToHeader } from '../lib/auth';
 
 const initialState = {
   token: '',

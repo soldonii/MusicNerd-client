@@ -33,6 +33,10 @@ export const requestLogin = dispatch => async user => {
   }
 };
 
-export const requestLogout = dispatch => () => dispatch({ type: LOGOUT });
+export const requestLogout = dispatch => () => {
+  dispatch({ type: LOGOUT });
+};
 
-export const clearError = dispatch => () => dispatch({ type: CLEAR_ERROR });
+export const clearError = dispatch => () => {
+  dispatch({ type: CLEAR_ERROR });
+};

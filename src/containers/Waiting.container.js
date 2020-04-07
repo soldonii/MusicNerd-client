@@ -13,8 +13,7 @@ import { postGame, fetchGames, enterGame } from '../actions/waiting.actions';
 
 const WatingContainer = ({
   userId,
-  createdGameId,
-  enterGameId,
+  gameId,
   allGames,
   loading,
   error,
@@ -41,8 +40,7 @@ const WatingContainer = ({
       <DefaultLayout>
         <WatingRoom
           userId={userId}
-          createdGameId={createdGameId}
-          enterGameId={enterGameId}
+          gameId={gameId}
           allGames={allGames}
           loading={loading}
           error={error}
@@ -57,8 +55,7 @@ const WatingContainer = ({
 
 const mapStateToProps = state => ({
   userId: state.auth.userId,
-  createdGameId: state.waiting.createdGameId,
-  enterGameId: state.waiting.enterGameId,
+  gameId: state.waiting.gameId,
   allGames: state.waiting.allGames,
   loading: state.waiting.loading,
   error: state.waiting.error
@@ -73,8 +70,7 @@ const mapDispatchToProps = dispatch => ({
 
 WatingContainer.propTypes = {
   userId: PropTypes.string.isRequired,
-  createdGameId: PropTypes.string.isRequired,
-  enterGameId: PropTypes.string.isRequired,
+  gameId: PropTypes.string.isRequired,
   allGames: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,

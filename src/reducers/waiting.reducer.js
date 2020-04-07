@@ -11,9 +11,8 @@ import {
 } from '../constants/index';
 
 const initialState = {
-  createdGameId: '',
+  gameId: '',
   allGames: [],
-  enterGameId: '',
   loading: false,
   error: null
 };
@@ -29,7 +28,7 @@ export const waitingReducer = (state = initialState, action) => {
     case CREATE_GAME_SUCCESS:
       return {
         ...state,
-        createdGameId: action.createdGameId,
+        gameId: action.gameId,
         loading: false,
         error: null
       };
@@ -38,7 +37,7 @@ export const waitingReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        createdGameId: '',
+        gameId: '',
         error: action.error
       };
 
@@ -74,14 +73,15 @@ export const waitingReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         error: null,
-        enterGameId: action.gameId
+        gameId: action.gameId
       };
 
     case ENTER_GAME_FAILED:
       return {
         ...state,
         loading: false,
-        error: action.error
+        error: action.error,
+        gameId: ''
       };
 
     default:

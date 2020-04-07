@@ -6,6 +6,7 @@ import HomeContainer from '../containers/Home.container';
 import AuthContainer from '../containers/Auth.container';
 import UserContainer from '../containers/User.container';
 import WaitingContainer from '../containers/Waiting.container';
+import GameContainer from '../containers/Game.container';
 
 import * as colors from '../lib/colors';
 
@@ -18,6 +19,7 @@ const App = () => (
         <Route path='/auth' component={AuthContainer} />
         <Route path='/users' component={UserContainer} />
         <Route path='/waiting' component={WaitingContainer} />
+        <Route path='/games' component={GameContainer} />
       </Switch>
     </Router>
   </Fragment>

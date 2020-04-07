@@ -11,8 +11,7 @@ import * as colors from '../../lib/colors';
 
 const WatingRoom = ({
   userId,
-  createdGameId,
-  enterGameId,
+  gameId,
   allGames,
   loading,
   error,
@@ -25,16 +24,13 @@ const WatingRoom = ({
   const [ gameTitle, setGameTitle ] = useState('');
 
   useEffect(() => {
-    if (createdGameId) {
-      history.push(`/games/${createdGameId}`);
-    }
-    if (enterGameId) {
-      history.push(`/games/${enterGameId}`);
+    if (gameId) {
+      return history.push(`/games/${gameId}`);
     }
     fetchGames();
 
     // eslint-disable-next-line
-  }, [ createdGameId, enterGameId ]);
+  }, [ gameId ]);
 
   const onSubmit = e => {
     e.preventDefault();

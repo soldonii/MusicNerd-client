@@ -22,7 +22,7 @@ const FavoriteArtists = ({
 
   useEffect(() => {
     if (postResult === 'success') {
-      history.push('/waiting');
+      return history.push('/waiting');
     }
     requestData(userId);
 

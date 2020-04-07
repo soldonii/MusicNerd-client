@@ -17,7 +17,7 @@ export const requestSignup = dispatch => async user => {
     await axios.post('http://localhost:8080/auth/signup', user);
     dispatch({ type: SIGNUP_SUCCESS });
   } catch (err) {
-    dispatch({ type: SIGNUP_FAILED, error: err.response.data.errorMessage});
+    dispatch({ type: SIGNUP_FAILED, error: err.response.data.errorMessage });
   }
 };
 

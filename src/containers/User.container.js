@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -7,6 +7,7 @@ import Navbar from '../components/layout/Navbar';
 import FavoriteArtists from '../components/users/FavoriteArtists';
 import logo from '../assets/logo.png';
 
+import history from '../lib/history';
 import { getArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/user.actions';
 
 const UserContainer = ({
@@ -15,21 +16,26 @@ const UserContainer = ({
   artistList,
   selectedArtists,
   postResult,
-  requestData,
+  getArtists,
   onSelect,
   onDeselect,
   postData
 }) => {
   const token = localStorage.getItem('token');
-  const history = useHistory();
 
   useEffect(() => {
     if (!token || !userId ) {
-      history.push('/');
+      return history.push('/');
     }
 
+    if (postResult === 'success') {
+      return history.push('/waiting');
+    }
+
+    getArtists(userId);
+
     // eslint-disable-next-line
-  }, [ token, userId ]);
+  }, [ token, userId, postResult ]);
 
   return (
     <Fragment>
@@ -39,12 +45,9 @@ const UserContainer = ({
       </Navbar>
       <Route exact path={`/users/${userId}/favorites`}>
         <FavoriteArtists
-          userId={userId}
           loading={loading}
           artistList={artistList}
           selectedArtists={selectedArtists}
-          postResult={postResult}
-          requestData={requestData}
           onSelect={onSelect}
           onDeselect={onDeselect}
         />
@@ -62,7 +65,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestData: getArtists(dispatch),
+  getArtists: getArtists(dispatch),
   onSelect: selectArtist(dispatch),
   onDeselect: deselectArtist(dispatch),
   postData: saveFavoriteArtists(dispatch)
@@ -74,7 +77,7 @@ UserContainer.propTypes = {
   artistList: PropTypes.array.isRequired,
   selectedArtists: PropTypes.object.isRequired,
   postResult: PropTypes.string.isRequired,
-  requestData: PropTypes.func.isRequired,
+  getArtists: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   onDeselect: PropTypes.func.isRequired,
   postData: PropTypes.func.isRequired

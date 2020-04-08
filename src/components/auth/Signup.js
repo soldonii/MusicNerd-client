@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -10,21 +9,10 @@ import FormInput from '../layout/FormInput';
 import * as colors from '../../lib/colors';
 
 const Signup = ({
-  hasSignedUp,
-  signupError,
+  error,
   loading,
-  requestSignup,
-  clearError
+  requestSignup
 }) => {
-  const history = useHistory();
-
-  useEffect(() => {
-    hasSignedUp && history.push('/auth/login');
-    signupError && window.setTimeout(() => clearError(), 2000);
-
-    // eslint-disable-next-line
-  }, [ hasSignedUp, signupError ]);
-
   const [ user, setUser ] = useState({
     username: '',
     email: '',
@@ -45,7 +33,7 @@ const Signup = ({
     loading ?
       <Loading /> :
       <SignupWrapper>
-        <Form title='Sign Up' onSubmit={() => requestSignup(user)}>
+        <Form title='Sign Up' onSubmit={e => requestSignup(e, user)}>
           <FormInput
             type='text'
             name='username'
@@ -80,7 +68,7 @@ const Signup = ({
             onChange={onChange}
             required
           />
-          <ErrorMessage>{signupError ? signupError : null}</ErrorMessage>
+          <ErrorMessage>{error ? error : null}</ErrorMessage>
           <SubmitButton type='submit' value='Register' isActive={checkInputCondition()} />
         </Form>
       </SignupWrapper>
@@ -122,11 +110,9 @@ const SubmitButton = styled.input`
 `;
 
 Signup.propTypes = {
-  hasSignedUp: PropTypes.bool.isRequired,
-  signupError: PropTypes.string,
+  error: PropTypes.string,
   loading: PropTypes.bool.isRequired,
-  requestSignup: PropTypes.func.isRequired,
-  clearError: PropTypes.func.isRequired
+  requestSignup: PropTypes.func.isRequired
 };
 
 export default Signup;

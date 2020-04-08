@@ -10,7 +10,9 @@ import {
   CLEAR_AUTH_ERROR
 } from '../constants/index';
 
-export const requestSignup = dispatch => async user => {
+export const requestSignup = dispatch => async (event, user) => {
+  event.preventDefault();
+
   try {
     dispatch({ type: SIGNUP_REQUEST });
 
@@ -21,7 +23,9 @@ export const requestSignup = dispatch => async user => {
   }
 };
 
-export const requestLogin = dispatch => async user => {
+export const requestLogin = dispatch => async (event, user) => {
+  event.preventDefault();
+
   try {
     dispatch({ type: LOGIN_REQUEST });
 

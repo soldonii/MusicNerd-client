@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import io from 'socket.io-client';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import DefaultLayout from '../layout/DefaultLayout';
@@ -7,52 +7,53 @@ import Header from '../layout/Header';
 import PlayerCard from './PlayerCard';
 import Chatting from './Chatting';
 
-import { enterRoom, updateParticipants } from '../../lib/socket';
+import { disconnectSocket } from '../../lib/socket';
 import wave from '../../assets/soundwave.gif';
 
 const GameRoom = ({
+  hasJoined,
   userId,
   gameId,
   participants,
-  // chatMessages,
-  // loading,
-  // error,
-  // updateParticipants
+  joinRoom,
+  leaveRoom,
+  updateParticipants
 }) => {
-  useEffect(() => {
-    // socket.emit('enter room', { userId, gameId });
-    enterRoom(userId, gameId);
+  const history = useHistory();
 
-    // return () => {
-    //   socket.emit('disconnect');
-    //   socket.off();
-    // }
+  useEffect(() => {
+    joinRoom(userId, gameId);
+    return () => disconnectSocket();
 
     // eslint-disable-next-line
   }, [ userId, gameId ]);
 
   useEffect(() => {
-    console.log('participants');
     updateParticipants();
 
-    // return () => socket.off();
+    return () => disconnectSocket();
 
     // eslint-disable-next-line
-  }, [ userId ]);
+  }, []);
+
+  const onExitButtonClick = (userId, gameId) => {
+    leaveRoom(userId, gameId);
+    return history.push('/waiting');
+  };
 
   return (
     <DefaultLayout>
       <GameWrapper>
         <Header>
           {
-            // participants.map(player => (
-            //   <PlayerCard
-            //     key={player.userId}
-            //     imgSrc={player.thumbnail_url}
-            //     userId={player.userId}
-            //     username={player.username}
-            //   />
-            // ))
+            participants.map(player => (
+              <PlayerCard
+                key={player.userId}
+                imgSrc={player.thumbnail_url}
+                userId={player.userId}
+                username={player.username}
+              />
+            ))
           }
         </Header>
         <GameMain>
@@ -62,7 +63,7 @@ const GameRoom = ({
           <MainRight>
             <ButtonContainer>
               <button >READY</button>
-              <button>EXIT</button>
+              <button onClick={() => onExitButtonClick(userId, gameId)}>EXIT</button>
             </ButtonContainer>
             <Chatting>
               some message...

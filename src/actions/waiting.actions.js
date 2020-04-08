@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../lib/history';
 import {
   CREATE_GAME_REQUEST,
   CREATE_GAME_SUCCESS,
@@ -33,6 +34,7 @@ export const createGame = dispatch => async (userId, gameTitle) => {
     });
 
     dispatch({ type: CREATE_GAME_SUCCESS, gameId });
+    return history.push(`/games/${gameId}`);
   } catch (err) {
     dispatch({ type: CREATE_GAME_FAILED, error: err.response.data.errorMessage });
   }
@@ -44,6 +46,7 @@ export const enterGame = dispatch => async gameId => {
     await axios.put('http://localhost:8080/waiting', { gameId });
 
     dispatch({ type: ENTER_GAME_SUCCESS, gameId });
+    return history.push(`/games/${gameId}`);
   } catch (err) {
     dispatch({ type: ENTER_GAME_FAILED, error: err.response.data.errorMessage });
   }

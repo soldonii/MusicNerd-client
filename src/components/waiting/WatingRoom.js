@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -8,47 +7,18 @@ import Form from '../layout/Form';
 import FormInput from '../layout/FormInput';
 import GameCard from './GameCard';
 
-import { connectSocket, disconnectSocket } from '../../lib/socket';
 import * as colors from '../../lib/colors';
 
 const WatingRoom = ({
   userId,
-  gameId,
   gameList,
   loading,
-  error,
+  // error,
   createGame,
-  getGames,
   enterGame,
-  clearError
 }) => {
-  const history = useHistory();
   const [ shouldModalOpen, setShouldModalOpen ] = useState(false);
   const [ gameTitle, setGameTitle ] = useState('');
-
-  useEffect(() => {
-    connectSocket();
-
-    return () => disconnectSocket();
-  }, []);
-
-  useEffect(() => {
-    if (gameId) {
-      return history.push(`/games/${gameId}`);
-    }
-    getGames();
-
-    // eslint-disable-next-line
-  }, [ gameId ]);
-
-  useEffect(() => {
-    if (error) {
-      window.alert('방에 입장할 수 없습니다!');
-      clearError();
-    }
-
-    // eslint-disable-next-line
-  }, [ error ]);
 
   const onSubmit = e => {
     e.preventDefault();
@@ -155,12 +125,10 @@ const SubmitButton = styled.input`
 
 WatingRoom.propTypes = {
   userId: PropTypes.string.isRequired,
-  gameId: PropTypes.string.isRequired,
   gameList: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
   createGame: PropTypes.func.isRequired,
-  getGames: PropTypes.func.isRequired,
   enterGame: PropTypes.func.isRequired,
 };
 

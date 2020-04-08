@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -10,36 +9,25 @@ import FormInput from '../layout/FormInput';
 import * as colors from '../../lib/colors';
 
 const Login = ({
-  userId,
-  isAuthenticated,
   error,
   loading,
-  requestLogin,
-  clearError
+  requestLogin
 }) => {
-  const history = useHistory();
   const [ user, setUser ] = useState({
     email: '',
     password: '',
   });
 
-  useEffect(() => {
-    isAuthenticated && history.push(`/users/${userId}/favorites`);
-    error && window.setTimeout(() => clearError(), 2000);
-
-    // eslint-disable-next-line
-  }, [ userId, isAuthenticated, error ]);
+  const { email, password } = user;
 
   const checkInputCondition = () => (email.includes('@')) && (password.length > 5);
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
-
-  const { email, password } = user;
 
   return (
     loading ?
       <Loading /> :
       <LoginWrapper>
-        <Form title='Login' onSubmit={() => requestLogin(user)}>
+        <Form title='Login' onSubmit={e => requestLogin(e, user)}>
           <FormInput
             type='email'
             name='email'
@@ -99,12 +87,9 @@ const SubmitButton = styled.input`
 `;
 
 Login.propTypes = {
-  userId: PropTypes.string.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
   error: PropTypes.string,
   loading: PropTypes.bool.isRequired,
   requestLogin: PropTypes.func.isRequired,
-  clearError: PropTypes.func.isRequired
 };
 
 export default Login;

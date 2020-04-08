@@ -7,7 +7,7 @@ import Navbar from '../components/layout/Navbar';
 import FavoriteArtists from '../components/users/FavoriteArtists';
 import logo from '../assets/logo.png';
 
-import { fetchArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/artist.actions';
+import { getArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/user.actions';
 
 const UserContainer = ({
   userId,
@@ -62,7 +62,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestData: fetchArtists(dispatch),
+  requestData: getArtists(dispatch),
   onSelect: selectArtist(dispatch),
   onDeselect: deselectArtist(dispatch),
   postData: saveFavoriteArtists(dispatch)

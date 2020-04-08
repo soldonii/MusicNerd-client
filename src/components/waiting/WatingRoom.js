@@ -7,34 +7,52 @@ import Modal from '../layout/Modal';
 import Form from '../layout/Form';
 import FormInput from '../layout/FormInput';
 import GameCard from './GameCard';
+
+import { connectSocket, disconnectSocket } from '../../lib/socket';
 import * as colors from '../../lib/colors';
 
 const WatingRoom = ({
   userId,
   gameId,
-  allGames,
+  gameList,
   loading,
   error,
-  postGame,
-  fetchGames,
-  enterGame
+  createGame,
+  getGames,
+  enterGame,
+  clearError
 }) => {
   const history = useHistory();
   const [ shouldModalOpen, setShouldModalOpen ] = useState(false);
   const [ gameTitle, setGameTitle ] = useState('');
 
   useEffect(() => {
+    connectSocket();
+
+    return () => disconnectSocket();
+  }, []);
+
+  useEffect(() => {
     if (gameId) {
       return history.push(`/games/${gameId}`);
     }
-    fetchGames();
+    getGames();
 
     // eslint-disable-next-line
   }, [ gameId ]);
 
+  useEffect(() => {
+    if (error) {
+      window.alert('방에 입장할 수 없습니다!');
+      clearError();
+    }
+
+    // eslint-disable-next-line
+  }, [ error ]);
+
   const onSubmit = e => {
     e.preventDefault();
-    postGame(userId, gameTitle);
+    createGame(userId, gameTitle);
   };
 
   return (
@@ -47,7 +65,7 @@ const WatingRoom = ({
       >
         <Form style={{ height: '30vh' }} onSubmit={onSubmit}>
           <FormInput type='text' onChange={e => setGameTitle(e.target.value)} />
-          <ErrorMessage>{error ? error : null}</ErrorMessage>
+          {/* <ErrorMessage>{error ? error : null}</ErrorMessage> */}
           <SubmitButton type='submit' value='Create' />
         </Form>
       </Modal>
@@ -58,10 +76,10 @@ const WatingRoom = ({
         </GameListNav>
         <GameCardWrapper>
           {
-            !allGames.length ?
+            !gameList.length ?
               <h1 style={{ textAlign: 'center' }}>There is no room!</h1> :
-              allGames.map(game => {
-                const { _id: gameId, is_playing: isPlaying, participants, game_title: gameTitle, thumbnail } = game;
+              gameList.map(game => {
+                const { _id: gameId, is_playing: isPlaying, participants, game_title: gameTitle, thumbnail_url: thumbnailUrl } = game;
 
                 return (
                   <GameCard
@@ -70,7 +88,7 @@ const WatingRoom = ({
                     isPlaying={isPlaying}
                     participants={participants}
                     gameTitle={gameTitle}
-                    thumbnail={thumbnail}
+                    thumbnailUrl={thumbnailUrl}
                     enterGame={enterGame}
                   />
                 )
@@ -110,14 +128,14 @@ const GameCardWrapper = styled.div`
   position: relative;
 `;
 
-const ErrorMessage = styled.p`
-  margin: 2rem 0;
-  font-size: 1.6rem;
-  height: 3rem;
-  width: 70%;
-  text-align: center;
-  color: red;
-`;
+// const ErrorMessage = styled.p`
+//   margin: 2rem 0;
+//   font-size: 1.6rem;
+//   height: 3rem;
+//   width: 70%;
+//   text-align: center;
+//   color: red;
+// `;
 
 const SubmitButton = styled.input`
   border: none;
@@ -138,11 +156,11 @@ const SubmitButton = styled.input`
 WatingRoom.propTypes = {
   userId: PropTypes.string.isRequired,
   gameId: PropTypes.string.isRequired,
-  allGames: PropTypes.array.isRequired,
+  gameList: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
-  postGame: PropTypes.func.isRequired,
-  fetchGames: PropTypes.func.isRequired,
+  createGame: PropTypes.func.isRequired,
+  getGames: PropTypes.func.isRequired,
   enterGame: PropTypes.func.isRequired,
 };
 

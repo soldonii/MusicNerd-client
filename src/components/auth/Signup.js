@@ -17,12 +17,6 @@ const Signup = ({
   clearError
 }) => {
   const history = useHistory();
-  const [ user, setUser ] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmationPassword: ''
-  });
 
   useEffect(() => {
     hasSignedUp && history.push('/auth/login');
@@ -30,6 +24,13 @@ const Signup = ({
 
     // eslint-disable-next-line
   }, [ hasSignedUp, signupError ]);
+
+  const [ user, setUser ] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmationPassword: ''
+  });
 
   const { username, email, password, confirmationPassword } = user;
 

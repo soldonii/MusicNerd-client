@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -7,38 +6,23 @@ import Modal from '../layout/Modal';
 import Form from '../layout/Form';
 import FormInput from '../layout/FormInput';
 import GameCard from './GameCard';
+
 import * as colors from '../../lib/colors';
 
 const WatingRoom = ({
   userId,
-  createdGameId,
-  enterGameId,
-  allGames,
+  gameList,
   loading,
-  error,
-  postGame,
-  fetchGames,
-  enterGame
+  // error,
+  createGame,
+  enterGame,
 }) => {
-  const history = useHistory();
   const [ shouldModalOpen, setShouldModalOpen ] = useState(false);
   const [ gameTitle, setGameTitle ] = useState('');
 
-  useEffect(() => {
-    if (createdGameId) {
-      history.push(`/games/${createdGameId}`);
-    }
-    if (enterGameId) {
-      history.push(`/games/${enterGameId}`);
-    }
-    fetchGames();
-
-    // eslint-disable-next-line
-  }, [ createdGameId, enterGameId ]);
-
   const onSubmit = e => {
     e.preventDefault();
-    postGame(userId, gameTitle);
+    createGame(userId, gameTitle);
   };
 
   return (
@@ -51,7 +35,7 @@ const WatingRoom = ({
       >
         <Form style={{ height: '30vh' }} onSubmit={onSubmit}>
           <FormInput type='text' onChange={e => setGameTitle(e.target.value)} />
-          <ErrorMessage>{error ? error : null}</ErrorMessage>
+          {/* <ErrorMessage>{error ? error : null}</ErrorMessage> */}
           <SubmitButton type='submit' value='Create' />
         </Form>
       </Modal>
@@ -62,10 +46,10 @@ const WatingRoom = ({
         </GameListNav>
         <GameCardWrapper>
           {
-            !allGames.length ?
+            !gameList.length ?
               <h1 style={{ textAlign: 'center' }}>There is no room!</h1> :
-              allGames.map(game => {
-                const { _id: gameId, is_playing: isPlaying, participants, game_title: gameTitle, thumbnail } = game;
+              gameList.map(game => {
+                const { _id: gameId, is_playing: isPlaying, participants, game_title: gameTitle, thumbnail_url: thumbnailUrl } = game;
 
                 return (
                   <GameCard
@@ -74,7 +58,7 @@ const WatingRoom = ({
                     isPlaying={isPlaying}
                     participants={participants}
                     gameTitle={gameTitle}
-                    thumbnail={thumbnail}
+                    thumbnailUrl={thumbnailUrl}
                     enterGame={enterGame}
                   />
                 )
@@ -114,14 +98,14 @@ const GameCardWrapper = styled.div`
   position: relative;
 `;
 
-const ErrorMessage = styled.p`
-  margin: 2rem 0;
-  font-size: 1.6rem;
-  height: 3rem;
-  width: 70%;
-  text-align: center;
-  color: red;
-`;
+// const ErrorMessage = styled.p`
+//   margin: 2rem 0;
+//   font-size: 1.6rem;
+//   height: 3rem;
+//   width: 70%;
+//   text-align: center;
+//   color: red;
+// `;
 
 const SubmitButton = styled.input`
   border: none;
@@ -141,12 +125,10 @@ const SubmitButton = styled.input`
 
 WatingRoom.propTypes = {
   userId: PropTypes.string.isRequired,
-  gameId: PropTypes.string.isRequired,
-  allGames: PropTypes.array.isRequired,
+  gameList: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
-  postGame: PropTypes.func.isRequired,
-  fetchGames: PropTypes.func.isRequired,
+  createGame: PropTypes.func.isRequired,
   enterGame: PropTypes.func.isRequired,
 };
 

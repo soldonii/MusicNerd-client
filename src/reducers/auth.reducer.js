@@ -6,7 +6,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILED,
   LOGOUT,
-  CLEAR_ERROR,
+  CLEAR_AUTH_ERROR,
 } from '../constants/index';
 import { setTokenToHeader } from '../lib/auth';
 
@@ -66,7 +66,7 @@ export const authReducer = (state = initialState, action) => {
         error: action.error
       };
 
-    case CLEAR_ERROR:
+    case CLEAR_AUTH_ERROR:
       return {
         ...state,
         loading: false,

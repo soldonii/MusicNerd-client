@@ -1,23 +1,26 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 
 import HomeContainer from '../containers/Home.container';
 import AuthContainer from '../containers/Auth.container';
 import UserContainer from '../containers/User.container';
 import WaitingContainer from '../containers/Waiting.container';
+import GameContainer from '../containers/Game.container';
 
+import history from '../lib/history';
 import * as colors from '../lib/colors';
 
 const App = () => (
   <Fragment>
     <GlobalStyle />
-    <Router>
+    <Router history={history}>
       <Switch>
         <Route exact path='/' component={HomeContainer} />
         <Route path='/auth' component={AuthContainer} />
         <Route path='/users' component={UserContainer} />
         <Route path='/waiting' component={WaitingContainer} />
+        <Route path='/games' component={GameContainer} />
       </Switch>
     </Router>
   </Fragment>

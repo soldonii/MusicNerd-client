@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -9,26 +8,12 @@ import Loading from '../layout/Loading';
 import ArtistCard from './ArtistCard';
 
 const FavoriteArtists = ({
-  userId,
   loading,
   artistList,
   selectedArtists,
-  postResult,
-  requestData,
   onSelect,
   onDeselect
 }) => {
-  const history = useHistory();
-
-  useEffect(() => {
-    if (postResult === 'success') {
-      history.push('/waiting');
-    }
-    requestData(userId);
-
-    // eslint-disable-next-line
-  }, [ userId, postResult ]);
-
   const selectedArtistLength = Object.keys(selectedArtists).length;
   const message = selectedArtistLength === 0 ?
     'Choose your favorite artists from 5 to 10.' :
@@ -87,12 +72,9 @@ const ArtistList = styled.div`
 `;
 
 FavoriteArtists.propTypes = {
-  userId: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
   artistList: PropTypes.array.isRequired,
   selectedArtists: PropTypes.object.isRequired,
-  postResult: PropTypes.string.isRequired,
-  requestData: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
   onDeselect: PropTypes.func.isRequired,
 };

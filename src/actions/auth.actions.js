@@ -7,21 +7,25 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILED,
   LOGOUT,
-  CLEAR_ERROR
+  CLEAR_AUTH_ERROR
 } from '../constants/index';
 
-export const requestSignup = dispatch => async user => {
+export const requestSignup = dispatch => async (event, user) => {
+  event.preventDefault();
+
   try {
     dispatch({ type: SIGNUP_REQUEST });
 
     await axios.post('http://localhost:8080/auth/signup', user);
     dispatch({ type: SIGNUP_SUCCESS });
   } catch (err) {
-    dispatch({ type: SIGNUP_FAILED, error: err.response.data.errorMessage});
+    dispatch({ type: SIGNUP_FAILED, error: err.response.data.errorMessage });
   }
 };
 
-export const requestLogin = dispatch => async user => {
+export const requestLogin = dispatch => async (event, user) => {
+  event.preventDefault();
+
   try {
     dispatch({ type: LOGIN_REQUEST });
 
@@ -38,5 +42,5 @@ export const logout = dispatch => () => {
 };
 
 export const clearError = dispatch => () => {
-  dispatch({ type: CLEAR_ERROR });
+  dispatch({ type: CLEAR_AUTH_ERROR });
 };

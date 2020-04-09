@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const PlayerCard = ({ imgSrc, userId, username }) => (
-  <CardWrapper data-id={userId}>
+const PlayerCard = ({ imgSrc, userId, username, isReady }) => (
+  <CardWrapper data-id={userId} isReady={isReady}>
     <img src={imgSrc} alt='user-profile'/>
     <h3>{username}</h3>
   </CardWrapper>
@@ -14,7 +14,8 @@ const CardWrapper = styled.div`
   height: 11rem;
   width: 11rem;
   text-align: center;
-  background-color: #2f71bd;
+  background-color: ${props => props.isReady ? '#FBAB7E' : '#2f71bd'};
+  background-image: ${props => props.isReady && 'linear-gradient(0deg, #FBAB7E 0%, #F7CE68 100%)'};
 
   & img {
     margin: 0 auto;

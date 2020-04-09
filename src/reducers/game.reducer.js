@@ -1,59 +1,43 @@
 import {
-  CONNECT_SOCKET_REQUEST,
-  CONNECT_SOCKET_SUCCESS,
-  CONNECT_SOCKET_FAILED
+  UPDATE_GAME_CREATOR,
+  UPDATE_PARTICIPANTS,
+  UPDATE_READY_STATUS,
+  UPDATE_CHAT_MESSAGES
 } from '../constants/index';
 
 const initialState = {
-  username: '',
-  gameId: '',
-  gameTitle: '',
-  createdBy: '',
-  isPlaying: false,
+  gameCreator: '',
   participants: [],
-  chatMessages: [], // { userId, chatMessage } 형태의 객체여야 함
-  score: {}, // { userId: points } 형태의 객체
-  readyStatus: {}, // { userid: true }와 같은 식. 모든 user true이면 방장은 게임 시작할 수 있음
-  playList: [], // 재생된 음악 list,
+  readyStatus: {},
+  chatMessages: [],
   loading: false,
   error: null
 };
 
 export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CONNECT_SOCKET_REQUEST:
+    case UPDATE_GAME_CREATOR:
       return {
         ...state,
-        loading: true
+        gameCreator: action.gameCreator
       };
 
-    case CONNECT_SOCKET_SUCCESS:
-      const {
-        is_playing: isPlaying,
-        participants,
-        _id: gameId,
-        game_title: gameTitle,
-        created_by: createdBy,
-        score } = action.game;
-
+    case UPDATE_PARTICIPANTS:
       return {
         ...state,
-        loading: false,
-        username: action.username,
-        gameId,
-        gameTitle,
-        createdBy,
-        isPlaying,
-        participants,
-        score,
-        error: null
+        participants: action.participants
       };
 
-    case CONNECT_SOCKET_FAILED:
+    case UPDATE_READY_STATUS:
       return {
         ...state,
-        loading: false,
-        error: action.error
+        readyStatus: action.readyStatus
+      };
+
+    case UPDATE_CHAT_MESSAGES:
+      return {
+        ...state,
+        chatMessages: [ ...state.chatMessages, action.message ]
       };
 
     default:

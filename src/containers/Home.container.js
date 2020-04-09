@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -8,16 +8,14 @@ import Navbar from '../components/layout/Navbar';
 import DefaultLayout from '../components/layout/DefaultLayout';
 import logo from '../assets/logo.png';
 
+import history from '../lib/history';
 import { logout } from '../actions/auth.actions';
 
 const HomeContainer = ({ userId, logout }) => {
   const token = localStorage.getItem('token');
-  const history = useHistory();
 
   useEffect(() => {
     (token && userId) && history.push('/games');
-
-    // eslint-disable-next-line
   }, [ token, userId ]);
 
   return (

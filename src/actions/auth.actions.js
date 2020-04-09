@@ -7,10 +7,12 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILED,
   LOGOUT,
-  CLEAR_ERROR
+  CLEAR_AUTH_ERROR
 } from '../constants/index';
 
-export const requestSignup = dispatch => async user => {
+export const requestSignup = dispatch => async (event, user) => {
+  event.preventDefault();
+
   try {
     dispatch({ type: SIGNUP_REQUEST });
 
@@ -21,7 +23,9 @@ export const requestSignup = dispatch => async user => {
   }
 };
 
-export const requestLogin = dispatch => async user => {
+export const requestLogin = dispatch => async (event, user) => {
+  event.preventDefault();
+
   try {
     dispatch({ type: LOGIN_REQUEST });
 
@@ -38,5 +42,5 @@ export const logout = dispatch => () => {
 };
 
 export const clearError = dispatch => () => {
-  dispatch({ type: CLEAR_ERROR });
+  dispatch({ type: CLEAR_AUTH_ERROR });
 };

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -9,6 +9,7 @@ import Login from '../components/auth/Login';
 import DefaultLayout from '../components/layout/DefaultLayout';
 import logo from '../assets/logo.png';
 
+import history from '../lib/history';
 import { requestSignup, requestLogin, clearError, logout } from '../actions/auth.actions';
 
 const AuthContainer = ({
@@ -24,6 +25,20 @@ const AuthContainer = ({
 }) => {
   const token = localStorage.getItem('token');
 
+  useEffect(() => {
+    hasSignedUp && history.push('/auth/login');
+    error && window.setTimeout(() => clearError(), 2000);
+
+    // eslint-disable-next-line
+  }, [ hasSignedUp, error ]);
+
+  useEffect(() => {
+    isAuthenticated && history.push(`/users/${userId}/favorites`);
+    error && window.setTimeout(() => clearError(), 2000);
+
+    // eslint-disable-next-line
+  }, [ userId, isAuthenticated, error ]);
+
   return (
     <Fragment>
       <Navbar logo={logo}>
@@ -34,21 +49,16 @@ const AuthContainer = ({
         <Switch>
           <Route exact path='/auth/signup'>
             <Signup
-              hasSignedUp={hasSignedUp}
-              signupError={error}
+              error={error}
               loading={loading}
               requestSignup={requestSignup}
-              clearError={clearError}
             />
           </Route>
           <Route exact path='/auth/login'>
             <Login
-              userId={userId}
-              isAuthenticated={isAuthenticated}
               error={error}
               loading={loading}
               requestLogin={requestLogin}
-              clearError={clearError}
             />
           </Route>
         </Switch>

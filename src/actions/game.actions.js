@@ -1,18 +1,36 @@
-import axios from 'axios';
+import { getSocket } from '../lib/socket';
+
 import {
-  CONNECT_SOCKET_REQUEST,
-  CONNECT_SOCKET_SUCCESS,
-  CONNECT_SOCKET_FAILED
+  UPDATE_GAME_CREATOR,
+  UPDATE_PARTICIPANTS,
+  UPDATE_READY_STATUS,
+  UPDATE_CHAT_MESSAGES
 } from '../constants/index';
 
-export const connectSocket = dispatch => async gameId => {
-  try {
-    dispatch({ type: CONNECT_SOCKET_REQUEST });
+export const updateGameCreator = dispatch => () => {
+  const socket = getSocket();
+  socket.on('gameCreator', gameCreator => {
+    dispatch({ type: UPDATE_GAME_CREATOR, gameCreator });
+  });
+}
 
-    const { data: { game, username } } = await axios.get(`http://localhost:8080/games/${gameId}`);
-    dispatch({ type: CONNECT_SOCKET_SUCCESS, game, username });
-  } catch (err) {
-    dispatch({ type: CONNECT_SOCKET_FAILED, error: err.response.data.errorMessage });
-  }
+export const updateParticipants = dispatch => () => {
+  const socket = getSocket();
+  socket.on('participants', participants => {
+    dispatch({ type: UPDATE_PARTICIPANTS, participants });
+  });
 };
 
+export const updateReadyStatus = dispatch => () => {
+  const socket = getSocket();
+  socket.on('ready status', readyStatus => {
+    dispatch({ type: UPDATE_READY_STATUS, readyStatus });
+  });
+};
+
+export const updateChatMessages = dispatch => () => {
+  const socket = getSocket();
+  socket.on('chat messages', message => {
+    dispatch({ type: UPDATE_CHAT_MESSAGES, message });
+  });
+};

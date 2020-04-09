@@ -1,7 +1,7 @@
 import {
-  FETCH_ARTISTS_REQUEST,
-  FETCH_ARTISTS_SUCCESS,
-  FETCH_ARTISTS_FAILED,
+  GET_ARTISTS_REQUEST,
+  GET_ARTISTS_SUCCESS,
+  GET_ARTISTS_FAILED,
   SELECT_FAVORITE_ARTIST,
   DESELECT_FAVORITE_ARTIST,
   SAVE_ARTISTS_REQUEST,
@@ -20,14 +20,14 @@ const initialState = {
 
 export const artistReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_ARTISTS_REQUEST:
+    case GET_ARTISTS_REQUEST:
       return {
         ...state,
         userId: action.userId,
         loading: true
       };
 
-    case FETCH_ARTISTS_SUCCESS:
+    case GET_ARTISTS_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -36,7 +36,7 @@ export const artistReducer = (state = initialState, action) => {
         selectedArtists: action.selectedArtists
       };
 
-    case FETCH_ARTISTS_FAILED:
+    case GET_ARTISTS_FAILED:
       return {
         ...state,
         loading: false,

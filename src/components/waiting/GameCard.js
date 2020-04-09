@@ -7,12 +7,12 @@ const GameCard = ({
   isPlaying,
   participants,
   gameTitle,
-  thumbnail,
+  thumbnailUrl,
   enterGame
 }) => (
   <GameCardWrapper
     onClick={() => enterGame(gameId)}
-    thumbnail={thumbnail}
+    thumbnailUrl={thumbnailUrl}
   >
     <h1>{gameTitle}</h1>
     <GameStatus>
@@ -27,7 +27,7 @@ const GameCardWrapper = styled.div`
   border: 0.3rem solid black;
   height: 100%;
   width: 24rem;
-  background: url(${props => props.thumbnail});
+  background: url(${props => props.thumbnailUrl});
   background-size: cover;
   text-align: center;
   color: white;
@@ -52,7 +52,7 @@ GameCard.propTypes = {
   isPlaying: PropTypes.bool.isRequired,
   participants: PropTypes.array.isRequired,
   gameTitle: PropTypes.string.isRequired,
-  thumbnail: PropTypes.string.isRequired,
+  thumbnailUrl: PropTypes.string.isRequired,
   enterGame: PropTypes.func.isRequired,
 };
 

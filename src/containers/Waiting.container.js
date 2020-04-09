@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -9,27 +9,44 @@ import WatingRoom from '../components/waiting/WatingRoom';
 import logo from '../assets/logo.png';
 
 import { logout } from '../actions/auth.actions';
-import { postGame, fetchGames, enterGame } from '../actions/waiting.actions';
+import { connectSocket, disconnectSocket } from '../lib/socket';
+import history from '../lib/history';
+import { createGame, getGames, enterGame, clearError } from '../actions/waiting.actions';
 
 const WatingContainer = ({
   userId,
-  gameId,
-  allGames,
+  gameList,
   loading,
   error,
   logout,
-  postGame,
-  fetchGames,
-  enterGame
+  createGame,
+  getGames,
+  enterGame,
+  clearError
 }) => {
   const token = localStorage.getItem('token');
-  const history = useHistory();
 
   useEffect(() => {
     (!token || !userId) && history.push('/');
+  }, [ token, userId ]);
+
+  useEffect(() => {
+    connectSocket();
+    getGames();
+
+    return () => disconnectSocket();
 
     // eslint-disable-next-line
-  }, [ token, userId ]);
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      window.alert('방에 입장할 수 없습니다!');
+      clearError();
+    }
+
+    // eslint-disable-next-line
+  }, [ error ]);
 
   return (
     <Fragment>
@@ -40,12 +57,10 @@ const WatingContainer = ({
       <DefaultLayout>
         <WatingRoom
           userId={userId}
-          gameId={gameId}
-          allGames={allGames}
+          gameList={gameList}
           loading={loading}
           error={error}
-          postGame={postGame}
-          fetchGames={fetchGames}
+          createGame={createGame}
           enterGame={enterGame}
         />
       </DefaultLayout>
@@ -55,28 +70,27 @@ const WatingContainer = ({
 
 const mapStateToProps = state => ({
   userId: state.auth.userId,
-  gameId: state.waiting.gameId,
-  allGames: state.waiting.allGames,
+  gameList: state.waiting.gameList,
   loading: state.waiting.loading,
   error: state.waiting.error
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: logout(dispatch),
-  postGame: postGame(dispatch),
-  fetchGames: fetchGames(dispatch),
-  enterGame: enterGame(dispatch)
+  createGame: createGame(dispatch),
+  getGames: getGames(dispatch),
+  enterGame: enterGame(dispatch),
+  clearError: clearError(dispatch)
 });
 
 WatingContainer.propTypes = {
   userId: PropTypes.string.isRequired,
-  gameId: PropTypes.string.isRequired,
-  allGames: PropTypes.array.isRequired,
+  gameList: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
   logout: PropTypes.func.isRequired,
-  postGame: PropTypes.func.isRequired,
-  fetchGames: PropTypes.func.isRequired,
+  createGame: PropTypes.func.isRequired,
+  getGames: PropTypes.func.isRequired,
   enterGame: PropTypes.func.isRequired
 };
 

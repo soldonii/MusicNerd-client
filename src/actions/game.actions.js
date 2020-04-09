@@ -1,24 +1,18 @@
 import { getSocket } from '../lib/socket';
 
 import {
-  JOIN_ROOM,
-  LEAVE_ROOM,
+  UPDATE_GAME_CREATOR,
   UPDATE_PARTICIPANTS,
+  UPDATE_READY_STATUS,
+  UPDATE_CHAT_MESSAGES
 } from '../constants/index';
 
-export const joinRoom = dispatch => (userId, gameId) => {
+export const updateGameCreator = dispatch => () => {
   const socket = getSocket();
-  socket.emit('enter room', { userId, gameId });
-
-  dispatch({ type: JOIN_ROOM });
-};
-
-export const leaveRoom = dispatch => (userId, gameId) => {
-  const socket = getSocket();
-  socket.emit('leave room', { userId, gameId });
-
-  dispatch({ type: LEAVE_ROOM });
-};
+  socket.on('gameCreator', gameCreator => {
+    dispatch({ type: UPDATE_GAME_CREATOR, gameCreator });
+  });
+}
 
 export const updateParticipants = dispatch => () => {
   const socket = getSocket();
@@ -27,20 +21,16 @@ export const updateParticipants = dispatch => () => {
   });
 };
 
+export const updateReadyStatus = dispatch => () => {
+  const socket = getSocket();
+  socket.on('ready status', readyStatus => {
+    dispatch({ type: UPDATE_READY_STATUS, readyStatus });
+  });
+};
 
-
-// export const connectSocket = () => socket = io('http://localhost:8080');
-
-// export const updateParticipants = dispatch => () => {
-//   const participants = getParticipants();
-//   console.log('in actions..', participants);
-
-//   dispatch({ type: UPDATE_PARTICIPANTS, participants });
-// };
-
-
-
-
-// export const updateParticipants = dispatch => participants => {
-//   dispatch({ type: UPDATE_PARTICIPANTS, participants });
-// };
+export const updateChatMessages = dispatch => () => {
+  const socket = getSocket();
+  socket.on('chat messages', message => {
+    dispatch({ type: UPDATE_CHAT_MESSAGES, message });
+  });
+};

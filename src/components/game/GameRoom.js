@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import DefaultLayout from '../layout/DefaultLayout';
@@ -7,38 +6,53 @@ import Header from '../layout/Header';
 import PlayerCard from './PlayerCard';
 import Chatting from './Chatting';
 
-import { disconnectSocket } from '../../lib/socket';
+import history from '../../lib/history';
 import wave from '../../assets/soundwave.gif';
 
+import {
+  leaveRoom,
+  onReady,
+  offReady,
+  sendMessage,
+  startGame,
+} from '../../lib/socket';
+
 const GameRoom = ({
-  hasJoined,
   userId,
   gameId,
+  gameCreator,
   participants,
-  joinRoom,
-  leaveRoom,
-  updateParticipants
+  readyStatus,
+  chatMessages,
+  // loading,
+  // error,
 }) => {
-  const history = useHistory();
-
-  useEffect(() => {
-    joinRoom(userId, gameId);
-    return () => disconnectSocket();
-
-    // eslint-disable-next-line
-  }, [ userId, gameId ]);
-
-  useEffect(() => {
-    updateParticipants();
-
-    return () => disconnectSocket();
-
-    // eslint-disable-next-line
-  }, []);
+  const [ isReady, setIsReady ] = useState(false);
+  const [ message, setMessage ] = useState('');
 
   const onExitButtonClick = (userId, gameId) => {
     leaveRoom(userId, gameId);
     return history.push('/waiting');
+  };
+
+  const onReadyButtonClick = userId => {
+    !isReady ? onReady(userId) : offReady(userId);
+    setIsReady(!isReady);
+  };
+
+  const onStartButtonClick = () => {
+    for (const participant of participants) {
+      if (!readyStatus[participant]) {
+        window.alert('모든 유저가 READY하지 않았습니다!');
+      }
+    }
+
+    startGame();
+  };
+
+  const onSendButtonClick = (event, message) => {
+    event.preventDefault();
+    sendMessage(message);
   };
 
   return (
@@ -52,21 +66,28 @@ const GameRoom = ({
                 imgSrc={player.thumbnail_url}
                 userId={player.userId}
                 username={player.username}
+                isReady={readyStatus[player.userId] ? true : false}
               />
             ))
           }
         </Header>
         <GameMain>
           <MainLeft>
-            <img src={wave} alt="wave"/> {/* 추후 soundwave 시각화 library로 대체  */}
+            <img src={wave} alt="wave"/>
           </MainLeft>
           <MainRight>
             <ButtonContainer>
-              <button >READY</button>
+              <button onClick={() => onReadyButtonClick(userId)}>READY</button>
+              {gameCreator === userId &&
+                <button onClick={onStartButtonClick}>GAME START</button>}
               <button onClick={() => onExitButtonClick(userId, gameId)}>EXIT</button>
             </ButtonContainer>
-            <Chatting>
-              some message...
+            <Chatting
+              message={message}
+              setMessage={setMessage}
+              onSendButtonClick={onSendButtonClick}
+            >
+              {chatMessages}
             </Chatting>
           </MainRight>
         </GameMain>

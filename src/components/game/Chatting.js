@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { css } from 'glamor';
@@ -8,18 +8,26 @@ const ScrollBarCss = css({
   backgroundColor: 'rgba(255, 255, 255, 0.5)'
 });
 
-const Chatting = ({ messages }) => {
+const Chatting = ({ message, setMessage, onSendButtonClick, children }) => {
   return (
     <Wrapper>
       <ScrollToBottom className={ScrollBarCss}>
-        <p>Messages.......</p>
+        {children.map(msg => (
+          <div key={Math.random()}>
+            <User>{msg.username}</User>
+            <Message>{msg.message}</Message>
+          </div>
+        ))
+        }
       </ScrollToBottom>
       <InputForm>
         <input
           type='text'
           placeholder='Type messages..'
+          value={message}
+          onChange={e => setMessage(e.target.value)}
         />
-        <button>Send</button>
+        <button onClick={e => onSendButtonClick(e, message)}>Send</button>
       </InputForm>
     </Wrapper>
   );
@@ -47,6 +55,21 @@ const InputForm = styled.form`
     color: white;
     font-size: 2rem;
   }
+`;
+
+const User = styled.span`
+  width: 20%;
+  height: 2rem;
+  font-size: 1.5rem;
+  text-align: left;
+  font-weight: bold;
+`;
+
+const Message = styled.span`
+  width: 80%;
+  height: 2rem;
+  font-size: 1.5rem;
+  text-align: left;
 `;
 
 export default Chatting;

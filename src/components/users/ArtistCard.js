@@ -51,7 +51,7 @@ const CardWrapper = styled.div`
   height: 20rem;
   padding: 1rem;
   text-align: center;
-  margin: 0.5rem auto;
+  margin: 1.5rem auto;
   background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   cursor: pointer;
 

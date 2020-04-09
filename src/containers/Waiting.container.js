@@ -24,7 +24,7 @@ const WatingContainer = ({
   enterGame,
   clearError
 }) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   useEffect(() => {
     (!token || !userId) && history.push('/');

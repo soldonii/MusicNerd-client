@@ -5,7 +5,16 @@ import PropTypes from 'prop-types';
 
 import GameRoom from '../components/game/GameRoom';
 
-import { updateParticipants, updateReadyStatus, updateGameCreator, updateChatMessages } from '../actions/game.actions';
+import {
+  resetGameState,
+  updateParticipants,
+  updateReadyStatus,
+  updateGameCreator,
+  updateChatMessages,
+  updateTrackUrl,
+  updateScore
+} from '../actions/game.actions';
+
 import {
   joinRoom,
   requestGameCreator,
@@ -19,18 +28,23 @@ const GameContainer = ({
   participants,
   readyStatus,
   chatMessages,
+  score,
   loading,
   error,
+  trackUrl,
+  resetGameState,
   updateParticipants,
   updateReadyStatus,
   updateGameCreator,
-  updateChatMessages
+  updateChatMessages,
+  updateTrackUrl,
+  updateScore
 }) => {
   useEffect(() => {
     joinRoom(userId, gameId);
     requestGameCreator(gameId);
-    return () => disconnectSocket();
 
+    return () => disconnectSocket();
     // eslint-disable-next-line
   }, [ userId, gameId ]);
 
@@ -39,9 +53,10 @@ const GameContainer = ({
     updateReadyStatus();
     updateGameCreator();
     updateChatMessages();
+    updateTrackUrl();
+    updateScore();
 
     return () => disconnectSocket();
-
     // eslint-disable-next-line
   }, []);
 
@@ -54,8 +69,11 @@ const GameContainer = ({
         participants={participants}
         readyStatus={readyStatus}
         chatMessages={chatMessages}
+        score={score}
         loading={loading}
         error={error}
+        trackUrl={trackUrl}
+        resetGameState={resetGameState}
       />
     </Route>
   );
@@ -68,15 +86,20 @@ const mapStateToProps = state => ({
   participants: state.game.participants,
   readyStatus: state.game.readyStatus,
   chatMessages: state.game.chatMessages,
+  score: state.game.score,
+  trackUrl: state.game.trackUrl,
   loading: state.game.loading,
   error: state.game.error
 });
 
 const mapDispatchToProps = dispatch => ({
+  resetGameState: resetGameState(dispatch),
   updateParticipants: updateParticipants(dispatch),
   updateReadyStatus: updateReadyStatus(dispatch),
   updateGameCreator: updateGameCreator(dispatch),
-  updateChatMessages: updateChatMessages(dispatch)
+  updateChatMessages: updateChatMessages(dispatch),
+  updateTrackUrl: updateTrackUrl(dispatch),
+  updateScore: updateScore(dispatch)
 });
 
 GameRoom.propTypes = {

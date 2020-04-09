@@ -21,7 +21,7 @@ const UserContainer = ({
   onDeselect,
   postData
 }) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   useEffect(() => {
     if (!token || !userId ) {

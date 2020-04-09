@@ -37,8 +37,8 @@ export const sendMessage = message => {
   socket.emit('send message', message);
 };
 
-export const startGame = () => {
-  socket.emit('start game');
+export const requestGameStart = participants => {
+  socket.emit('request game start', participants);
 };
 
 

@@ -7,7 +7,7 @@ import * as colors from '../../lib/colors';
 
 const Navbar = ({ logo, children}) => (
   <NavWrapper>
-    <Link to={localStorage.getItem('token') ? '/games' : '/'}>
+    <Link to={sessionStorage.getItem('token') ? '/games' : '/'}>
       <img src={logo} alt='logo'/>
     </Link>
     <LinkWrapper>

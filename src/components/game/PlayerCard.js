@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const PlayerCard = ({ imgSrc, userId, username, isReady }) => (
+const PlayerCard = ({ imgSrc, userId, username, score, isReady }) => (
   <CardWrapper data-id={userId} isReady={isReady}>
     <img src={imgSrc} alt='user-profile'/>
     <h3>{username}</h3>
+    <h6>{score}</h6>
   </CardWrapper>
 );
 
@@ -27,6 +28,11 @@ const CardWrapper = styled.div`
     text-align: center;
     margin-top: 0.5rem;
     font-size: 1.5rem;
+  }
+
+  h6 {
+    font-size: 1rem;
+    color: red;
   }
 `;
 

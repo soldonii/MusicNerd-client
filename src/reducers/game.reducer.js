@@ -1,8 +1,11 @@
 import {
+  RESET_GAME_STATE,
   UPDATE_GAME_CREATOR,
   UPDATE_PARTICIPANTS,
   UPDATE_READY_STATUS,
-  UPDATE_CHAT_MESSAGES
+  UPDATE_CHAT_MESSAGES,
+  UPDATE_TRACK_URL,
+  UPDATE_SCORE
 } from '../constants/index';
 
 const initialState = {
@@ -10,12 +13,24 @@ const initialState = {
   participants: [],
   readyStatus: {},
   chatMessages: [],
+  score: {},
+  trackUrl: '',
   loading: false,
   error: null
 };
 
 export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
+    case RESET_GAME_STATE:
+      return {
+        gameCreator: '',
+        participants: [],
+        readyStatus: {},
+        chatMessages: [],
+        loading: false,
+        error: null
+      };
+
     case UPDATE_GAME_CREATOR:
       return {
         ...state,
@@ -38,6 +53,22 @@ export const gameReducer = (state = initialState, action) => {
       return {
         ...state,
         chatMessages: [ ...state.chatMessages, action.message ]
+      };
+
+    case UPDATE_TRACK_URL:
+      return {
+        ...state,
+        trackUrl: action.trackUrl
+      };
+
+    case UPDATE_SCORE:
+      const { username, trackurl } = action;
+      const updatedScore = state.score[username] ? state.score[username] + 10 : 10;
+
+      return {
+        ...state,
+        score: { ...state.score, [username]: updatedScore },
+        trackurl
       };
 
     default:

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { css } from 'glamor';

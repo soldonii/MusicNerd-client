@@ -28,16 +28,20 @@ const Signup = ({
     (password.length > 5) &&
     (confirmationPassword.length > 5);
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  const onSubmit = (e, user) => {
+    e.preventDefault();
+    requestSignup(user);
+  };
 
   return (
     loading ?
       <Loading /> :
       <SignupWrapper>
-        <Form title='Sign Up' onSubmit={e => requestSignup(e, user)}>
+        <Form title='Sign Up' onSubmit={e => onSubmit(e, user)}>
           <FormInput
             type='text'
             name='username'
-            placeholder='Username'
+            placeholder='Username (lowercase only)'
             value={username}
             onChange={onChange}
             required

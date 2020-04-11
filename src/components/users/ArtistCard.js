@@ -15,14 +15,15 @@ const ArtistCard = ({
   const onClick = artistId => {
     if (artistId in selectedArtists) {
       setIsSelected(false);
-      onDeselect(artistId);
-    } else {
-      if (Object.keys(selectedArtists).length === 10) {
-        return window.alert('최대 10명까지만 선택할 수 있습니다.');
-      }
-      setIsSelected(true);
-      onSelect(artistId);
+      return onDeselect(artistId);
     }
+
+    if (Object.keys(selectedArtists).length === 10) {
+      return window.alert('최대 10명까지만 선택할 수 있습니다.');
+    }
+
+    setIsSelected(true);
+    onSelect(artistId);
   };
 
   return (

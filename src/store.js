@@ -8,7 +8,7 @@ import { rootReducer } from './reducers/root.reducer';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'artist', 'waiting']
+  whitelist: ['auth']
 };
 
 const enhancedReducer = persistReducer(persistConfig, rootReducer);

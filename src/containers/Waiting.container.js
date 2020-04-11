@@ -9,34 +9,31 @@ import WatingRoom from '../components/waiting/WatingRoom';
 import logo from '../assets/logo.png';
 
 import { setTokenToHeader } from '../lib/auth';
+import { connectSocket, disconnectSocket } from '../lib/socket';
 
 import { logout } from '../actions/auth.actions';
-import { connectSocket, disconnectSocket } from '../lib/socket';
-import history from '../lib/history';
-import { createGame, getGames, enterGame, clearError, updateSocket } from '../actions/waiting.actions';
+import { createGame, getGames, enterGame, clearCreateGameError, updateSocket } from '../actions/waiting.actions';
 
 const WatingContainer = ({
+  isAuthenticated,
   userId,
   gameList,
   loading,
-  error,
-  socket,
+  createGameLoading,
+  getGameListError,
+  createGameError,
+  joinGameError,
   logout,
-  createGame,
+  updateSocket,
   getGames,
+  createGame,
   enterGame,
-  clearError,
-  updateSocket
+  clearCreateGameError,
 }) => {
-  const token = localStorage.getItem('token');
-
   useEffect(() => {
+    const token = localStorage.getItem('token');
     setTokenToHeader(token);
   }, []);
-
-  useEffect(() => {
-    (!token || !userId) && history.push('/');
-  }, [ token, userId ]);
 
   useEffect(() => {
     connectSocket();
@@ -49,28 +46,39 @@ const WatingContainer = ({
   }, []);
 
   useEffect(() => {
-    if (error) {
-      window.alert('방에 입장할 수 없습니다!');
-      clearError();
+    if (joinGameError) {
+      window.alert('게임 생성자는 방에 입장할 수 없습니다!');
+    }
+  }, [ joinGameError ]);
+
+  useEffect(() => {
+    let errorTimeout;
+    if (createGameError) {
+      errorTimeout = window.setTimeout(() => clearCreateGameError(), 3000);
     }
 
+    return () => clearTimeout(errorTimeout);
+
     // eslint-disable-next-line
-  }, [ error ]);
+  }, [ createGameError ]);
 
   return (
     <Fragment>
       <Navbar logo={logo}>
-        <Link to='/users/:userId/profile'>Profile</Link>
-        {token ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
+        <Link to={`/users/:${userId}/profile`}>Profile</Link>
+        {isAuthenticated ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
       </Navbar>
       <DefaultLayout>
         <WatingRoom
           userId={userId}
           gameList={gameList}
           loading={loading}
-          error={error}
+          createGameLoading={createGameLoading}
+          getGameListError={getGameListError}
+          createGameError={createGameError}
           createGame={createGame}
           enterGame={enterGame}
+          clearCreateGameError={clearCreateGameError}
         />
       </DefaultLayout>
     </Fragment>
@@ -78,33 +86,41 @@ const WatingContainer = ({
 };
 
 const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
   userId: state.auth.userId,
+  socket: state.waiting.socket,
   gameList: state.waiting.gameList,
   loading: state.waiting.loading,
-  error: state.waiting.error,
-  socket: state.waiting.socket
+  createGameLoading: state.waiting.createGameLoading,
+  getGameListError: state.waiting.getGameListError,
+  createGameError: state.waiting.createGameError,
+  joinGameError: state.waiting.joinGameError
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: logout(dispatch),
-  createGame: createGame(dispatch),
+  updateSocket: updateSocket(dispatch),
   getGames: getGames(dispatch),
+  createGame: createGame(dispatch),
   enterGame: enterGame(dispatch),
-  clearError: clearError(dispatch),
-  updateSocket: updateSocket(dispatch)
+  clearCreateGameError: clearCreateGameError(dispatch)
 });
 
 WatingContainer.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
   userId: PropTypes.string.isRequired,
   gameList: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-  socket: PropTypes.string.isRequired,
+  createGameLoading: PropTypes.bool.isRequired,
+  getGameListError: PropTypes.string,
+  createGameError: PropTypes.string,
+  joinGameError: PropTypes.string,
   logout: PropTypes.func.isRequired,
-  createGame: PropTypes.func.isRequired,
+  updateSocket: PropTypes.func.isRequired,
   getGames: PropTypes.func.isRequired,
+  createGame: PropTypes.func.isRequired,
   enterGame: PropTypes.func.isRequired,
-  updateSocket: PropTypes.func.isRequired
+  clearCreateGameError: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WatingContainer);

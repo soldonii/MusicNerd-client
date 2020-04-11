@@ -18,7 +18,7 @@ const initialState = {
   result: ''
 };
 
-export const artistReducer = (state = initialState, action) => {
+export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ARTISTS_REQUEST:
       return {

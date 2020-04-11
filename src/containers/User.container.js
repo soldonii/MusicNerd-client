@@ -3,8 +3,8 @@ import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Navbar from '../components/layout/Navbar';
 import FavoriteArtists from '../components/users/FavoriteArtists';
+import Navbar from '../components/layout/Navbar';
 import logo from '../assets/logo.png';
 
 import history from '../lib/history';
@@ -18,21 +18,16 @@ const UserContainer = ({
   selectedArtists,
   postResult,
   getArtists,
-  onSelect,
-  onDeselect,
-  postData
+  selectArtist,
+  deselectArtist,
+  saveFavoriteArtists
 }) => {
-  const token = localStorage.getItem('token');
-
   useEffect(() => {
+    const token = localStorage.getItem('token');
     setTokenToHeader(token);
   }, []);
 
   useEffect(() => {
-    if (!token || !userId ) {
-      return history.push('/');
-    }
-
     if (postResult === 'success') {
       return history.push('/waiting');
     }
@@ -40,21 +35,21 @@ const UserContainer = ({
     getArtists(userId);
 
     // eslint-disable-next-line
-  }, [ token, userId, postResult ]);
+  }, [ userId, postResult ]);
 
   return (
     <Fragment>
       <Navbar logo={logo}>
         {Object.keys(selectedArtists).length >= 5
-          && <button onClick={() => postData(userId, selectedArtists)}>Next</button>}
+          && <button onClick={() => saveFavoriteArtists(userId, selectedArtists)}>Next</button>}
       </Navbar>
       <Route exact path={`/users/${userId}/favorites`}>
         <FavoriteArtists
           loading={loading}
           artistList={artistList}
           selectedArtists={selectedArtists}
-          onSelect={onSelect}
-          onDeselect={onDeselect}
+          onSelect={selectArtist}
+          onDeselect={deselectArtist}
         />
       </Route>
     </Fragment>
@@ -63,17 +58,17 @@ const UserContainer = ({
 
 const mapStateToProps = state => ({
   userId: state.auth.userId,
-  loading: state.artist.loading,
-  artistList: state.artist.artistList,
-  selectedArtists: state.artist.selectedArtists,
-  postResult: state.artist.result
+  loading: state.user.loading,
+  artistList: state.user.artistList,
+  selectedArtists: state.user.selectedArtists,
+  postResult: state.user.result
 });
 
 const mapDispatchToProps = dispatch => ({
   getArtists: getArtists(dispatch),
-  onSelect: selectArtist(dispatch),
-  onDeselect: deselectArtist(dispatch),
-  postData: saveFavoriteArtists(dispatch)
+  selectArtist: selectArtist(dispatch),
+  deselectArtist: deselectArtist(dispatch),
+  saveFavoriteArtists: saveFavoriteArtists(dispatch)
 });
 
 UserContainer.propTypes = {
@@ -83,9 +78,9 @@ UserContainer.propTypes = {
   selectedArtists: PropTypes.object.isRequired,
   postResult: PropTypes.string.isRequired,
   getArtists: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  onDeselect: PropTypes.func.isRequired,
-  postData: PropTypes.func.isRequired
+  selectArtist: PropTypes.func.isRequired,
+  deselectArtist: PropTypes.func.isRequired,
+  saveFavoriteArtists: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

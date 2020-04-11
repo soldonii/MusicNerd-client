@@ -15,7 +15,6 @@ export const disconnectSocket = () => {
 };
 
 export const joinRoom = (userId, gameId) => {
-  console.log('join room action', userId, gameId);
   socket.emit('join room', { userId, gameId });
 };
 

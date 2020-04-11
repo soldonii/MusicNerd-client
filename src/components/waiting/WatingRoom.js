@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Modal from '../layout/Modal';
 import Form from '../layout/Form';
 import FormInput from '../layout/FormInput';
+import Loading from '../layout/Loading';
 import GameCard from './GameCard';
 
 import * as colors from '../../lib/colors';
@@ -13,7 +14,9 @@ const WatingRoom = ({
   userId,
   gameList,
   loading,
-  // error,
+  createGameLoading,
+  getGameListError,
+  createGameError,
   createGame,
   enterGame,
 }) => {
@@ -25,6 +28,10 @@ const WatingRoom = ({
     createGame(userId, gameTitle);
   };
 
+  if (getGameListError) {
+    return <h1>{getGameListError}</h1>;
+  }
+
   return (
     <Fragment>
       <Modal
@@ -34,9 +41,13 @@ const WatingRoom = ({
         title='Create Room'
       >
         <Form style={{ height: '30vh' }} onSubmit={onSubmit}>
-          <FormInput type='text' onChange={e => setGameTitle(e.target.value)} />
-          {/* <ErrorMessage>{error ? error : null}</ErrorMessage> */}
-          <SubmitButton type='submit' value='Create' />
+          {createGameLoading ?
+            <Loading color='black' /> :
+            <Fragment>
+              <FormInput type='text' onChange={e => setGameTitle(e.target.value)} />
+              <ErrorMessage>{createGameError ? createGameError : null}</ErrorMessage>
+              <SubmitButton type='submit' value='Create' />
+            </Fragment>}
         </Form>
       </Modal>
       <GameListWrapper>
@@ -45,11 +56,17 @@ const WatingRoom = ({
           <button>다음 페이지</button>
         </GameListNav>
         <GameCardWrapper>
-          {
-            !gameList.length ?
-              <h1 style={{ textAlign: 'center' }}>There is no room!</h1> :
+          {loading && <Loading style={{ margin: '0 auto' }} />}
+          {!loading && !gameList.length ?
+            <h1 style={{ margin: '0 auto', fontSize: '4rem' }}>Please create a game room.</h1> :
               gameList.map(game => {
-                const { _id: gameId, is_playing: isPlaying, participants, game_title: gameTitle, thumbnail_url: thumbnailUrl } = game;
+                const {
+                  _id: gameId,
+                  is_playing: isPlaying,
+                  participants,
+                  game_title: gameTitle,
+                  thumbnail_url: thumbnailUrl
+                } = game;
 
                 return (
                   <GameCard
@@ -61,9 +78,8 @@ const WatingRoom = ({
                     thumbnailUrl={thumbnailUrl}
                     enterGame={enterGame}
                   />
-                )
-              })
-          }
+                );
+            })}
         </GameCardWrapper>
       </GameListWrapper>
     </Fragment>
@@ -98,14 +114,14 @@ const GameCardWrapper = styled.div`
   position: relative;
 `;
 
-// const ErrorMessage = styled.p`
-//   margin: 2rem 0;
-//   font-size: 1.6rem;
-//   height: 3rem;
-//   width: 70%;
-//   text-align: center;
-//   color: red;
-// `;
+const ErrorMessage = styled.p`
+  margin: 2rem 0;
+  font-size: 1.6rem;
+  height: 3rem;
+  width: 70%;
+  text-align: center;
+  color: red;
+`;
 
 const SubmitButton = styled.input`
   border: none;
@@ -127,7 +143,9 @@ WatingRoom.propTypes = {
   userId: PropTypes.string.isRequired,
   gameList: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
-  error: PropTypes.string,
+  createGameLoading: PropTypes.bool.isRequired,
+  getGameListError: PropTypes.string,
+  createGameError: PropTypes.string,
   createGame: PropTypes.func.isRequired,
   enterGame: PropTypes.func.isRequired,
 };

@@ -2,18 +2,23 @@ import axios from 'axios';
 import history from '../lib/history';
 import { getSocket } from '../lib/socket';
 import {
-  CREATE_GAME_REQUEST,
-  CREATE_GAME_SUCCESS,
-  CREATE_GAME_FAILED,
+  UPDATE_SOCKET,
   GET_GAMES_REQUEST,
   GET_GAMES_SUCCESS,
   GET_GAMES_FAILURE,
-  ENTER_GAME_REQUEST,
-  ENTER_GAME_SUCCESS,
-  ENTER_GAME_FAILED,
-  CLEAR_WAITING_ERROR,
-  UPDATE_SOCKET
+  CREATE_GAME_REQUEST,
+  CREATE_GAME_SUCCESS,
+  CREATE_GAME_FAILED,
+  JOIN_GAME_REQUEST,
+  JOIN_GAME_SUCCESS,
+  JOIN_GAME_FAILED,
+  CLAER_CREATE_GAME_ERROR
 } from '../constants/index';
+
+export const updateSocket = dispatch => () => {
+  const socket = getSocket();
+  dispatch({ type: UPDATE_SOCKET, socket });
+};
 
 export const getGames = dispatch => async () => {
   try {
@@ -44,21 +49,16 @@ export const createGame = dispatch => async (userId, gameTitle) => {
 
 export const enterGame = dispatch => async gameId => {
   try {
-    dispatch({ type: ENTER_GAME_REQUEST });
+    dispatch({ type: JOIN_GAME_REQUEST });
     await axios.put('http://localhost:8080/waiting', { gameId });
 
-    dispatch({ type: ENTER_GAME_SUCCESS, gameId });
+    dispatch({ type: JOIN_GAME_SUCCESS, gameId });
     return history.push(`/games/${gameId}`);
   } catch (err) {
-    dispatch({ type: ENTER_GAME_FAILED, error: err.response.data.errorMessage });
+    dispatch({ type: JOIN_GAME_FAILED, error: err.response.data.errorMessage });
   }
 };
 
-export const clearError = dispatch => () => {
-  dispatch({ type: CLEAR_WAITING_ERROR });
-};
-
-export const updateSocket = dispatch => () => {
-  const socket = getSocket();
-  dispatch({ type: UPDATE_SOCKET, socket });
+export const clearCreateGameError = dispatch => () => {
+  dispatch({ type: CLAER_CREATE_GAME_ERROR });
 };

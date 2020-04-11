@@ -15,7 +15,7 @@ const FavoriteArtists = ({
   onDeselect
 }) => {
   const selectedArtistLength = Object.keys(selectedArtists).length;
-  const message = selectedArtistLength === 0 ?
+  const progressMessage = selectedArtistLength === 0 ?
     'Choose your favorite artists from 5 to 10.' :
     `${selectedArtistLength} Artists selected!`;
 
@@ -25,29 +25,27 @@ const FavoriteArtists = ({
         loading ?
           <Loading /> :
           <ArtistWrapper>
-            <h3>{message}</h3>
+            <h3>{progressMessage}</h3>
             <ProgressBar
               lengthLimit={10}
               currentLength={selectedArtistLength}
             />
             <ArtistList>
-              {
-                artistList.map(artist => {
-                  const { thumbnail: { url }, names, _id: artistId } = artist;
+              {artistList.map(artist => {
+                const { thumbnail: { url }, names, _id: artistId } = artist;
 
-                  return (
-                    <ArtistCard
-                      key={artistId}
-                      artistId={artistId}
-                      selectedArtists={selectedArtists}
-                      thumbnailUrl={url}
-                      name={names[0]}
-                      onSelect={onSelect}
-                      onDeselect={onDeselect}
-                    />
-                  );
-                })
-              }
+                return (
+                  <ArtistCard
+                    key={artistId}
+                    artistId={artistId}
+                    selectedArtists={selectedArtists}
+                    thumbnailUrl={url}
+                    name={names[0]}
+                    onSelect={onSelect}
+                    onDeselect={onDeselect}
+                  />
+                );
+              })}
             </ArtistList>
           </ArtistWrapper>
       }

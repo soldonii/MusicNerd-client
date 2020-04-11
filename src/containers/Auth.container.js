@@ -23,7 +23,7 @@ const AuthContainer = ({
   logout,
   clearError
 }) => {
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     hasSignedUp && history.push('/auth/login');

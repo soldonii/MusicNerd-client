@@ -48,7 +48,7 @@ export const authReducer = (state = initialState, action) => {
       };
 
     case LOGIN_SUCCESS:
-      sessionStorage.setItem('token', action.token);
+      localStorage.setItem('token', action.token);
       setTokenToHeader(action.token);
 
       return {
@@ -74,7 +74,7 @@ export const authReducer = (state = initialState, action) => {
       };
 
     case LOGOUT:
-      sessionStorage.removeItem('token');
+      localStorage.removeItem('token');
       return {
         token: '',
         userId: '',

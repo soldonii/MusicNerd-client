@@ -12,10 +12,10 @@ import history from '../lib/history';
 import { logout } from '../actions/auth.actions';
 
 const HomeContainer = ({ userId, logout }) => {
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    (token && userId) && history.push('/games');
+    (token && userId) && history.push('/wating');
   }, [ token, userId ]);
 
   return (

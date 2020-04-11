@@ -8,23 +8,31 @@ import DefaultLayout from '../components/layout/DefaultLayout';
 import WatingRoom from '../components/waiting/WatingRoom';
 import logo from '../assets/logo.png';
 
+import { setTokenToHeader } from '../lib/auth';
+
 import { logout } from '../actions/auth.actions';
 import { connectSocket, disconnectSocket } from '../lib/socket';
 import history from '../lib/history';
-import { createGame, getGames, enterGame, clearError } from '../actions/waiting.actions';
+import { createGame, getGames, enterGame, clearError, updateSocket } from '../actions/waiting.actions';
 
 const WatingContainer = ({
   userId,
   gameList,
   loading,
   error,
+  socket,
   logout,
   createGame,
   getGames,
   enterGame,
-  clearError
+  clearError,
+  updateSocket
 }) => {
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    setTokenToHeader(token);
+  }, []);
 
   useEffect(() => {
     (!token || !userId) && history.push('/');
@@ -32,6 +40,7 @@ const WatingContainer = ({
 
   useEffect(() => {
     connectSocket();
+    updateSocket();
     getGames();
 
     return () => disconnectSocket();
@@ -72,7 +81,8 @@ const mapStateToProps = state => ({
   userId: state.auth.userId,
   gameList: state.waiting.gameList,
   loading: state.waiting.loading,
-  error: state.waiting.error
+  error: state.waiting.error,
+  socket: state.waiting.socket
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -80,7 +90,8 @@ const mapDispatchToProps = dispatch => ({
   createGame: createGame(dispatch),
   getGames: getGames(dispatch),
   enterGame: enterGame(dispatch),
-  clearError: clearError(dispatch)
+  clearError: clearError(dispatch),
+  updateSocket: updateSocket(dispatch)
 });
 
 WatingContainer.propTypes = {
@@ -88,10 +99,12 @@ WatingContainer.propTypes = {
   gameList: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
+  socket: PropTypes.string.isRequired,
   logout: PropTypes.func.isRequired,
   createGame: PropTypes.func.isRequired,
   getGames: PropTypes.func.isRequired,
-  enterGame: PropTypes.func.isRequired
+  enterGame: PropTypes.func.isRequired,
+  updateSocket: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WatingContainer);

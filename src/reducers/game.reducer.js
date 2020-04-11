@@ -4,7 +4,8 @@ import {
   UPDATE_PARTICIPANTS,
   UPDATE_READY_STATUS,
   UPDATE_CHAT_MESSAGES,
-  UPDATE_TRACK_URL,
+  UPDATE_GAME_STATUS,
+  UPDATE_CURRENT_TRACK,
   UPDATE_SCORE
 } from '../constants/index';
 
@@ -14,7 +15,9 @@ const initialState = {
   readyStatus: {},
   chatMessages: [],
   score: {},
-  trackUrl: '',
+  playLog: [],
+  isGameReady: false,
+  currentTrack: '',
   loading: false,
   error: null
 };
@@ -55,20 +58,27 @@ export const gameReducer = (state = initialState, action) => {
         chatMessages: [ ...state.chatMessages, action.message ]
       };
 
-    case UPDATE_TRACK_URL:
+    case UPDATE_GAME_STATUS:
       return {
         ...state,
-        trackUrl: action.trackUrl
+        isGameReady: true
+      };
+
+    case UPDATE_CURRENT_TRACK:
+      return {
+        ...state,
+        currentTrack: action.currentTrack
       };
 
     case UPDATE_SCORE:
-      const { username, trackurl } = action;
+      const { username, message } = action.messageObj;
       const updatedScore = state.score[username] ? state.score[username] + 10 : 10;
 
       return {
         ...state,
         score: { ...state.score, [username]: updatedScore },
-        trackurl
+        chatMessages: [ ...state.chatMessages, { [username]: message } ],
+        playLog: [ ...state.playLog, username ]
       };
 
     default:

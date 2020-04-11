@@ -5,15 +5,24 @@ import PropTypes from 'prop-types';
 
 import * as colors from '../../lib/colors';
 
-const Navbar = ({ logo, children}) => (
+const Navbar = ({ isLoggedIn, logo, showNext, showProfile, showGames, children }) => (
   <NavWrapper>
-    <Link to={sessionStorage.getItem('token') ? '/games' : '/'}>
+    <Link to={isLoggedIn ? '/waiting' : '/'}>
       <img src={logo} alt='logo'/>
     </Link>
     <LinkWrapper>
       {children}
     </LinkWrapper>
   </NavWrapper>
+
+  // <NavWrapper>
+    // <Link to={localStorage.getItem('token') ? '/waiting' : '/'}>
+    //   <img src={logo} alt='logo'/>
+    // </Link>
+  //   <LinkWrapper>
+  //     {children}
+  //   </LinkWrapper>
+  // </NavWrapper>
 );
 
 const NavWrapper = styled.nav`

@@ -8,12 +8,14 @@ import {
   ENTER_GAME_REQUEST,
   ENTER_GAME_SUCCESS,
   ENTER_GAME_FAILED,
-  CLEAR_WAITING_ERROR
+  CLEAR_WAITING_ERROR,
+  UPDATE_SOCKET
 } from '../constants/index';
 
 const initialState = {
   gameId: '',
   gameList: [],
+  socket: '',
   loading: false,
   error: null
 };
@@ -89,6 +91,12 @@ export const waitingReducer = (state = initialState, action) => {
       return {
         ...state,
         error: null
+      };
+
+    case UPDATE_SOCKET:
+      return {
+        ...state,
+        socket: action.socket
       };
 
     default:

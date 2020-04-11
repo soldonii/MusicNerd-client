@@ -8,6 +8,7 @@ import FavoriteArtists from '../components/users/FavoriteArtists';
 import logo from '../assets/logo.png';
 
 import history from '../lib/history';
+import { setTokenToHeader } from '../lib/auth';
 import { getArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/user.actions';
 
 const UserContainer = ({
@@ -21,7 +22,11 @@ const UserContainer = ({
   onDeselect,
   postData
 }) => {
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    setTokenToHeader(token);
+  }, []);
 
   useEffect(() => {
     if (!token || !userId ) {

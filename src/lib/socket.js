@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 let socket;
 
 export const connectSocket = () => {
+  console.log('connect socket');
   socket = io('http://localhost:8080');
 };
 
@@ -14,6 +15,7 @@ export const disconnectSocket = () => {
 };
 
 export const joinRoom = (userId, gameId) => {
+  console.log('join room action', userId, gameId);
   socket.emit('join room', { userId, gameId });
 };
 
@@ -39,6 +41,10 @@ export const sendMessage = message => {
 
 export const requestGameStart = participants => {
   socket.emit('request game start', participants);
+};
+
+export const requestNewTrack = () => {
+  socket.emit('request new track');
 };
 
 

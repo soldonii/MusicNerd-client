@@ -6,58 +6,61 @@ import {
   UPDATE_PARTICIPANTS,
   UPDATE_READY_STATUS,
   UPDATE_CHAT_MESSAGES,
-  UPDATE_TRACK_URL,
-  UPDATE_SCORE
+  UPDATE_CURRENT_TRACK,
+  UPDATE_SCORE,
+  UPDATE_GAME_STATUS
 } from '../constants/index';
 
 export const resetGameState = dispatch => () => {
   dispatch({ type: RESET_GAME_STATE });
 };
 
-export const updateGameCreator = dispatch => () => {
+export const updateGameCreator = dispatch => (sk) => {
   const socket = getSocket();
   socket.on('gameCreator', gameCreator => {
     dispatch({ type: UPDATE_GAME_CREATOR, gameCreator });
   });
 }
 
-export const updateParticipants = dispatch => () => {
+export const updateParticipants = dispatch => (sk) => {
   const socket = getSocket();
   socket.on('participants', participants => {
     dispatch({ type: UPDATE_PARTICIPANTS, participants });
   });
 };
 
-export const updateReadyStatus = dispatch => () => {
+export const updateReadyStatus = dispatch => (sk) => {
   const socket = getSocket();
   socket.on('ready status', readyStatus => {
     dispatch({ type: UPDATE_READY_STATUS, readyStatus });
   });
 };
 
-export const updateChatMessages = dispatch => () => {
+export const updateChatMessages = dispatch => (sk) => {
   const socket = getSocket();
   socket.on('chat messages', message => {
     dispatch({ type: UPDATE_CHAT_MESSAGES, message });
   });
 };
 
-export const updateTrackUrl = dispatch => () => {
+export const updateGameStatus = dispatch => () => {
   const socket = getSocket();
-  socket.on('send a track', trackUrl => {
-    dispatch({ type: UPDATE_TRACK_URL, trackUrl });
+  socket.on('ready to start', () => {
+    dispatch({ type: UPDATE_GAME_STATUS });
   });
 };
 
-export const updateScore = dispatch => () => {
+export const updateCurrentTrack = dispatch => (sk) => {
   const socket = getSocket();
-  // socket.on('correct answer', data => {
-  //   console.log('data on correct answer', data);
-  // });
-  socket.on('correct answer', ({ username, trackUrl }) => {
-    console.log('username', username)
-    console.log('trackUrl', trackUrl);
-    dispatch({ type: UPDATE_SCORE, username, trackUrl });
+  socket.on('send a track', currentTrack => {
+    dispatch({ type: UPDATE_CURRENT_TRACK, currentTrack });
+  });
+};
+
+export const updateScore = dispatch => (sk) => {
+  const socket = getSocket();
+  socket.on('correct answer', messageObj => {
+    dispatch({ type: UPDATE_SCORE, messageObj });
   });
 };
 

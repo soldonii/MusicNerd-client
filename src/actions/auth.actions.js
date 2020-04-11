@@ -44,3 +44,5 @@ export const logout = dispatch => () => {
 export const clearError = dispatch => () => {
   dispatch({ type: CLEAR_AUTH_ERROR });
 };
+
+// export const requestUserInfo

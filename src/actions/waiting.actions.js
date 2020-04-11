@@ -1,5 +1,6 @@
 import axios from 'axios';
 import history from '../lib/history';
+import { getSocket } from '../lib/socket';
 import {
   CREATE_GAME_REQUEST,
   CREATE_GAME_SUCCESS,
@@ -10,7 +11,8 @@ import {
   ENTER_GAME_REQUEST,
   ENTER_GAME_SUCCESS,
   ENTER_GAME_FAILED,
-  CLEAR_WAITING_ERROR
+  CLEAR_WAITING_ERROR,
+  UPDATE_SOCKET
 } from '../constants/index';
 
 export const getGames = dispatch => async () => {
@@ -54,4 +56,9 @@ export const enterGame = dispatch => async gameId => {
 
 export const clearError = dispatch => () => {
   dispatch({ type: CLEAR_WAITING_ERROR });
+};
+
+export const updateSocket = dispatch => () => {
+  const socket = getSocket();
+  dispatch({ type: UPDATE_SOCKET, socket });
 };

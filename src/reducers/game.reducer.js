@@ -1,17 +1,18 @@
 import {
-  RESET_GAME_STATE,
-  UPDATE_GAME_CREATOR,
-  UPDATE_PARTICIPANTS,
+  UPDATE_GAME_HOST,
+  UPDATE_PLAYERS,
   UPDATE_READY_STATUS,
   UPDATE_CHAT_MESSAGES,
   UPDATE_GAME_STATUS,
   UPDATE_CURRENT_TRACK,
-  UPDATE_SCORE
+  UPDATE_SCORE_AND_PLAYLOG,
+  UPDATE_PLAYLOG_ONLY,
+  RESET_GAME_STATE
 } from '../constants/index';
 
 const initialState = {
-  gameCreator: '',
-  participants: [],
+  gameHost: '',
+  players: [],
   readyStatus: {},
   chatMessages: [],
   score: {},
@@ -24,26 +25,16 @@ const initialState = {
 
 export const gameReducer = (state = initialState, action) => {
   switch (action.type) {
-    case RESET_GAME_STATE:
-      return {
-        gameCreator: '',
-        participants: [],
-        readyStatus: {},
-        chatMessages: [],
-        loading: false,
-        error: null
-      };
-
-    case UPDATE_GAME_CREATOR:
+    case UPDATE_GAME_HOST:
       return {
         ...state,
-        gameCreator: action.gameCreator
+        gameHost: action.gameHost
       };
 
-    case UPDATE_PARTICIPANTS:
+    case UPDATE_PLAYERS:
       return {
         ...state,
-        participants: action.participants
+        players: action.players
       };
 
     case UPDATE_READY_STATUS:
@@ -70,7 +61,7 @@ export const gameReducer = (state = initialState, action) => {
         currentTrack: action.currentTrack
       };
 
-    case UPDATE_SCORE:
+    case UPDATE_SCORE_AND_PLAYLOG:
       const { username, message } = action.messageObj;
       const updatedScore = state.score[username] ? state.score[username] + 10 : 10;
 
@@ -79,6 +70,22 @@ export const gameReducer = (state = initialState, action) => {
         score: { ...state.score, [username]: updatedScore },
         chatMessages: [ ...state.chatMessages, { [username]: message } ],
         playLog: [ ...state.playLog, username ]
+      };
+
+    case UPDATE_PLAYLOG_ONLY:
+      return {
+        ...state,
+        playLog: [ ...state.playLog, null ]
+      };
+
+    case RESET_GAME_STATE:
+      return {
+        gameHost: '',
+        players: [],
+        readyStatus: {},
+        chatMessages: [],
+        loading: false,
+        error: null
       };
 
     default:

@@ -63,7 +63,7 @@ const WatingRoom = ({
                 const {
                   _id: gameId,
                   is_playing: isPlaying,
-                  participants,
+                  players,
                   game_title: gameTitle,
                   thumbnail_url: thumbnailUrl
                 } = game;
@@ -73,7 +73,7 @@ const WatingRoom = ({
                     key={gameId}
                     gameId={gameId}
                     isPlaying={isPlaying}
-                    participants={participants}
+                    players={players}
                     gameTitle={gameTitle}
                     thumbnailUrl={thumbnailUrl}
                     enterGame={enterGame}
@@ -111,7 +111,6 @@ const GameCardWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  position: relative;
 `;
 
 const ErrorMessage = styled.p`

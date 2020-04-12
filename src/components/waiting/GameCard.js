@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const GameCard = ({
   gameId,
   isPlaying,
-  participants,
+  players,
   gameTitle,
   thumbnailUrl,
   enterGame
@@ -17,7 +17,7 @@ const GameCard = ({
     <h1>{gameTitle}</h1>
     <GameStatus>
       <h3>{isPlaying ? 'Playing' : 'Available'}</h3>
-      <h3>{participants.length} players</h3>
+      <h3>{players.length} players</h3>
     </GameStatus>
   </GameCardWrapper>
 );
@@ -31,6 +31,9 @@ const GameCardWrapper = styled.div`
   background-size: cover;
   text-align: center;
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   & h1 {
     margin-top: 2rem;
@@ -50,7 +53,7 @@ const GameStatus = styled.div`
 GameCard.propTypes = {
   gameId: PropTypes.string.isRequired,
   isPlaying: PropTypes.bool.isRequired,
-  participants: PropTypes.array.isRequired,
+  players: PropTypes.array.isRequired,
   gameTitle: PropTypes.string.isRequired,
   thumbnailUrl: PropTypes.string.isRequired,
   enterGame: PropTypes.func.isRequired,

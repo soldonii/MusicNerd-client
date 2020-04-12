@@ -25,18 +25,17 @@ let fadeTimeout, stopTimeout;
 const GameRoom = ({
   userId,
   gameId,
-  gameCreator,
-  participants,
+  gameHost,
+  players,
   readyStatus,
   chatMessages,
-  score, // { username: 10 }
   isGameReady,
-  // loading,
-  // error,
   currentTrack,
+  score,
   playLog,
-  // recentScorer,
-  resetGameState,
+  loading,
+  error,
+  updatePlayLog
 }) => {
   const [ isReady, setIsReady ] = useState(false);
   const [ message, setMessage ] = useState('');
@@ -46,25 +45,6 @@ const GameRoom = ({
       requestNewTrack();
     }
   }, [ isGameReady ]);
-
-  useEffect(() => {
-    if (track) track.stop();
-    const prevQuizScorer = playLog[playLog.length - 1];
-
-    if (prevQuizScorer) {
-      window.alert(prevQuizScorer);
-    }
-
-    if (currentTrack) {
-      const { title, album_type: albumType, thumbnail: { url: thumbnail_url }, release_date: releaseDate, artist: { names: artistName } } = currentTrack;
-
-      window.alert(`${artistName[0]}: ${title}. ${albumType}, ${thumbnail_url}, ${releaseDate}`);
-    }
-
-    if (isGameReady) {
-      requestNewTrack();
-    }
-  }, [ playLog ]);
 
   useEffect(() => {
     if (currentTrack) {
@@ -82,29 +62,42 @@ const GameRoom = ({
 
       stopTimeout = setTimeout(() => {
         track.stop();
+        updatePlayLog();
       }, 1000 * 30);
+    }
+  }, [ currentTrack ]);
+
+  useEffect(() => {
+    const prevQuizScorer = playLog[playLog.length - 1];
+
+    if (prevQuizScorer) {
+      window.alert(prevQuizScorer);
+    }
+
+    // 현재 재생되던 음악 정보 보여주기(3초 동안)
+    if (currentTrack) {
+      const { title, album_type: albumType, thumbnail: { url: thumbnail_url }, release_date: releaseDate, artist: { names: artistName } } = currentTrack;
+
+      window.alert(`${artistName[0]}: ${title}. ${albumType}, ${thumbnail_url}, ${releaseDate}`);
+    }
+
+    // 재생되던 음악 멈춰주기
+    if (track) {
+      track.stop();
 
       clearTimeout(fadeTimeout);
       clearTimeout(stopTimeout);
       fadeTimeout = null;
       stopTimeout = null;
     }
-  }, [ currentTrack ]);
 
-  // useEffect(() => {
-  //   setGotCorrectAnswer(true);
-  // }, [ recentScorer ]);
-
-  // useEffect(() => {
-  //   gotCorrectAnswer && track.stop();
-  //   window.alert(`${recentScorer} has scored!`);
-
-  //   setGotCorrectAnswer(true);
-  // }, [ gotCorrectAnswer ]);
+    if (isGameReady) {
+      requestNewTrack();
+    }
+  }, [ playLog ]);
 
   const onExitButtonClick = (userId, gameId) => {
     leaveRoom(userId, gameId);
-    resetGameState();
     return history.push('/waiting');
   };
 
@@ -114,13 +107,13 @@ const GameRoom = ({
   };
 
   const onStartButtonClick = () => {
-    for (const participant of participants) {
-      if (!readyStatus[participant.userId]) {
+    for (const player of players) {
+      if (!readyStatus[player.userId]) {
         window.alert('모든 유저가 READY하지 않았습니다!');
       }
     }
 
-    requestGameStart(participants);
+    requestGameStart(players);
   };
 
   const onSendButtonClick = (event, message) => {
@@ -133,7 +126,7 @@ const GameRoom = ({
     <DefaultLayout>
       <GameWrapper>
         <Header>
-          {participants.map(player => (
+          {players.map(player => (
             <PlayerCard
               key={player.userId}
               imgSrc={player.thumbnail_url}
@@ -151,7 +144,7 @@ const GameRoom = ({
           <MainRight>
             <ButtonContainer>
               <button onClick={() => onReadyButtonClick(userId)}>READY</button>
-              {gameCreator === userId &&
+              {gameHost === userId &&
                 <button onClick={onStartButtonClick}>GAME START</button>}
               <button onClick={() => onExitButtonClick(userId, gameId)}>EXIT</button>
             </ButtonContainer>
@@ -244,8 +237,8 @@ export default GameRoom;
 // const GameRoom = ({
 //   userId,
 //   gameId,
-//   gameCreator,
-//   participants,
+//   gameHost,
+//   players,
 //   readyStatus,
 //   chatMessages,
 //   score, // { username: 10 }
@@ -326,13 +319,13 @@ export default GameRoom;
 //   };
 
 //   const onStartButtonClick = () => {
-//     for (const participant of participants) {
-//       if (!readyStatus[participant.userId]) {
+//     for (const player of players) {
+//       if (!readyStatus[player.userId]) {
 //         window.alert('모든 유저가 READY하지 않았습니다!');
 //       }
 //     }
 
-//     requestGameStart(participants);
+//     requestGameStart(players);
 //   };
 
 //   const onSendButtonClick = (event, message) => {
@@ -345,7 +338,7 @@ export default GameRoom;
 //     <DefaultLayout>
 //       <GameWrapper>
 //         <Header>
-//           {participants.map(player => (
+//           {players.map(player => (
 //             <PlayerCard
 //               key={player.userId}
 //               imgSrc={player.thumbnail_url}
@@ -363,7 +356,7 @@ export default GameRoom;
 //           <MainRight>
 //             <ButtonContainer>
 //               <button onClick={() => onReadyButtonClick(userId)}>READY</button>
-//               {gameCreator === userId &&
+//               {gameHost === userId &&
 //                 <button onClick={onStartButtonClick}>GAME START</button>}
 //               <button onClick={() => onExitButtonClick(userId, gameId)}>EXIT</button>
 //             </ButtonContainer>

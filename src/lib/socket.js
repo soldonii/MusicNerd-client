@@ -18,8 +18,8 @@ export const joinRoom = (userId, gameId) => {
   socket.emit('join room', { userId, gameId });
 };
 
-export const requestGameCreator = gameId => {
-  socket.emit('request game creator', gameId);
+export const requestGameHost = gameId => {
+  socket.emit('request game host', gameId);
 };
 
 export const leaveRoom = (userId, gameId) => {
@@ -38,8 +38,8 @@ export const sendMessage = message => {
   socket.emit('send message', message);
 };
 
-export const requestGameStart = participants => {
-  socket.emit('request game start', participants);
+export const requestGameStart = players => {
+  socket.emit('request game start', players);
 };
 
 export const requestNewTrack = () => {

@@ -1,42 +1,39 @@
 import { getSocket } from '../lib/socket';
 
 import {
-  RESET_GAME_STATE,
-  UPDATE_GAME_CREATOR,
-  UPDATE_PARTICIPANTS,
+  UPDATE_GAME_HOST,
+  UPDATE_PLAYERS,
   UPDATE_READY_STATUS,
   UPDATE_CHAT_MESSAGES,
+  UPDATE_GAME_STATUS,
   UPDATE_CURRENT_TRACK,
-  UPDATE_SCORE,
-  UPDATE_GAME_STATUS
+  UPDATE_SCORE_AND_PLAYLOG,
+  UPDATE_PLAYLOG_ONLY,
+  RESET_GAME_STATE
 } from '../constants/index';
 
-export const resetGameState = dispatch => () => {
-  dispatch({ type: RESET_GAME_STATE });
-};
-
-export const updateGameCreator = dispatch => (sk) => {
+export const updateGameHost = dispatch => () => {
   const socket = getSocket();
-  socket.on('gameCreator', gameCreator => {
-    dispatch({ type: UPDATE_GAME_CREATOR, gameCreator });
+  socket.on('gameHost', gameHost => {
+    dispatch({ type: UPDATE_GAME_HOST, gameHost });
   });
 }
 
-export const updateParticipants = dispatch => (sk) => {
+export const updatePlayers = dispatch => () => {
   const socket = getSocket();
-  socket.on('participants', participants => {
-    dispatch({ type: UPDATE_PARTICIPANTS, participants });
+  socket.on('players', players => {
+    dispatch({ type: UPDATE_PLAYERS, players });
   });
 };
 
-export const updateReadyStatus = dispatch => (sk) => {
+export const updateReadyStatus = dispatch => () => {
   const socket = getSocket();
   socket.on('ready status', readyStatus => {
     dispatch({ type: UPDATE_READY_STATUS, readyStatus });
   });
 };
 
-export const updateChatMessages = dispatch => (sk) => {
+export const updateChatMessages = dispatch => () => {
   const socket = getSocket();
   socket.on('chat messages', message => {
     dispatch({ type: UPDATE_CHAT_MESSAGES, message });
@@ -50,25 +47,27 @@ export const updateGameStatus = dispatch => () => {
   });
 };
 
-export const updateCurrentTrack = dispatch => (sk) => {
+export const updateCurrentTrack = dispatch => () => {
   const socket = getSocket();
   socket.on('send a track', currentTrack => {
     dispatch({ type: UPDATE_CURRENT_TRACK, currentTrack });
   });
 };
 
-export const updateScore = dispatch => (sk) => {
+export const updateScoreAndPlayLog = dispatch => () => {
   const socket = getSocket();
   socket.on('correct answer', messageObj => {
-    dispatch({ type: UPDATE_SCORE, messageObj });
+    dispatch({ type: UPDATE_SCORE_AND_PLAYLOG, messageObj });
   });
 };
 
-// export const startGame = dispatch => () => {
-//   const socket = getSocket();
-//   socket.on('start game', () => {
-//     dispatch({ type: START_GAME });
-//   });
-// };
+export const updatePlayLog = dispatch => () => {
+  dispatch({ type: UPDATE_PLAYLOG_ONLY });
+};
+
+export const resetGameState = dispatch => () => {
+  dispatch({ type: RESET_GAME_STATE });
+};
+
 
 

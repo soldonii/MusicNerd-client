@@ -47,7 +47,7 @@ const WatingContainer = ({
 
   useEffect(() => {
     if (joinGameError) {
-      window.alert('게임 생성자는 방에 입장할 수 없습니다!');
+      window.alert(joinGameError);
     }
   }, [ joinGameError ]);
 

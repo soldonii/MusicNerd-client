@@ -41,7 +41,7 @@ const Signup = ({
           <FormInput
             type='text'
             name='username'
-            placeholder='Username (lowercase only)'
+            placeholder='Username (max 8 characters)'
             value={username}
             onChange={onChange}
             required

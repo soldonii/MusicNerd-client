@@ -9,6 +9,7 @@ import {
   UPDATE_CURRENT_TRACK,
   UPDATE_SCORE_AND_PLAYLOG,
   UPDATE_PLAYLOG,
+  UPDATE_FINAL_SCORE,
   RESET_GAME_STATE
 } from '../constants/index';
 
@@ -63,6 +64,13 @@ export const updateScoreAndPlayLog = dispatch => () => {
 
 export const updatePlayLog = dispatch => () => {
   dispatch({ type: UPDATE_PLAYLOG });
+};
+
+export const updateFinalScore = dispatch => () => {
+  const socket = getSocket();
+  socket.on('end game', () => {
+    dispatch({ type: UPDATE_FINAL_SCORE });
+  });
 };
 
 export const resetGameState = dispatch => () => {

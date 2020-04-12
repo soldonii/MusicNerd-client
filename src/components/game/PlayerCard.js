@@ -31,34 +31,19 @@ const CardWrapper = styled.div`
 
   & h1 {
     font-size: 2.2rem;
-    animation: ${props => props.isReady && readyNeon} 0.5s ease-in-out infinite alternate;
+    text-shadow: ${props => props.isReady &&
+      `0 0 6px rgba(212, 202, 228, 0.92),
+      0 0 30px rgba(212, 202, 228, 0.34),
+      0 0 12px rgba(154, 30, 242, 0.52),
+      0 0 21px rgba(154, 30, 242, 0.92),
+      0 0 34px rgba(154, 30, 242, 0.78),
+      0 0 54px rgba(154, 30, 242, 0.92)`
+    };
   }
 
   & h4 {
     font-size: 1.3rem;
-    animation: ${props => props.hasScored && scoreNeon} 1s ease-in-out;
-  }
-
-`;
-
-const readyNeon = keyframes`
-  from {
-    text-shadow:
-    0 0 6px rgba(212, 202, 228, 0.92),
-    0 0 30px rgba(212, 202, 228, 0.34),
-    0 0 12px rgba(154, 30, 242, 0.52),
-    0 0 21px rgba(154, 30, 242, 0.92),
-    0 0 34px rgba(154, 30, 242, 0.78),
-    0 0 54px rgba(154, 30, 242, 0.92);
-  }
-  to {
-    text-shadow:
-    0 0 6px rgba(212, 202, 228, 0.98),
-    0 0 30px rgba(212, 202, 228, 0.42),
-    0 0 12px rgba(154, 30, 242, 0.58),
-    0 0 22px rgba(154, 30, 242, 0.84),
-    0 0 38px rgba(154, 30, 242, 0.88),
-    0 0 60px rgba(154, 30, 242, 1),
+    animation: ${props => props.hasScored && scoreNeon} 0.5s ease-in-out infinite;
   }
 `;
 

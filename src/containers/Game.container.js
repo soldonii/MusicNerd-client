@@ -14,6 +14,7 @@ import {
   updateCurrentTrack,
   updateScoreAndPlayLog,
   updatePlayLog,
+  updateFinalScore,
   resetGameState,
 } from '../actions/game.actions';
 
@@ -26,18 +27,17 @@ import {
 const GameContainer = ({
   userId,
   gameId,
-  socket,
   gameHost,
   players,
   readyStatus,
   chatMessages,
-  isGameReady,
   score,
+  playLog,
+  isGameReady,
+  currentTrack,
+  isGameEnded,
   loading,
   error,
-  currentTrack,
-  playLog,
-  resetGameState,
   updatePlayersAndReadyStatus,
   updateReadyStatus,
   updateGameHost,
@@ -45,7 +45,9 @@ const GameContainer = ({
   updateCurrentTrack,
   updateScoreAndPlayLog,
   updatePlayLog,
-  updateGameStatus
+  updateFinalScore,
+  updateGameStatus,
+  resetGameState
 }) => {
   useEffect(() => {
     if (userId && gameId) {
@@ -64,6 +66,7 @@ const GameContainer = ({
     updateGameStatus();
     updateCurrentTrack();
     updateScoreAndPlayLog();
+    updateFinalScore();
 
     return () => {
       disconnectSocket();
@@ -81,10 +84,11 @@ const GameContainer = ({
         players={players}
         readyStatus={readyStatus}
         chatMessages={chatMessages}
-        isGameReady={isGameReady}
-        currentTrack={currentTrack}
         score={score}
         playLog={playLog}
+        isGameReady={isGameReady}
+        currentTrack={currentTrack}
+        isGameEnded={isGameEnded}
         loading={loading}
         error={error}
         updatePlayLog={updatePlayLog}
@@ -100,10 +104,11 @@ const mapStateToProps = state => ({
   players: state.game.players,
   readyStatus: state.game.readyStatus,
   chatMessages: state.game.chatMessages,
-  isGameReady: state.game.isGameReady,
-  currentTrack: state.game.currentTrack,
   score: state.game.score,
   playLog: state.game.playLog,
+  isGameReady: state.game.isGameReady,
+  currentTrack: state.game.currentTrack,
+  isGameEnded: state.game.isGameEnded,
   loading: state.game.loading,
   error: state.game.error
 });
@@ -117,6 +122,7 @@ const mapDispatchToProps = dispatch => ({
   updateCurrentTrack: updateCurrentTrack(dispatch),
   updateScoreAndPlayLog: updateScoreAndPlayLog(dispatch),
   updatePlayLog: updatePlayLog(dispatch),
+  updateFinalScore: updateFinalScore(dispatch),
   resetGameState: resetGameState(dispatch)
 });
 
@@ -127,10 +133,11 @@ GameRoom.propTypes = {
   players: PropTypes.array.isRequired,
   readyStatus: PropTypes.object.isRequired,
   chatMessages: PropTypes.array.isRequired,
-  isGameReady: PropTypes.bool.isRequired,
-  currentTrack: PropTypes.object.isRequired,
   score: PropTypes.object.isRequired,
   playLog: PropTypes.array.isRequired,
+  isGameReady: PropTypes.bool.isRequired,
+  currentTrack: PropTypes.any,
+  isGameEnded: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string
 };

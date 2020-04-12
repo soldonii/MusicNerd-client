@@ -38,7 +38,8 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.error
+        error: action.error,
+        hasSignedUp: false
       };
 
     case LOGIN_REQUEST:
@@ -63,7 +64,9 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.error
+        error: action.error,
+        token: '',
+        isAuthenticated: false
       };
 
     case CLEAR_AUTH_ERROR:

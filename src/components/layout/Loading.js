@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
 
-const Loading = ({ color, style }) => (
+const Loading = ({ color }) => (
   <ReactLoading
     type='cubes'
     color={color}
-    style={style}
     height='10%'
     width='10%'
   />
@@ -13,6 +12,6 @@ const Loading = ({ color, style }) => (
 
 Loading.defaultProps = {
   color: '#fff'
-}
+};
 
 export default Loading;

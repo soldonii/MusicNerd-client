@@ -12,6 +12,7 @@ const Button = styled.button`
   &:hover {
     color: ${colors.WHITE};
     background-color: ${colors.HIGHLIGHT};
+    transition: all 0.3s;
   }
 `;
 

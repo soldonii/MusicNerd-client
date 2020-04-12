@@ -5,7 +5,8 @@ import { css } from 'glamor';
 
 const ScrollBarCss = css({
   height: '93%',
-  backgroundColor: 'rgba(255, 255, 255, 0.5)'
+  backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  padding: '1rem'
 });
 
 const Chatting = ({ message, setMessage, onSendButtonClick, children }) => {
@@ -13,10 +14,10 @@ const Chatting = ({ message, setMessage, onSendButtonClick, children }) => {
     <Wrapper>
       <ScrollToBottom className={ScrollBarCss}>
         {children.map(msg => (
-          <div key={Math.random()}>
-            <User>{msg.username}</User>
+          <MessageWrapper key={Math.random()}>
+            <User>{msg.username}{' '}</User>
             <Message>{msg.message}</Message>
-          </div>
+          </MessageWrapper>
         ))
         }
       </ScrollToBottom>
@@ -57,15 +58,22 @@ const InputForm = styled.form`
   }
 `;
 
-const User = styled.span`
-  width: 20%;
+const MessageWrapper = styled.div`
+  margin: 0.3rem 0;
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const User = styled.p`
+  min-width: 15%;
   height: 2rem;
   font-size: 1.5rem;
   text-align: left;
   font-weight: bold;
+  color: #0017bd;
 `;
 
-const Message = styled.span`
+const Message = styled.p`
   width: 80%;
   height: 2rem;
   font-size: 1.5rem;

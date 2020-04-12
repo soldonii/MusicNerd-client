@@ -7,6 +7,7 @@ import {
   UPDATE_CURRENT_TRACK,
   UPDATE_SCORE_AND_PLAYLOG,
   UPDATE_PLAYLOG,
+  UPDATE_FINAL_SCORE,
   RESET_GAME_STATE
 } from '../constants/index';
 
@@ -19,6 +20,7 @@ const initialState = {
   playLog: [],
   isGameReady: false,
   currentTrack: '',
+  isGameEnded: false,
   loading: false,
   error: null
 };
@@ -77,6 +79,12 @@ export const gameReducer = (state = initialState, action) => {
       return {
         ...state,
         playLog: [ ...state.playLog, null ]
+      };
+
+    case UPDATE_FINAL_SCORE:
+      return {
+        ...state,
+        isGameEnded: true
       };
 
     case RESET_GAME_STATE:

@@ -6,6 +6,7 @@ import Modal from '../layout/Modal';
 import Form from '../layout/Form';
 import FormInput from '../layout/FormInput';
 import Loading from '../layout/Loading';
+import Button from '../layout/Button';
 import GameCard from './GameCard';
 
 import * as colors from '../../lib/colors';
@@ -52,11 +53,10 @@ const WatingRoom = ({
       </Modal>
       <GameListWrapper>
         <GameListNav>
-          <button onClick={() => setShouldModalOpen(true)}>방 만들기</button>
-          <button>다음 페이지</button>
+          <Button onClick={() => setShouldModalOpen(true)}>방 만들기</Button>
         </GameListNav>
         <GameCardWrapper>
-          {loading && <Loading style={{ margin: '0 auto' }} />}
+          {loading && <Loading />}
           {!loading && !gameList.length ?
             <h1 style={{ margin: '0 auto', fontSize: '4rem' }}>Please create a game room.</h1> :
               gameList.map(game => {
@@ -101,7 +101,7 @@ const GameListNav = styled.div`
   width: 100%;
   height: 10%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 `;
 

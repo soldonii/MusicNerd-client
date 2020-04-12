@@ -2,13 +2,13 @@ import { getSocket } from '../lib/socket';
 
 import {
   UPDATE_GAME_HOST,
-  UPDATE_PLAYERS,
+  UPDATE_PLAYERS_AND_READY_STATUS,
   UPDATE_READY_STATUS,
   UPDATE_CHAT_MESSAGES,
   UPDATE_GAME_STATUS,
   UPDATE_CURRENT_TRACK,
   UPDATE_SCORE_AND_PLAYLOG,
-  UPDATE_PLAYLOG_ONLY,
+  UPDATE_PLAYLOG,
   RESET_GAME_STATE
 } from '../constants/index';
 
@@ -19,10 +19,10 @@ export const updateGameHost = dispatch => () => {
   });
 }
 
-export const updatePlayers = dispatch => () => {
+export const updatePlayersAndReadyStatus = dispatch => () => {
   const socket = getSocket();
-  socket.on('players', players => {
-    dispatch({ type: UPDATE_PLAYERS, players });
+  socket.on('players and readyStatus', (players, readyStatus) => {
+    dispatch({ type: UPDATE_PLAYERS_AND_READY_STATUS, players, readyStatus });
   });
 };
 
@@ -56,13 +56,13 @@ export const updateCurrentTrack = dispatch => () => {
 
 export const updateScoreAndPlayLog = dispatch => () => {
   const socket = getSocket();
-  socket.on('correct answer', messageObj => {
-    dispatch({ type: UPDATE_SCORE_AND_PLAYLOG, messageObj });
+  socket.on('correct answer', message => {
+    dispatch({ type: UPDATE_SCORE_AND_PLAYLOG, message });
   });
 };
 
 export const updatePlayLog = dispatch => () => {
-  dispatch({ type: UPDATE_PLAYLOG_ONLY });
+  dispatch({ type: UPDATE_PLAYLOG });
 };
 
 export const resetGameState = dispatch => () => {

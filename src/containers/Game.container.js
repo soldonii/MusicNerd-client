@@ -7,7 +7,7 @@ import GameRoom from '../components/game/GameRoom';
 
 import {
   updateGameHost,
-  updatePlayers,
+  updatePlayersAndReadyStatus,
   updateReadyStatus,
   updateChatMessages,
   updateGameStatus,
@@ -38,7 +38,7 @@ const GameContainer = ({
   currentTrack,
   playLog,
   resetGameState,
-  updatePlayers,
+  updatePlayersAndReadyStatus,
   updateReadyStatus,
   updateGameHost,
   updateChatMessages,
@@ -53,18 +53,17 @@ const GameContainer = ({
       requestGameHost(gameId);
     }
 
-    // return () => disconnectSocket();
     // eslint-disable-next-line
   }, [ userId, gameId ]);
 
   useEffect(() => {
-    updateGameHost(socket);
-    updatePlayers(socket);
-    updateReadyStatus(socket);
-    updateChatMessages(socket);
-    updateGameStatus(socket);
-    updateCurrentTrack(socket);
-    updateScoreAndPlayLog(socket);
+    updateGameHost();
+    updatePlayersAndReadyStatus();
+    updateReadyStatus();
+    updateChatMessages();
+    updateGameStatus();
+    updateCurrentTrack();
+    updateScoreAndPlayLog();
 
     return () => {
       disconnectSocket();
@@ -111,7 +110,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateGameHost: updateGameHost(dispatch),
-  updatePlayers: updatePlayers(dispatch),
+  updatePlayersAndReadyStatus: updatePlayersAndReadyStatus(dispatch),
   updateReadyStatus: updateReadyStatus(dispatch),
   updateChatMessages: updateChatMessages(dispatch),
   updateGameStatus: updateGameStatus(dispatch),
@@ -129,7 +128,7 @@ GameRoom.propTypes = {
   readyStatus: PropTypes.object.isRequired,
   chatMessages: PropTypes.array.isRequired,
   isGameReady: PropTypes.bool.isRequired,
-  currentTrack: PropTypes.string.isRequired,
+  currentTrack: PropTypes.object.isRequired,
   score: PropTypes.object.isRequired,
   playLog: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,

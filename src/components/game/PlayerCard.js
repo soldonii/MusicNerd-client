@@ -1,38 +1,85 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
-const PlayerCard = ({ imgSrc, userId, username, score, isReady }) => (
-  <CardWrapper data-id={userId} isReady={isReady}>
-    <img src={imgSrc} alt='user-profile'/>
-    <h3>{username}</h3>
-    <h6>{score}</h6>
+const PlayerCard = ({
+  userId,
+  username,
+  score,
+  isReady,
+  hasScored
+}) => (
+  <CardWrapper
+    data-id={userId}
+    isReady={isReady}
+    hasScored={hasScored}
+  >
+    <h1>{username.toUpperCase()}</h1>
+    <h4>{score} points</h4>
   </CardWrapper>
 );
 
 const CardWrapper = styled.div`
   margin: 0 1.25rem;
   padding: 0.5rem;
-  height: 11rem;
+  height: 8rem;
   width: 11rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   text-align: center;
-  background-color: ${props => props.isReady ? '#FBAB7E' : '#2f71bd'};
-  background-image: ${props => props.isReady && 'linear-gradient(0deg, #FBAB7E 0%, #F7CE68 100%)'};
+  color: #c6e2ff;
 
-  & img {
-    margin: 0 auto;
-    width: 80%;
-    height: auto;
+  & h1 {
+    font-size: 2.2rem;
+    animation: ${props => props.isReady && readyNeon} 0.5s ease-in-out infinite alternate;
   }
 
-  h3 {
-    text-align: center;
-    margin-top: 0.5rem;
-    font-size: 1.5rem;
+  & h4 {
+    font-size: 1.3rem;
+    animation: ${props => props.hasScored && scoreNeon} 1s ease-in-out;
   }
 
-  h6 {
-    font-size: 1rem;
-    color: red;
+`;
+
+const readyNeon = keyframes`
+  from {
+    text-shadow:
+    0 0 6px rgba(212, 202, 228, 0.92),
+    0 0 30px rgba(212, 202, 228, 0.34),
+    0 0 12px rgba(154, 30, 242, 0.52),
+    0 0 21px rgba(154, 30, 242, 0.92),
+    0 0 34px rgba(154, 30, 242, 0.78),
+    0 0 54px rgba(154, 30, 242, 0.92);
+  }
+  to {
+    text-shadow:
+    0 0 6px rgba(212, 202, 228, 0.98),
+    0 0 30px rgba(212, 202, 228, 0.42),
+    0 0 12px rgba(154, 30, 242, 0.58),
+    0 0 22px rgba(154, 30, 242, 0.84),
+    0 0 38px rgba(154, 30, 242, 0.88),
+    0 0 60px rgba(154, 30, 242, 1),
+  }
+`;
+
+const scoreNeon = keyframes`
+  from {
+    text-shadow:
+    0 0 6px rgba(228, 202, 202, 0.92),
+    0 0 30px rgba(228, 202, 202, 0.34),
+    0 0 12px rgba(242, 58, 30, 0.52),
+    0 0 21px rgba(242, 58, 30, 0.92),
+    0 0 34px rgba(242, 58, 30, 0.78),
+    0 0 54px rgba(242, 58, 30, 0.92);
+  }
+  to {
+    text-shadow:
+    0 0 6px rgba(228, 202, 202, 0.98),
+    0 0 30px rgba(228, 202, 202, 0.42),
+    0 0 12px rgba(242, 58, 30, 0.58),
+    0 0 22px rgba(242, 58, 30, 0.84),
+    0 0 38px rgba(242, 58, 30, 0.88),
+    0 0 60px rgba(242, 58, 30, 1),
   }
 `;
 

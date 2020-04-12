@@ -1,12 +1,12 @@
 import {
   UPDATE_GAME_HOST,
-  UPDATE_PLAYERS,
+  UPDATE_PLAYERS_AND_READY_STATUS,
   UPDATE_READY_STATUS,
   UPDATE_CHAT_MESSAGES,
   UPDATE_GAME_STATUS,
   UPDATE_CURRENT_TRACK,
   UPDATE_SCORE_AND_PLAYLOG,
-  UPDATE_PLAYLOG_ONLY,
+  UPDATE_PLAYLOG,
   RESET_GAME_STATE
 } from '../constants/index';
 
@@ -31,10 +31,11 @@ export const gameReducer = (state = initialState, action) => {
         gameHost: action.gameHost
       };
 
-    case UPDATE_PLAYERS:
+    case UPDATE_PLAYERS_AND_READY_STATUS:
       return {
         ...state,
-        players: action.players
+        players: action.players,
+        readyStatus: action.readyStatus
       };
 
     case UPDATE_READY_STATUS:
@@ -62,17 +63,17 @@ export const gameReducer = (state = initialState, action) => {
       };
 
     case UPDATE_SCORE_AND_PLAYLOG:
-      const { username, message } = action.messageObj;
-      const updatedScore = state.score[username] ? state.score[username] + 10 : 10;
+      const updatedScore = state.score[action.message.username] ?
+        state.score[action.message.username] + 10 : 10;
 
       return {
         ...state,
-        score: { ...state.score, [username]: updatedScore },
-        chatMessages: [ ...state.chatMessages, { [username]: message } ],
-        playLog: [ ...state.playLog, username ]
+        score: { ...state.score, [action.message.username]: updatedScore },
+        chatMessages: [ ...state.chatMessages, action.message ],
+        playLog: [ ...state.playLog, action.message.username ]
       };
 
-    case UPDATE_PLAYLOG_ONLY:
+    case UPDATE_PLAYLOG:
       return {
         ...state,
         playLog: [ ...state.playLog, null ]

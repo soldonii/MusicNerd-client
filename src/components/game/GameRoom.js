@@ -4,7 +4,9 @@ import styled from 'styled-components';
 
 import DefaultLayout from '../layout/DefaultLayout';
 import Header from '../layout/Header';
+import Button from '../layout/Button';
 import PlayerCard from './PlayerCard';
+import TrackCard from './TrackCard';
 import Chatting from './Chatting';
 
 import history from '../../lib/history';
@@ -39,6 +41,8 @@ const GameRoom = ({
 }) => {
   const [ isReady, setIsReady ] = useState(false);
   const [ message, setMessage ] = useState('');
+  const [ hasScored, setHasScored ] = useState(false);
+  const [ isTrackEnded, setIsTrackEnded ] = useState(false);
 
   useEffect(() => {
     if (isGameReady) {
@@ -65,35 +69,89 @@ const GameRoom = ({
         updatePlayLog();
       }, 1000 * 30);
     }
+
+    return () => {
+      if (track) {
+        track.stop();
+        clearTimeout(fadeTimeout);
+        clearTimeout(stopTimeout);
+      }
+    }
   }, [ currentTrack ]);
+
+  useEffect(() => {
+    let displayScorerTimeout;
+
+    if (hasScored) {
+      displayScorerTimeout = setTimeout(() => {
+        setHasScored(false);
+      }, 2000);
+    }
+
+    return () => clearTimeout(displayScorerTimeout);
+  }, [ hasScored ]);
+
+  useEffect(() => {
+    let displayTrackInfoTimeout;
+
+    if (isTrackEnded) {
+      displayTrackInfoTimeout = setTimeout(() => {
+        if (track) {
+          track.stop();
+
+          clearTimeout(fadeTimeout);
+          clearTimeout(stopTimeout);
+          fadeTimeout = null;
+          stopTimeout = null;
+        }
+
+        if (isGameReady) {
+          requestNewTrack();
+        }
+
+        setIsTrackEnded(false);
+      }, 4000);
+    }
+
+    return () => clearTimeout(displayTrackInfoTimeout);
+  }, [ isTrackEnded ]);
 
   useEffect(() => {
     const prevQuizScorer = playLog[playLog.length - 1];
 
+    // 맞춘 player 표시해주기
     if (prevQuizScorer) {
-      window.alert(prevQuizScorer);
+      setHasScored(true);
     }
+
+    setIsTrackEnded(true);
 
     // 현재 재생되던 음악 정보 보여주기(3초 동안)
-    if (currentTrack) {
-      const { title, album_type: albumType, thumbnail: { url: thumbnail_url }, release_date: releaseDate, artist: { names: artistName } } = currentTrack;
+    // if (currentTrack) {
+    //   const {
+    //     title,
+    //     album_type: albumType,
+    //     thumbnail: { url: thumbnailUrl },
+    //     release_date: releaseDate,
+    //     artist: { names: artistName }
+    //   } = currentTrack;
 
-      window.alert(`${artistName[0]}: ${title}. ${albumType}, ${thumbnail_url}, ${releaseDate}`);
-    }
+    //   window.alert(`${artistName[0]}: ${title}. ${albumType}, ${thumbnailUrl}, ${releaseDate}`);
+    // }
 
     // 재생되던 음악 멈춰주기
-    if (track) {
-      track.stop();
+    // if (track) {
+    //   track.stop();
 
-      clearTimeout(fadeTimeout);
-      clearTimeout(stopTimeout);
-      fadeTimeout = null;
-      stopTimeout = null;
-    }
+    //   clearTimeout(fadeTimeout);
+    //   clearTimeout(stopTimeout);
+    //   fadeTimeout = null;
+    //   stopTimeout = null;
+    // }
 
-    if (isGameReady) {
-      requestNewTrack();
-    }
+    // if (isGameReady) {
+    //   requestNewTrack();
+    // }
   }, [ playLog ]);
 
   const onExitButtonClick = (userId, gameId) => {
@@ -109,7 +167,7 @@ const GameRoom = ({
   const onStartButtonClick = () => {
     for (const player of players) {
       if (!readyStatus[player.userId]) {
-        window.alert('모든 유저가 READY하지 않았습니다!');
+        return window.alert('모든 유저가 READY하지 않았습니다!');
       }
     }
 
@@ -129,24 +187,25 @@ const GameRoom = ({
           {players.map(player => (
             <PlayerCard
               key={player.userId}
-              imgSrc={player.thumbnail_url}
               userId={player.userId}
               username={player.username}
               score={score[player.username] ? score[player.username] : 0}
-              isReady={readyStatus[player.userId] ? true : false}
+              isReady={readyStatus[player.userId]}
+              hasScored={hasScored}
             />
           ))}
         </Header>
         <GameMain>
           <MainLeft>
             <img src={wave} alt="wave"/>
+            <TrackCard track={currentTrack} isTrackEnded={isTrackEnded} />
           </MainLeft>
           <MainRight>
             <ButtonContainer>
-              <button onClick={() => onReadyButtonClick(userId)}>READY</button>
               {gameHost === userId &&
-                <button onClick={onStartButtonClick}>GAME START</button>}
-              <button onClick={() => onExitButtonClick(userId, gameId)}>EXIT</button>
+                <Button onClick={onStartButtonClick}>GAME START</Button>}
+              {!isGameReady && <Button onClick={() => onReadyButtonClick(userId)}>READY</Button>}
+              <Button onClick={() => onExitButtonClick(userId, gameId)}>EXIT</Button>
             </ButtonContainer>
             <Chatting
               message={message}
@@ -210,12 +269,18 @@ export default GameRoom;
 
 
 
+
+
+
+
+
 // import React, { useState, useEffect } from 'react';
 // import { Howl } from 'howler';
 // import styled from 'styled-components';
 
 // import DefaultLayout from '../layout/DefaultLayout';
 // import Header from '../layout/Header';
+// import Button from '../layout/Button';
 // import PlayerCard from './PlayerCard';
 // import Chatting from './Chatting';
 
@@ -241,38 +306,27 @@ export default GameRoom;
 //   players,
 //   readyStatus,
 //   chatMessages,
-//   score, // { username: 10 }
 //   isGameReady,
-//   // loading,
-//   // error,
-//   trackUrl,
-//   // recentScorer,
-//   resetGameState,
+//   currentTrack,
+//   score,
+//   playLog,
+//   loading,
+//   error,
+//   updatePlayLog
 // }) => {
 //   const [ isReady, setIsReady ] = useState(false);
 //   const [ message, setMessage ] = useState('');
 
 //   useEffect(() => {
-//     requestNewTrack();
+//     if (isGameReady) {
+//       requestNewTrack();
+//     }
 //   }, [ isGameReady ]);
 
 //   useEffect(() => {
-//     // console.log('trackUrl', trackUrl);
-//     // console.log('track before', track);
-
-//     // if (track) {
-//     //   console.log('current track should be stopped', track)
-
-//     //   track.stop();
-//       // clearTimeout(fadeTimeout);
-//       // clearTimeout(stopTimeout);
-//     //   // window.alert(`${recentScorer} has scored!`);
-//     //   track = null;
-//     // }
-
-//     if (trackUrl) {
+//     if (currentTrack) {
 //       track = new Howl({
-//         src: [trackUrl],
+//         src: [currentTrack.audio_url],
 //         volume: 0.7,
 //         onstop: () => console.log('music stopped')
 //       });
@@ -285,31 +339,52 @@ export default GameRoom;
 
 //       stopTimeout = setTimeout(() => {
 //         track.stop();
+//         updatePlayLog();
 //       }, 1000 * 30);
+//     }
+
+//     return () => {
+//       if (track) track.stop();
+//     }
+//   }, [ currentTrack ]);
+
+//   useEffect(() => {
+//     const prevQuizScorer = playLog[playLog.length - 1];
+
+//     if (prevQuizScorer) {
+//       window.alert(prevQuizScorer);
+//     }
+
+//     // 현재 재생되던 음악 정보 보여주기(3초 동안)
+//     if (currentTrack) {
+//       const {
+//         title,
+//         album_type: albumType,
+//         thumbnail: { url: thumbnailUrl },
+//         release_date: releaseDate,
+//         artist: { names: artistName }
+//       } = currentTrack;
+
+//       window.alert(`${artistName[0]}: ${title}. ${albumType}, ${thumbnailUrl}, ${releaseDate}`);
+//     }
+
+//     // 재생되던 음악 멈춰주기
+//     if (track) {
+//       track.stop();
 
 //       clearTimeout(fadeTimeout);
 //       clearTimeout(stopTimeout);
-
-//       // 여기에 들어오는 것은 아무도 정답을 못 맞췄다는 의미
-//       // 정답을 못 맞출 경우, 
-//       // console.log('track after', track);
+//       fadeTimeout = null;
+//       stopTimeout = null;
 //     }
-//   }, [ trackUrl ]);
 
-//   // useEffect(() => {
-//   //   setGotCorrectAnswer(true);
-//   // }, [ recentScorer ]);
-
-//   // useEffect(() => {
-//   //   gotCorrectAnswer && track.stop();
-//   //   window.alert(`${recentScorer} has scored!`);
-
-//   //   setGotCorrectAnswer(true);
-//   // }, [ gotCorrectAnswer ]);
+//     if (isGameReady) {
+//       requestNewTrack();
+//     }
+//   }, [ playLog ]);
 
 //   const onExitButtonClick = (userId, gameId) => {
 //     leaveRoom(userId, gameId);
-//     resetGameState();
 //     return history.push('/waiting');
 //   };
 
@@ -345,7 +420,8 @@ export default GameRoom;
 //               userId={player.userId}
 //               username={player.username}
 //               score={score[player.username] ? score[player.username] : 0}
-//               isReady={readyStatus[player.userId] ? true : false}
+//               isReady={readyStatus[player.userId]}
+//               hasScored={playLog[playLog.length - 1] === player.username}
 //             />
 //           ))}
 //         </Header>
@@ -355,10 +431,10 @@ export default GameRoom;
 //           </MainLeft>
 //           <MainRight>
 //             <ButtonContainer>
-//               <button onClick={() => onReadyButtonClick(userId)}>READY</button>
 //               {gameHost === userId &&
-//                 <button onClick={onStartButtonClick}>GAME START</button>}
-//               <button onClick={() => onExitButtonClick(userId, gameId)}>EXIT</button>
+//                 <Button onClick={onStartButtonClick}>GAME START</Button>}
+//               {!isGameReady && <Button onClick={() => onReadyButtonClick(userId)}>READY</Button>}
+//               <Button onClick={() => onExitButtonClick(userId, gameId)}>EXIT</Button>
 //             </ButtonContainer>
 //             <Chatting
 //               message={message}

@@ -7,7 +7,11 @@ import {
   DESELECT_FAVORITE_ARTIST,
   SAVE_ARTISTS_REQUEST,
   SAVE_ARTISTS_SUCCESS,
-  SAVE_ARTISTS_FAILED
+  SAVE_ARTISTS_FAILED,
+  CLEAR_POST_RESULT,
+  GET_PROFILE_REQUEST,
+  GET_PROFILE_SUCCESS,
+  GET_PROFILE_ERROR
 } from '../constants/index';
 
 export const getArtists = dispatch => async userId => {
@@ -41,5 +45,20 @@ export const saveFavoriteArtists = dispatch => async (userId, selectedArtists) =
     dispatch({ type: SAVE_ARTISTS_SUCCESS });
   } catch (err) {
     dispatch({ type: SAVE_ARTISTS_FAILED, error: err.response.data.errorMessage });
+  }
+};
+
+export const clearPostResult = dispatch => () => {
+  dispatch({ type: CLEAR_POST_RESULT });
+};
+
+export const getProfile = dispatch => async userId => {
+  dispatch({ type: GET_PROFILE_REQUEST });
+
+  try {
+    const { data: userProfile } = await axios.get(`http://localhost:8080/users/${userId}/profile`, userId);
+    dispatch({ type: GET_PROFILE_SUCCESS, userProfile });
+  } catch (err) {
+    dispatch({ type: GET_PROFILE_ERROR, error: err.response.data.errorMessage });
   }
 };

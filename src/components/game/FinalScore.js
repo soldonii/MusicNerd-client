@@ -3,8 +3,9 @@ import styled from 'styled-components';
 
 import Button from '../layout/Button';
 import histroy from '../../lib/history';
+import { leaveRoom } from '../../lib/socket';
 
-const FinalScore = ({ score }) => {
+const FinalScore = ({ score, userId, gameId }) => {
   const sortedScore = [];
   for (const player in score) {
     sortedScore.push([player, score[player]]);
@@ -12,12 +13,15 @@ const FinalScore = ({ score }) => {
 
   sortedScore.sort((a, b) => b[1] - a[1]);
 
-  const onConfirmButtonClick = () => histroy.push('/waiting');
+  const onConfirmButtonClick = () => {
+    leaveRoom(userId, gameId);
+    histroy.push('/waiting');
+  }
 
   return (
     <ScoreWrapper>
       {sortedScore.map(score => (
-        <Score>
+        <Score key={score[0]}>
           <h1>{score[0]}</h1>
           <h2>{score[1]}</h2>
         </Score>
@@ -31,6 +35,10 @@ const ScoreWrapper = styled.div`
   height: 50vh;
   width: 40vw;
   padding: 2rem;
+
+  button {
+    transform: translateY(26rem);
+  }
 `;
 
 const Score = styled.div`

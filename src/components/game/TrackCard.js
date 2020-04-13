@@ -1,11 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import heart from '../../assets/heart.png';
+import { saveFavoriteTrack, deleteFavoriteTrack } from '../../lib/socket';
+
+// import emptyHeart from '../../assets/emptyHeart.png';
+// import heart from '../../assets/heart.png';
+import emptyHeart from '../../assets/emptyHeart.svg';
+import heart from '../../assets/heart.svg';
 
 const TrackCard = ({ track, isTrackEnded }) => {
+  const [ isClicked, setIsClicked ] = useState(false);
+  const onClick = trackId => {
+    let heartClickTimeout;
+
+    if (!isClicked) {
+      saveFavoriteTrack(trackId);
+      setIsClicked(true);
+
+      heartClickTimeout = setTimeout(() => {
+        setIsClicked(false);
+      }, 3000);
+    } else {
+      deleteFavoriteTrack(trackId);
+      setIsClicked(false);
+    }
+
+    return () => clearTimeout(heartClickTimeout);
+  };
+
+  useEffect(() => {
+    return () => setIsClicked(false);
+  }, []);
+
   if (track) {
     const {
+      _id: trackId,
       title,
       thumbnail: { url: thumbnailUrl },
       release_date: releaseDate,
@@ -14,7 +43,12 @@ const TrackCard = ({ track, isTrackEnded }) => {
 
     return (
       <CardWrapper isTrackEnded={isTrackEnded}>
-        <img src={heart} alt='heart' className='heart'/>
+        <img
+          src={!isClicked ? emptyHeart : heart}
+          alt='heart'
+          className='heart'
+          onClick={() => onClick(trackId)}
+        />
         <img src={thumbnailUrl} alt='thumbnail' className='coverimg'/>
         <h2>{title[0]}</h2>
         <p><span>{releaseDate} 발매</span><span>{artistName[0]}</span></p>

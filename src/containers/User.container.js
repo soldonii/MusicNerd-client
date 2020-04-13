@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import FavoriteArtists from '../components/users/FavoriteArtists';
+import Profile from '../components/users/Profile';
 import Navbar from '../components/layout/Navbar';
 import logo from '../assets/logo.png';
 
 import history from '../lib/history';
 import { setTokenToHeader } from '../lib/auth';
-import { getArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/user.actions';
+import { getArtists, selectArtist, deselectArtist, saveFavoriteArtists, clearPostResult, getProfile } from '../actions/user.actions';
 
 const UserContainer = ({
   userId,
@@ -17,10 +18,13 @@ const UserContainer = ({
   artistList,
   selectedArtists,
   postResult,
+  userProfile,
   getArtists,
   selectArtist,
   deselectArtist,
-  saveFavoriteArtists
+  saveFavoriteArtists,
+  clearPostResult,
+  getProfile
 }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -29,6 +33,7 @@ const UserContainer = ({
 
   useEffect(() => {
     if (postResult === 'success') {
+      clearPostResult();
       return history.push('/waiting');
     }
 
@@ -52,6 +57,13 @@ const UserContainer = ({
           onDeselect={deselectArtist}
         />
       </Route>
+      <Route exact path={`/users/${userId}/profile`}>
+        <Profile
+          userId={userId}
+          userProfile={userProfile}
+          requestData={getProfile}
+        />
+      </Route>
     </Fragment>
   );
 };
@@ -61,14 +73,17 @@ const mapStateToProps = state => ({
   loading: state.user.loading,
   artistList: state.user.artistList,
   selectedArtists: state.user.selectedArtists,
-  postResult: state.user.result
+  postResult: state.user.result,
+  userProfile: state.user.userProfile
 });
 
 const mapDispatchToProps = dispatch => ({
   getArtists: getArtists(dispatch),
   selectArtist: selectArtist(dispatch),
   deselectArtist: deselectArtist(dispatch),
-  saveFavoriteArtists: saveFavoriteArtists(dispatch)
+  saveFavoriteArtists: saveFavoriteArtists(dispatch),
+  clearPostResult: clearPostResult(dispatch),
+  getProfile: getProfile(dispatch)
 });
 
 UserContainer.propTypes = {
@@ -77,10 +92,13 @@ UserContainer.propTypes = {
   artistList: PropTypes.array.isRequired,
   selectedArtists: PropTypes.object.isRequired,
   postResult: PropTypes.string.isRequired,
+  userProfile: PropTypes.object.isRequired,
   getArtists: PropTypes.func.isRequired,
   selectArtist: PropTypes.func.isRequired,
   deselectArtist: PropTypes.func.isRequired,
-  saveFavoriteArtists: PropTypes.func.isRequired
+  saveFavoriteArtists: PropTypes.func.isRequired,
+  clearPostResult: PropTypes.func.isRequired,
+  getProfile: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

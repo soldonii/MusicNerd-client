@@ -46,4 +46,10 @@ export const requestNewTrack = () => {
   socket.emit('request new track');
 };
 
+export const saveFavoriteTrack = trackId => {
+  socket.emit('save favorite track', trackId);
+};
 
+export const deleteFavoriteTrack = trackId => {
+  socket.emit('delete favorite track', trackId);
+};

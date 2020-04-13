@@ -76,6 +76,3 @@ export const updateFinalScore = dispatch => () => {
 export const resetGameState = dispatch => () => {
   dispatch({ type: RESET_GAME_STATE });
 };
-
-
-

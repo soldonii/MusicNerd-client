@@ -65,7 +65,7 @@ const WatingContainer = ({
   return (
     <Fragment>
       <Navbar logo={logo}>
-        <Link to={`/users/:${userId}/profile`}>Profile</Link>
+        <Link to={`/users/${userId}/profile`}>Profile</Link>
         {isAuthenticated ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
       </Navbar>
       <DefaultLayout>

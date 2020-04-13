@@ -21,7 +21,7 @@ import {
   offReady,
   sendMessage,
   requestGameStart,
-  requestNewTrack
+  requestNewTrack,
 } from '../../lib/socket';
 
 let track;
@@ -144,11 +144,11 @@ const GameRoom = ({
       scoreTimeout = setTimeout(() => {
         setShouldModalOpen(true);
       }, 2000);
-      console.log('게임 끝!')
-      console.log('최종 score', score); // {soldonii: 100}
     }
 
     return () => clearTimeout(scoreTimeout);
+
+    // eslint-disable-next-line
   }, [ isGameEnded ]);
 
   const onExitButtonClick = (userId, gameId) => {
@@ -184,7 +184,7 @@ const GameRoom = ({
         setShouldModalOpen={setShouldModalOpen}
         title='Final Score'
       >
-        <FinalScore score={score} />
+        <FinalScore score={score} userId={userId} gameId={gameId} />
       </Modal>
       <GameWrapper>
         <Header>

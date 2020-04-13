@@ -6,7 +6,11 @@ import {
   DESELECT_FAVORITE_ARTIST,
   SAVE_ARTISTS_REQUEST,
   SAVE_ARTISTS_SUCCESS,
-  SAVE_ARTISTS_FAILED
+  SAVE_ARTISTS_FAILED,
+  CLEAR_POST_RESULT,
+  GET_PROFILE_REQUEST,
+  GET_PROFILE_SUCCESS,
+  GET_PROFILE_ERROR
 } from '../constants/index';
 
 const initialState = {
@@ -15,7 +19,15 @@ const initialState = {
   error: null,
   artistList: [],
   selectedArtists: {},
-  result: ''
+  result: '',
+  userProfile: {
+    favoriteArtists: [],
+    favoriteTracks: [],
+    username: '',
+    email: '',
+    thumbnailUrl: '',
+    playLog: []
+  }
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -83,6 +95,32 @@ export const userReducer = (state = initialState, action) => {
         loading: false,
         error: action.error,
         result: 'failure'
+      };
+
+    case CLEAR_POST_RESULT:
+      return {
+        ...state,
+        result: ''
+      };
+
+    case GET_PROFILE_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case GET_PROFILE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        userProfile: action.userProfile
+      };
+
+    case GET_PROFILE_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
       };
 
     default:

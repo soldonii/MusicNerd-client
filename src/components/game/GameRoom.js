@@ -4,10 +4,12 @@ import styled from 'styled-components';
 
 import DefaultLayout from '../layout/DefaultLayout';
 import Header from '../layout/Header';
+import Modal from '../layout/Modal';
 import Button from '../layout/Button';
 import PlayerCard from './PlayerCard';
 import TrackCard from './TrackCard';
 import Chatting from './Chatting';
+import FinalScore from './FinalScore';
 
 import history from '../../lib/history';
 import { FADEOUT_DURATION, TRACK_FADEOUT_SECONDS, TRACK_STOP_SECONDS } from '../../constants/index';
@@ -45,6 +47,7 @@ const GameRoom = ({
   const [ message, setMessage ] = useState('');
   const [ hasScored, setHasScored ] = useState(false);
   const [ isTrackEnded, setIsTrackEnded ] = useState(false);
+  const [ shouldModalOpen, setShouldModalOpen ] = useState(false);
 
   useEffect(() => {
     if (isGameReady) {
@@ -135,11 +138,18 @@ const GameRoom = ({
   }, [ playLog ]);
 
   useEffect(() => {
+    let scoreTimeout;
+
     if (isGameEnded) {
+      scoreTimeout = setTimeout(() => {
+        setShouldModalOpen(true);
+      }, 2000);
       console.log('게임 끝!')
-      console.log('최종 score', score);
+      console.log('최종 score', score); // {soldonii: 100}
     }
-  }, [isGameEnded])
+
+    return () => clearTimeout(scoreTimeout);
+  }, [ isGameEnded ]);
 
   const onExitButtonClick = (userId, gameId) => {
     leaveRoom(userId, gameId);
@@ -169,6 +179,13 @@ const GameRoom = ({
 
   return (
     <DefaultLayout>
+      <Modal
+        shouldModalOpen={shouldModalOpen}
+        setShouldModalOpen={setShouldModalOpen}
+        title='Final Score'
+      >
+        <FinalScore score={score} />
+      </Modal>
       <GameWrapper>
         <Header>
           {players.map(player => (

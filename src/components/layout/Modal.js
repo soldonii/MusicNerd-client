@@ -56,9 +56,10 @@ const ModalWindow = styled.div`
 
 const ModalHeader = styled.div`
   display: flex;
-  & h3 {
+  h3 {
     position: absolute;
     right: 1rem;
+    cursor: pointer
   }
 `;
 

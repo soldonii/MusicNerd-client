@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Howl } from 'howler';
+import Siriwave from 'siriwave';
 import styled from 'styled-components';
 
 import DefaultLayout from '../layout/DefaultLayout';
@@ -13,7 +14,6 @@ import FinalScore from './FinalScore';
 
 import history from '../../lib/history';
 import { FADEOUT_DURATION, TRACK_FADEOUT_SECONDS, TRACK_STOP_SECONDS } from '../../constants/index';
-import wave from '../../assets/soundwave.gif';
 
 import {
   leaveRoom,
@@ -25,6 +25,7 @@ import {
 } from '../../lib/socket';
 
 let track;
+let siriwave;
 let fadeTimeout, stopTimeout;
 
 const GameRoom = ({
@@ -50,6 +51,12 @@ const GameRoom = ({
   const [ shouldModalOpen, setShouldModalOpen ] = useState(false);
 
   useEffect(() => {
+    return () => {
+      if (track) track.stop();
+    }
+  }, []);
+
+  useEffect(() => {
     if (isGameReady) {
       requestNewTrack();
     }
@@ -65,6 +72,16 @@ const GameRoom = ({
         onstop: () => console.log('music stopped')
       });
 
+      if (!siriwave) {
+        siriwave = new Siriwave({
+          container: document.querySelector('#siri-container'),
+          height: 450,
+          width: 500,
+          style: 'ios9',
+          amplitude: 3
+        });
+      }
+      siriwave.start();
       track.play();
 
       fadeTimeout = setTimeout(() => {
@@ -72,21 +89,28 @@ const GameRoom = ({
       }, 1000 * TRACK_FADEOUT_SECONDS);
 
       stopTimeout = setTimeout(() => {
-        track.stop();
         updatePlayLog();
       }, 1000 * TRACK_STOP_SECONDS);
     }
 
     return () => {
-      if (track) {
-        track.stop();
-        clearTimeout(fadeTimeout);
-        clearTimeout(stopTimeout);
-      }
+      clearTimeout(fadeTimeout);
+      clearTimeout(stopTimeout);
+      fadeTimeout = null;
+      stopTimeout = null;
     }
 
     // eslint-disable-next-line
   }, [ currentTrack ]);
+
+  useEffect(() => {
+    const prevQuizScorer = playLog[playLog.length - 1];
+
+    if (prevQuizScorer) {
+      setHasScored(true);
+    }
+    setIsTrackEnded(true);
+  }, [ playLog ]);
 
   useEffect(() => {
     let displayScorerTimeout;
@@ -107,7 +131,6 @@ const GameRoom = ({
       displayTrackInfoTimeout = setTimeout(() => {
         if (track) {
           track.stop();
-
           clearTimeout(fadeTimeout);
           clearTimeout(stopTimeout);
           fadeTimeout = null;
@@ -128,19 +151,10 @@ const GameRoom = ({
   }, [ isTrackEnded ]);
 
   useEffect(() => {
-    const prevQuizScorer = playLog[playLog.length - 1];
-
-    if (prevQuizScorer) {
-      setHasScored(true);
-    }
-
-    setIsTrackEnded(true);
-  }, [ playLog ]);
-
-  useEffect(() => {
     let scoreTimeout;
 
     if (isGameEnded) {
+      siriwave.stop();
       scoreTimeout = setTimeout(() => {
         setShouldModalOpen(true);
       }, 2000);
@@ -201,7 +215,7 @@ const GameRoom = ({
         </Header>
         <GameMain>
           <MainLeft>
-            <img src={wave} alt="wave"/>
+            <div id='siri-container'></div>
             <TrackCard track={currentTrack} isTrackEnded={isTrackEnded} />
           </MainLeft>
           <MainRight>
@@ -246,7 +260,6 @@ const MainLeft = styled.div`
   height: 45rem;
   width: 55rem;
   margin: 0 1.5rem;
-  background-color: lightgray;
 
   & img {
     height: 45rem;

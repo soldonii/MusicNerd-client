@@ -18,6 +18,8 @@ const Profile = ({
 
   useEffect(() => {
     requestData(userId);
+
+    // eslint-disable-next-line
   }, []);
 
   const {

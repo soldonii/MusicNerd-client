@@ -14,15 +14,6 @@ const Navbar = ({ isLoggedIn, logo, showNext, showProfile, showGames, children }
       {children}
     </LinkWrapper>
   </NavWrapper>
-
-  // <NavWrapper>
-    // <Link to={localStorage.getItem('token') ? '/waiting' : '/'}>
-    //   <img src={logo} alt='logo'/>
-    // </Link>
-  //   <LinkWrapper>
-  //     {children}
-  //   </LinkWrapper>
-  // </NavWrapper>
 );
 
 const NavWrapper = styled.nav`
@@ -36,7 +27,7 @@ const NavWrapper = styled.nav`
   padding: 0 5vw;
 
   & img {
-    height: 6vh;
+    height: 8vh;
   }
 `;
 

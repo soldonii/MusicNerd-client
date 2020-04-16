@@ -2,10 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Button from '../layout/Button';
+
 import histroy from '../../lib/history';
 import { leaveRoom } from '../../lib/socket';
 
-const FinalScore = ({ score, userId, gameId }) => {
+import * as colors from '../../lib/colors';
+
+const FinalScore = ({
+  score,
+  userId,
+  gameId
+}) => {
   const sortedScore = [];
   for (const player in score) {
     sortedScore.push([player, score[player]]);
@@ -16,7 +23,7 @@ const FinalScore = ({ score, userId, gameId }) => {
   const onConfirmButtonClick = () => {
     leaveRoom(userId, gameId);
     histroy.push('/waiting');
-  }
+  };
 
   return (
     <ScoreWrapper>
@@ -49,10 +56,10 @@ const Score = styled.div`
   justify-content: flex-start;
   align-items: center;
   border-radius: 0.5rem;
-  box-shadow: 0.2rem 0.2rem 0.2rem #0017bd;
+  box-shadow: 0.2rem 0.2rem 0.2rem ${colors.GAME_HIGHLIGHT_COLOR};
 
   h1 {
-    color: #0017bd;
+    color: ${colors.GAME_HIGHLIGHT_COLOR};
     font-weight: bold;
     width: 56%;
     margin-right: 2%;

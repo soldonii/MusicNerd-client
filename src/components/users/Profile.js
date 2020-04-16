@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { setTokenToHeader } from '../../lib/auth';
-
 import DefaultLayout from '../layout/DefaultLayout';
+
+import { setTokenToHeader } from '../../lib/auth';
+import * as colors from '../../lib/colors';
 
 const Profile = ({
   userId,
@@ -41,8 +42,8 @@ const Profile = ({
         <div className='user-info'>
           <h1>username: {username}</h1>
           <h1>email: {email}</h1>
-          <h3>Total Score: {totalScore} points</h3>
-          <h3>Total Play: {playLog.length} games</h3>
+          <h1>Total Score: {totalScore} points</h1>
+          <h1>Total Play: {playLog.length} games</h1>
         </div>
       </UserInfoWrapper>
       <Favorites>
@@ -63,7 +64,6 @@ const Profile = ({
         <div className='card-wrapper'>
           {favoriteTracks.map(track => {
             const { thumbnail: { url }, title, _id: trackId, artist: { names } } = track;
-            console.log(track);
             return (
               <FavoritesCard key={trackId}>
                 <img src={url} alt="thumbnail"/>
@@ -84,7 +84,7 @@ const UserInfoWrapper = styled.section`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  border: 0.2rem solid white;
+  border: 0.2rem solid ${colors.MAIN_TEXT_COLOR};
   border-bottom: none;
 
   img {
@@ -107,7 +107,7 @@ const Favorites = styled.section`
   width: 80vw;
   min-height: 45vh;
   padding: 2rem;
-  border: 0.2rem solid white;
+  border: 0.2rem solid ${colors.MAIN_TEXT_COLOR};
 
   h2 {
     font-size: 3rem;
@@ -144,6 +144,3 @@ Profile.propTypes = {
 };
 
 export default Profile;
-
-
-// 프로필 페이지 : user 프로필 정보, 좋아요 누른 음악, 좋아요 눌렀던 가수 수정, playLog 보여주기.

@@ -1,5 +1,4 @@
 import { getSocket } from '../lib/socket';
-
 import {
   UPDATE_GAME_HOST,
   UPDATE_PLAYERS_AND_READY_STATUS,
@@ -9,7 +8,7 @@ import {
   UPDATE_CURRENT_TRACK,
   UPDATE_SCORE_AND_PLAYLOG,
   UPDATE_PLAYLOG,
-  UPDATE_FINAL_SCORE,
+  UPDATE_GAMESTATE_TO_END,
   RESET_GAME_STATE
 } from '../constants/index';
 
@@ -18,7 +17,7 @@ export const updateGameHost = dispatch => () => {
   socket.on('gameHost', gameHost => {
     dispatch({ type: UPDATE_GAME_HOST, gameHost });
   });
-}
+};
 
 export const updatePlayersAndReadyStatus = dispatch => () => {
   const socket = getSocket();
@@ -69,7 +68,7 @@ export const updatePlayLog = dispatch => () => {
 export const updateFinalScore = dispatch => () => {
   const socket = getSocket();
   socket.on('end game', () => {
-    dispatch({ type: UPDATE_FINAL_SCORE });
+    dispatch({ type: UPDATE_GAMESTATE_TO_END });
   });
 };
 

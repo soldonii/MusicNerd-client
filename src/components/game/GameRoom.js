@@ -7,6 +7,7 @@ import DefaultLayout from '../layout/DefaultLayout';
 import Header from '../layout/Header';
 import Modal from '../layout/Modal';
 import Button from '../layout/Button';
+
 import PlayerCard from './PlayerCard';
 import TrackCard from './TrackCard';
 import Chatting from './Chatting';
@@ -40,8 +41,6 @@ const GameRoom = ({
   isGameReady,
   currentTrack,
   isGameEnded,
-  loading,
-  error,
   updatePlayLog
 }) => {
   const [ isReady, setIsReady ] = useState(false);
@@ -55,14 +54,6 @@ const GameRoom = ({
       if (track) track.stop();
     }
   }, []);
-
-  useEffect(() => {
-    if (isGameReady) {
-      requestNewTrack();
-    }
-
-    // eslint-disable-next-line
-  }, [ isGameReady ]);
 
   useEffect(() => {
     if (currentTrack) {
@@ -109,6 +100,7 @@ const GameRoom = ({
     if (prevQuizScorer) {
       setHasScored(true);
     }
+
     setIsTrackEnded(true);
   }, [ playLog ]);
 
@@ -126,6 +118,7 @@ const GameRoom = ({
 
   useEffect(() => {
     let displayTrackInfoTimeout;
+    let requestTrackTimeout;
 
     if (isTrackEnded) {
       displayTrackInfoTimeout = setTimeout(() => {
@@ -136,19 +129,23 @@ const GameRoom = ({
           fadeTimeout = null;
           stopTimeout = null;
         }
-
-        if (isGameReady) {
-          requestNewTrack();
-        }
-
         setIsTrackEnded(false);
       }, 4000);
     }
 
-    return () => clearTimeout(displayTrackInfoTimeout);
+    if (!isTrackEnded && isGameReady) {
+      requestTrackTimeout = setTimeout(() => {
+        requestNewTrack();
+      }, 1000);
+    }
+
+    return () => {
+      clearTimeout(displayTrackInfoTimeout);
+      clearTimeout(requestTrackTimeout);
+    }
 
     // eslint-disable-next-line
-  }, [ isTrackEnded ]);
+  }, [ isGameReady, isTrackEnded ]);
 
   useEffect(() => {
     let scoreTimeout;
@@ -187,6 +184,7 @@ const GameRoom = ({
 
   const onSendButtonClick = (event, message) => {
     event.preventDefault();
+
     sendMessage(message);
     setMessage('');
   };
@@ -239,13 +237,12 @@ const GameRoom = ({
   );
 };
 
-// isGameEnded이면 Modal을 위 html 중 어딘가에 끼워넣기
-
 const GameWrapper = styled.div`
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   padding: 2vh 2vw;
+  overflow: hidden;
 `;
 
 const GameMain = styled.div`
@@ -260,8 +257,10 @@ const MainLeft = styled.div`
   height: 45rem;
   width: 55rem;
   margin: 0 1.5rem;
+  overflow: hidden;
+  position: relative;
 
-  & img {
+  img {
     height: 45rem;
     width: 55rem;
   }

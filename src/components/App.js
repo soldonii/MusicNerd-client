@@ -19,7 +19,7 @@ import history from '../lib/history';
 const App = ({ isAuthenticated }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
-    token && setTokenToHeader(token)
+    token && setTokenToHeader(token);
   }, []);
 
   return (

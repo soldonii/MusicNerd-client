@@ -14,8 +14,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     min-height: 100vh;
     margin: 0;
-    color: black;
-    background-color: black;
+    color: ${colors.DEFAULT_GLOBAL_FONT_COLOR};
+    background-color: ${colors.DEFAULT_GLOBAL_FONT_COLOR};
   }
 
   * {
@@ -29,12 +29,12 @@ const GlobalStyle = createGlobalStyle`
 
   a, a:link, a:visited {
     text-decoration: none;
-    color: black;
+    color: ${colors.DEFAULT_GLOBAL_FONT_COLOR};
     margin: 0 1rem;
   }
 
   a:hover {
-    color: ${colors.HIGHLIGHT};
+    color: ${colors.HIGHLIGHT_COLOR};
     transition: all 0.3s;
   }
 `;

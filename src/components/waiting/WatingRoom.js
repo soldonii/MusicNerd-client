@@ -29,6 +29,11 @@ const WatingRoom = ({
     createGame(userId, gameTitle);
   };
 
+  const closeModal = () => {
+    setGameTitle('');
+    setShouldModalOpen(false);
+  };
+
   if (getGameListError) {
     return <h1>{getGameListError}</h1>;
   }
@@ -38,14 +43,14 @@ const WatingRoom = ({
       <Modal
         loading={loading}
         shouldModalOpen={shouldModalOpen}
-        setShouldModalOpen={setShouldModalOpen}
+        closeModal={closeModal}
         title='Create Room'
       >
         <Form style={{ height: '30vh' }} onSubmit={onSubmit}>
           {createGameLoading ?
             <Loading color='black' /> :
             <Fragment>
-              <FormInput type='text' onChange={e => setGameTitle(e.target.value)} />
+              <FormInput type='text' onChange={e => setGameTitle(e.target.value)} value={gameTitle} />
               <ErrorMessage>{createGameError ? createGameError : null}</ErrorMessage>
               <SubmitButton type='submit' value='Create' />
             </Fragment>}
@@ -91,9 +96,9 @@ const GameListWrapper = styled.div`
   height: 80vh;
   margin: 12vh 0 5vh 0;
   padding: 2rem;
-  background-color: black;
+  background-color: ${colors.DEFAULT_GLOBAL_FONT_COLOR};
   box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem #303030;
-  color: white;
+  color: ${colors.MAIN_TEXT_COLOR};
   justify-content: center;
 `;
 
@@ -108,9 +113,13 @@ const GameListNav = styled.div`
 const GameCardWrapper = styled.div`
   width: 100%;
   height: 90%;
+  overflow-x: scroll;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ErrorMessage = styled.p`
@@ -119,13 +128,13 @@ const ErrorMessage = styled.p`
   height: 3rem;
   width: 70%;
   text-align: center;
-  color: red;
+  color: ${colors.ERROR_TEXT_COLOR};
 `;
 
 const SubmitButton = styled.input`
   border: none;
   border-radius: 2rem;
-  background-color: ${colors.HIGHLIGHT};
+  background-color: ${colors.HIGHLIGHT_COLOR};
   color: ${colors.MAIN_TEXT_COLOR};
   font-size: 2rem;
   padding: 1rem 1.5rem;

@@ -13,7 +13,7 @@ import {
   GET_PROFILE_ERROR
 } from '../constants/index';
 
-const initialState = {
+export const initialState = {
   userId: null,
   loading: false,
   error: null,

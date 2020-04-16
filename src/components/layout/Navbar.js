@@ -5,7 +5,14 @@ import PropTypes from 'prop-types';
 
 import * as colors from '../../lib/colors';
 
-const Navbar = ({ isLoggedIn, logo, showNext, showProfile, showGames, children }) => (
+const Navbar = ({
+  isLoggedIn,
+  logo,
+  showNext,
+  showProfile,
+  showGames,
+  children
+}) => (
   <NavWrapper>
     <Link to={isLoggedIn ? '/waiting' : '/'}>
       <img src={logo} alt='logo'/>
@@ -26,7 +33,7 @@ const NavWrapper = styled.nav`
   align-items: center;
   padding: 0 5vw;
 
-  & img {
+  img {
     height: 8vh;
   }
 `;
@@ -35,7 +42,7 @@ const LinkWrapper = styled.div`
   font-size: 1.5rem;
 
   button {
-    background-color: ${colors.WHITE};
+    background-color: ${colors.MAIN_TEXT_COLOR};
     padding: 0.9rem 1.7rem;
     border: 0;
     border-radius: 2rem;
@@ -44,19 +51,19 @@ const LinkWrapper = styled.div`
   }
 
   button:hover {
-    color: ${colors.WHITE};
-    background-color: ${colors.HIGHLIGHT};
+    color: ${colors.MAIN_TEXT_COLOR};
+    background-color: ${colors.HIGHLIGHT_COLOR};
   }
 
-  & a {
-    background-color: ${colors.WHITE};
+  a {
+    background-color: ${colors.MAIN_TEXT_COLOR};
     padding: 0.9rem 1.7rem;
     border-radius: 2rem;
   }
 
-  & a:hover {
-    color: ${colors.WHITE};
-    background-color: ${colors.HIGHLIGHT};
+  a:hover {
+    color: ${colors.MAIN_TEXT_COLOR};
+    background-color: ${colors.HIGHLIGHT_COLOR};
   }
 `;
 

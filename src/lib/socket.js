@@ -4,7 +4,7 @@ let socket;
 
 export const connectSocket = () => {
   console.log('connect socket');
-  socket = io('http://localhost:8080');
+  socket = io(process.env.REACT_APP_SERVER_URI);
 };
 
 export const getSocket = () => socket;

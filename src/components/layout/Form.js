@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 
 import * as colors from '../../lib/colors';
 
-const Form = ({ title, onSubmit, style, children }) => (
+const Form = ({
+  title,
+  onSubmit,
+  style,
+  children
+}) => (
   <FormWrapper style={style} onSubmit={onSubmit}>
     {title ? <h1>{title}</h1> : null}
     {children}
@@ -14,14 +19,14 @@ const Form = ({ title, onSubmit, style, children }) => (
 const FormWrapper = styled.form`
   width: 40vw;
   height: 70vh;
-  color: ${colors.FORM_TEXT_COLOR};
+  color: ${colors.MAIN_TEXT_COLOR};
   background-color: transparent;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  & h1 {
+  h1 {
     font-size: 4rem;
     margin-bottom: 4rem;
   }
@@ -30,6 +35,7 @@ const FormWrapper = styled.form`
 Form.propTypes = {
   title: PropTypes.string,
   onSubmit: PropTypes.func,
+  style: PropTypes.object,
   children: PropTypes.node
 };
 

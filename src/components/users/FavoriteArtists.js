@@ -21,34 +21,32 @@ const FavoriteArtists = ({
 
   return (
     <DefaultLayout>
-      {
-        loading ?
-          <Loading /> :
-          <ArtistWrapper>
-            <h3>{progressMessage}</h3>
-            <ProgressBar
-              lengthLimit={10}
-              currentLength={selectedArtistLength}
-            />
-            <ArtistList>
-              {artistList.map(artist => {
-                const { thumbnail: { url }, names, _id: artistId } = artist;
+      {loading ?
+        <Loading /> :
+        <ArtistWrapper>
+          <h3>{progressMessage}</h3>
+          <ProgressBar
+            lengthLimit={10}
+            currentLength={selectedArtistLength}
+          />
+          <ArtistList id='artistList'>
+            {artistList.map(artist => {
+              const { thumbnail: { url }, names, _id: artistId } = artist;
 
-                return (
-                  <ArtistCard
-                    key={artistId}
-                    artistId={artistId}
-                    selectedArtists={selectedArtists}
-                    thumbnailUrl={url}
-                    name={names[0]}
-                    onSelect={onSelect}
-                    onDeselect={onDeselect}
-                  />
-                );
-              })}
-            </ArtistList>
-          </ArtistWrapper>
-      }
+              return (
+                <ArtistCard
+                  key={artistId}
+                  artistId={artistId}
+                  selectedArtists={selectedArtists}
+                  thumbnailUrl={url}
+                  name={names[0]}
+                  onSelect={onSelect}
+                  onDeselect={onDeselect}
+                />
+              );
+            })}
+          </ArtistList>
+        </ArtistWrapper>}
     </DefaultLayout>
   );
 };
@@ -58,7 +56,7 @@ const ArtistWrapper = styled.section`
   min-height: 100vh;
   margin: 12vh 0 5vh 0;
 
-  & h3 {
+  h3 {
     font-size: 2rem;
     text-align: center;
   }

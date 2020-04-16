@@ -66,13 +66,13 @@ const ErrorMessage = styled.p`
   height: 3rem;
   width: 70%;
   text-align: center;
-  color: red;
+  color: ${colors.ERROR_TEXT_COLOR};
 `;
 
 const SubmitButton = styled.input`
   border: none;
   border-radius: 2rem;
-  background-color: ${colors.HIGHLIGHT};
+  background-color: ${colors.HIGHLIGHT_COLOR};
   color: ${colors.MAIN_TEXT_COLOR};
   font-size: 2rem;
   padding: 1rem 1.5rem;

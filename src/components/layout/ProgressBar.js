@@ -2,14 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const ProgressBar = ({ lengthLimit, currentLength }) => (
+import * as colors from '../../lib/colors';
+
+const ProgressBar = ({
+  lengthLimit,
+  currentLength
+}) => (
   <Bar>
     <Progress style={{ width: `${currentLength / lengthLimit * 100}%` }} />
   </Bar>
 );
 
 const Bar = styled.div`
-  border: 1px solid white;
+  border: 1px solid ${colors.MAIN_TEXT_COLOR};
   border-radius: 2rem;
   width: 45rem;
   height: 1rem;

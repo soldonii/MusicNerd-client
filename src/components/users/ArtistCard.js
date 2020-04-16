@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+import * as colors from '../../lib/colors';
+
 const ArtistCard = ({
   artistId,
   selectedArtists,
@@ -39,12 +41,11 @@ const ArtistCard = ({
 };
 
 const selectedStyle = {
-  backgroundColor: '#FBAB7E',
-  backgroundImage: 'linear-gradient(0deg, #FBAB7E 0%, #F7CE68 100%)'
+  backgroundImage: colors.SELECTED_CARD_COLOR
 };
 
 const deselectedStyle = {
-  backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  backgroundImage: colors.DESELECTED_CARD_COLOR
 };
 
 const CardWrapper = styled.div`
@@ -56,12 +57,12 @@ const CardWrapper = styled.div`
   background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   cursor: pointer;
 
-  & img {
+  img {
     width: 15rem;
     height: 15rem;
   }
 
-  & h1 {
+  h1 {
     margin-top: 1rem;
   }
 `;

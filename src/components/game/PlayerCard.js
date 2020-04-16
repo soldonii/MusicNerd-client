@@ -1,6 +1,8 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
+import * as colors from '../../lib/colors';
+
 const PlayerCard = ({
   userId,
   username,
@@ -27,9 +29,9 @@ const CardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
-  color: #c6e2ff;
+  color: ${colors.GAME_PLAYER_COLOR};
 
-  & h1 {
+  h1 {
     font-size: 2.2rem;
     text-shadow: ${props => props.isReady &&
       `0 0 6px rgba(212, 202, 228, 0.92),
@@ -41,7 +43,7 @@ const CardWrapper = styled.div`
     };
   }
 
-  & h4 {
+  h4 {
     font-size: 1.3rem;
     animation: ${props => props.hasScored && scoreNeon} 0.5s ease-in-out infinite;
   }

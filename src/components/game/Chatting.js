@@ -3,36 +3,40 @@ import styled from 'styled-components';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { css } from 'glamor';
 
+import * as colors from '../../lib/colors';
+
+const Chatting = ({
+  message,
+  setMessage,
+  onSendButtonClick,
+  children
+}) => (
+  <Wrapper>
+    <ScrollToBottom className={ScrollBarCss}>
+      {children.map(msg => (
+        <MessageWrapper key={Math.random()}>
+          <User>{msg.username}</User>
+          <Message>{msg.message}</Message>
+        </MessageWrapper>
+      ))}
+    </ScrollToBottom>
+    <InputForm>
+      <input
+        type='text'
+        placeholder='Type messages..'
+        value={message}
+        onChange={e => setMessage(e.target.value)}
+      />
+      <button onClick={e => onSendButtonClick(e, message)}>Send</button>
+    </InputForm>
+  </Wrapper>
+);
+
 const ScrollBarCss = css({
   height: '93%',
   backgroundColor: 'rgba(255, 255, 255, 0.5)',
   padding: '1rem'
 });
-
-const Chatting = ({ message, setMessage, onSendButtonClick, children }) => {
-  return (
-    <Wrapper>
-      <ScrollToBottom className={ScrollBarCss}>
-        {children.map(msg => (
-          <MessageWrapper key={Math.random()}>
-            <User>{msg.username}{' '}</User>
-            <Message>{msg.message}</Message>
-          </MessageWrapper>
-        ))
-        }
-      </ScrollToBottom>
-      <InputForm>
-        <input
-          type='text'
-          placeholder='Type messages..'
-          value={message}
-          onChange={e => setMessage(e.target.value)}
-        />
-        <button onClick={e => onSendButtonClick(e, message)}>Send</button>
-      </InputForm>
-    </Wrapper>
-  );
-};
 
 const Wrapper = styled.div`
   height: 40rem;
@@ -44,15 +48,15 @@ const InputForm = styled.form`
   display: flex;
   justify-content: space-between;
 
-  & input {
+  input {
     width: 85%;
     padding: 0 1rem;
     font-size: 1.5rem;
   }
 
-  & button {
+  button {
     width: 15%;
-    background-color: #001527;
+    background-color: ${colors.CHAT_SUBMIT_BUTTON_COLOR};
     color: white;
     font-size: 2rem;
   }
@@ -70,7 +74,7 @@ const User = styled.p`
   font-size: 1.5rem;
   text-align: left;
   font-weight: bold;
-  color: #0017bd;
+  color: ${colors.GAME_HIGHLIGHT_COLOR};
 `;
 
 const Message = styled.p`

@@ -3,8 +3,6 @@ import styled from 'styled-components';
 
 import { saveFavoriteTrack, deleteFavoriteTrack } from '../../lib/socket';
 
-// import emptyHeart from '../../assets/emptyHeart.png';
-// import heart from '../../assets/heart.png';
 import emptyHeart from '../../assets/emptyHeart.svg';
 import heart from '../../assets/heart.svg';
 
@@ -67,8 +65,7 @@ const CardWrapper = styled.div`
   background: linear-gradient(186deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 45%, rgba(0,106,255,1) 100%);
   position: absolute;
   box-sizing: content-box;
-  /* visibility: ${props => props.isTrackEnded ? 'visible' : 'hidden'} */
-  display: ${props => props.isTrackEnded ? 'block' : 'none'};
+  visibility: ${props => props.isTrackEnded ? 'visible' : 'hidden'};
   transform: ${props => props.isTrackEnded ? 'translate(0, -32rem)' : 'translate(0, 0)'};
   transition: all 1s ease-in-out;
 

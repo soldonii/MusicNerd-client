@@ -107,4 +107,3 @@ export const waitingReducer = (state = initialState, action) => {
       return state;
   }
 };
-

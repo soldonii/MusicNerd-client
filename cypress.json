@@ -1,0 +1,10 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "testFiles": [
+    "home.spec.js",
+    "artist.spec.js",
+    "waiting.spec.js",
+    "game.spec.js",
+    "profile.spec.js"
+  ]
+}

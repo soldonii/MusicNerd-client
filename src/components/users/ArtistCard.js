@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+import * as colors from '../../lib/colors';
+
 const ArtistCard = ({
   artistId,
   selectedArtists,
@@ -15,14 +17,15 @@ const ArtistCard = ({
   const onClick = artistId => {
     if (artistId in selectedArtists) {
       setIsSelected(false);
-      onDeselect(artistId);
-    } else {
-      if (Object.keys(selectedArtists).length === 10) {
-        return window.alert('최대 10명까지만 선택할 수 있습니다.');
-      }
-      setIsSelected(true);
-      onSelect(artistId);
+      return onDeselect(artistId);
     }
+
+    if (Object.keys(selectedArtists).length === 10) {
+      return window.alert('최대 10명까지만 선택할 수 있습니다.');
+    }
+
+    setIsSelected(true);
+    onSelect(artistId);
   };
 
   return (
@@ -38,12 +41,11 @@ const ArtistCard = ({
 };
 
 const selectedStyle = {
-  backgroundColor: '#FBAB7E',
-  backgroundImage: 'linear-gradient(0deg, #FBAB7E 0%, #F7CE68 100%)'
+  backgroundImage: colors.SELECTED_CARD_COLOR
 };
 
 const deselectedStyle = {
-  backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+  backgroundImage: colors.DESELECTED_CARD_COLOR
 };
 
 const CardWrapper = styled.div`
@@ -51,16 +53,16 @@ const CardWrapper = styled.div`
   height: 20rem;
   padding: 1rem;
   text-align: center;
-  margin: 0.5rem auto;
+  margin: 1.5rem auto;
   background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   cursor: pointer;
 
-  & img {
+  img {
     width: 15rem;
     height: 15rem;
   }
 
-  & h1 {
+  h1 {
     margin-top: 1rem;
   }
 `;

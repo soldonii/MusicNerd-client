@@ -1,14 +1,17 @@
 import React, { useEffect, Fragment } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Navbar from '../components/layout/Navbar';
 import FavoriteArtists from '../components/users/FavoriteArtists';
+import Profile from '../components/users/Profile';
+import Navbar from '../components/layout/Navbar';
 import logo from '../assets/logo.png';
 
 import history from '../lib/history';
-import { getArtists, selectArtist, deselectArtist, saveFavoriteArtists } from '../actions/user.actions';
+import { setTokenToHeader } from '../lib/auth';
+import { logout } from '../actions/auth.actions';
+import { getArtists, selectArtist, deselectArtist, saveFavoriteArtists, clearPostResult, getProfile } from '../actions/user.actions';
 
 const UserContainer = ({
   userId,
@@ -16,40 +19,56 @@ const UserContainer = ({
   artistList,
   selectedArtists,
   postResult,
+  userProfile,
   getArtists,
-  onSelect,
-  onDeselect,
-  postData
+  selectArtist,
+  deselectArtist,
+  saveFavoriteArtists,
+  clearPostResult,
+  getProfile,
+  logout
 }) => {
-  const token = localStorage.getItem('token');
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setTokenToHeader(token);
+  }, []);
 
   useEffect(() => {
-    if (!token || !userId ) {
-      return history.push('/');
-    }
-
     if (postResult === 'success') {
+      clearPostResult();
       return history.push('/waiting');
     }
 
     getArtists(userId);
 
     // eslint-disable-next-line
-  }, [ token, userId, postResult ]);
+  }, [ userId, postResult ]);
 
   return (
     <Fragment>
       <Navbar logo={logo}>
-        {Object.keys(selectedArtists).length >= 5
-          && <button onClick={() => postData(userId, selectedArtists)}>Next</button>}
+        {window.location.pathname.includes('profile') ?
+          <Fragment>
+            <Link to='/waiting'>Game</Link>
+            <button onClick={logout}>Logout</button>
+          </Fragment> :
+          Object.keys(selectedArtists).length >= 5 &&
+            <button onClick={() => saveFavoriteArtists(userId, selectedArtists)}>Next</button>}
       </Navbar>
       <Route exact path={`/users/${userId}/favorites`}>
         <FavoriteArtists
           loading={loading}
           artistList={artistList}
           selectedArtists={selectedArtists}
-          onSelect={onSelect}
-          onDeselect={onDeselect}
+          onSelect={selectArtist}
+          onDeselect={deselectArtist}
+        />
+      </Route>
+      <Route exact path={`/users/${userId}/profile`}>
+        <Profile
+          userId={userId}
+          userProfile={userProfile}
+          requestData={getProfile}
         />
       </Route>
     </Fragment>
@@ -58,17 +77,21 @@ const UserContainer = ({
 
 const mapStateToProps = state => ({
   userId: state.auth.userId,
-  loading: state.artist.loading,
-  artistList: state.artist.artistList,
-  selectedArtists: state.artist.selectedArtists,
-  postResult: state.artist.result
+  loading: state.user.loading,
+  artistList: state.user.artistList,
+  selectedArtists: state.user.selectedArtists,
+  postResult: state.user.result,
+  userProfile: state.user.userProfile
 });
 
 const mapDispatchToProps = dispatch => ({
   getArtists: getArtists(dispatch),
-  onSelect: selectArtist(dispatch),
-  onDeselect: deselectArtist(dispatch),
-  postData: saveFavoriteArtists(dispatch)
+  selectArtist: selectArtist(dispatch),
+  deselectArtist: deselectArtist(dispatch),
+  saveFavoriteArtists: saveFavoriteArtists(dispatch),
+  clearPostResult: clearPostResult(dispatch),
+  getProfile: getProfile(dispatch),
+  logout: logout(dispatch)
 });
 
 UserContainer.propTypes = {
@@ -77,10 +100,14 @@ UserContainer.propTypes = {
   artistList: PropTypes.array.isRequired,
   selectedArtists: PropTypes.object.isRequired,
   postResult: PropTypes.string.isRequired,
+  userProfile: PropTypes.object.isRequired,
   getArtists: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  onDeselect: PropTypes.func.isRequired,
-  postData: PropTypes.func.isRequired
+  selectArtist: PropTypes.func.isRequired,
+  deselectArtist: PropTypes.func.isRequired,
+  saveFavoriteArtists: PropTypes.func.isRequired,
+  clearPostResult: PropTypes.func.isRequired,
+  getProfile: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

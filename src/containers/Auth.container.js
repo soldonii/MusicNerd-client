@@ -3,10 +3,10 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Navbar from '../components/layout/Navbar';
+import DefaultLayout from '../components/layout/DefaultLayout';
 import Signup from '../components/auth/Signup';
 import Login from '../components/auth/Login';
-import DefaultLayout from '../components/layout/DefaultLayout';
+import Navbar from '../components/layout/Navbar';
 import logo from '../assets/logo.png';
 
 import history from '../lib/history';
@@ -23,27 +23,29 @@ const AuthContainer = ({
   logout,
   clearError
 }) => {
-  const token = localStorage.getItem('token');
-
   useEffect(() => {
     hasSignedUp && history.push('/auth/login');
-    error && window.setTimeout(() => clearError(), 2000);
 
+    let errorTimeout;
+    if (error) {
+      errorTimeout = window.setTimeout(() => clearError(), 2000);
+    }
+
+    return () => clearTimeout(errorTimeout);
     // eslint-disable-next-line
   }, [ hasSignedUp, error ]);
 
   useEffect(() => {
     isAuthenticated && history.push(`/users/${userId}/favorites`);
-    error && window.setTimeout(() => clearError(), 2000);
 
     // eslint-disable-next-line
-  }, [ userId, isAuthenticated, error ]);
+  }, [ userId, isAuthenticated ]);
 
   return (
     <Fragment>
       <Navbar logo={logo}>
         <Link to='/auth/signup'>Sign Up</Link>
-        {token ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
+        {isAuthenticated ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
       </Navbar>
       <DefaultLayout>
         <Switch>

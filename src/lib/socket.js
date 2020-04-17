@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 let socket;
 
 export const connectSocket = () => {
-  socket = io('http://localhost:8080');
+  socket = io(process.env.REACT_APP_SERVER_URI);
 };
 
 export const getSocket = () => socket;
@@ -17,8 +17,8 @@ export const joinRoom = (userId, gameId) => {
   socket.emit('join room', { userId, gameId });
 };
 
-export const requestGameCreator = gameId => {
-  socket.emit('request game creator', gameId);
+export const requestGameHost = gameId => {
+  socket.emit('request game host', gameId);
 };
 
 export const leaveRoom = (userId, gameId) => {
@@ -37,8 +37,18 @@ export const sendMessage = message => {
   socket.emit('send message', message);
 };
 
-export const startGame = () => {
-  socket.emit('start game');
+export const requestGameStart = players => {
+  socket.emit('request game start', players);
 };
 
+export const requestNewTrack = () => {
+  socket.emit('request new track');
+};
 
+export const saveFavoriteTrack = trackId => {
+  socket.emit('save favorite track', trackId);
+};
+
+export const deleteFavoriteTrack = trackId => {
+  socket.emit('delete favorite track', trackId);
+};

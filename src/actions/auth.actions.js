@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../lib/history';
 import {
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
@@ -10,27 +11,24 @@ import {
   CLEAR_AUTH_ERROR
 } from '../constants/index';
 
-export const requestSignup = dispatch => async (event, user) => {
-  event.preventDefault();
-
+export const requestSignup = dispatch => async user => {
   try {
     dispatch({ type: SIGNUP_REQUEST });
 
-    await axios.post('http://localhost:8080/auth/signup', user);
+    await axios.post(`${process.env.REACT_APP_SERVER_URI}/auth/signup`, user);
     dispatch({ type: SIGNUP_SUCCESS });
   } catch (err) {
     dispatch({ type: SIGNUP_FAILED, error: err.response.data.errorMessage });
   }
 };
 
-export const requestLogin = dispatch => async (event, user) => {
-  event.preventDefault();
-
+export const requestLogin = dispatch => async user => {
   try {
     dispatch({ type: LOGIN_REQUEST });
 
-    const response = await axios.post('http://localhost:8080/auth/login', user);
+    const response = await axios.post(`${process.env.REACT_APP_SERVER_URI}/auth/login`, user);
     const { token, userId } = response.data;
+
     dispatch({ type: LOGIN_SUCCESS, token, userId });
   } catch (err) {
     dispatch({ type: LOGIN_FAILED, error: err.response.data.errorMessage });
@@ -38,6 +36,7 @@ export const requestLogin = dispatch => async (event, user) => {
 };
 
 export const logout = dispatch => () => {
+  history.push('/');
   dispatch({ type: LOGOUT });
 };
 

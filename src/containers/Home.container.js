@@ -4,25 +4,23 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import Navbar from '../components/layout/Navbar';
 import DefaultLayout from '../components/layout/DefaultLayout';
+import Navbar from '../components/layout/Navbar';
 import logo from '../assets/logo.png';
 
 import history from '../lib/history';
 import { logout } from '../actions/auth.actions';
 
-const HomeContainer = ({ userId, logout }) => {
-  const token = localStorage.getItem('token');
-
+const HomeContainer = ({ isAuthenticated, logout }) => {
   useEffect(() => {
-    (token && userId) && history.push('/games');
-  }, [ token, userId ]);
+    isAuthenticated && history.push('/waiting');
+  }, [ isAuthenticated ]);
 
   return (
     <Fragment>
       <Navbar logo={logo}>
         <Link to='/auth/signup'>Sign Up</Link>
-        {token ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
+        {isAuthenticated ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
       </Navbar>
       <DefaultLayout>
         <Title>MUSIC NERD</Title>
@@ -42,7 +40,7 @@ const SubTitle = styled.p`
 `;
 
 const mapStateToProps = state => ({
-  userId: state.auth.userId
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -50,7 +48,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 HomeContainer.propTypes = {
-  userId: PropTypes.string.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired
 };
 

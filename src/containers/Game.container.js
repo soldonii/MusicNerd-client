@@ -5,43 +5,73 @@ import PropTypes from 'prop-types';
 
 import GameRoom from '../components/game/GameRoom';
 
-import { updateParticipants, updateReadyStatus, updateGameCreator, updateChatMessages } from '../actions/game.actions';
+import {
+  updateGameHost,
+  updatePlayersAndReadyStatus,
+  updateReadyStatus,
+  updateChatMessages,
+  updateGameStatus,
+  updateCurrentTrack,
+  updateScoreAndPlayLog,
+  updatePlayLog,
+  updateFinalScore,
+  resetGameState,
+} from '../actions/game.actions';
+
 import {
   joinRoom,
-  requestGameCreator,
+  requestGameHost,
   disconnectSocket
 } from '../lib/socket';
 
 const GameContainer = ({
   userId,
   gameId,
-  gameCreator,
-  participants,
+  gameHost,
+  players,
   readyStatus,
   chatMessages,
+  score,
+  playLog,
+  isGameReady,
+  currentTrack,
+  isGameEnded,
   loading,
   error,
-  updateParticipants,
+  updatePlayersAndReadyStatus,
   updateReadyStatus,
-  updateGameCreator,
-  updateChatMessages
+  updateGameHost,
+  updateChatMessages,
+  updateCurrentTrack,
+  updateScoreAndPlayLog,
+  updatePlayLog,
+  updateFinalScore,
+  updateGameStatus,
+  resetGameState
 }) => {
   useEffect(() => {
-    joinRoom(userId, gameId);
-    requestGameCreator(gameId);
-    return () => disconnectSocket();
+    if (userId && gameId) {
+      joinRoom(userId, gameId);
+      requestGameHost(gameId);
+    }
 
     // eslint-disable-next-line
   }, [ userId, gameId ]);
 
   useEffect(() => {
-    updateParticipants();
+    updateGameHost();
+    updatePlayersAndReadyStatus();
     updateReadyStatus();
-    updateGameCreator();
     updateChatMessages();
+    updateGameStatus();
+    updateCurrentTrack();
+    updateScoreAndPlayLog();
+    updateFinalScore();
 
-    return () => disconnectSocket();
-
+    return () => {
+      disconnectSocket();
+      resetGameState();
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -50,12 +80,18 @@ const GameContainer = ({
       <GameRoom
         userId={userId}
         gameId={gameId}
-        gameCreator={gameCreator}
-        participants={participants}
+        gameHost={gameHost}
+        players={players}
         readyStatus={readyStatus}
         chatMessages={chatMessages}
+        score={score}
+        playLog={playLog}
+        isGameReady={isGameReady}
+        currentTrack={currentTrack}
+        isGameEnded={isGameEnded}
         loading={loading}
         error={error}
+        updatePlayLog={updatePlayLog}
       />
     </Route>
   );
@@ -64,30 +100,56 @@ const GameContainer = ({
 const mapStateToProps = state => ({
   userId: state.auth.userId,
   gameId: state.waiting.gameId,
-  gameCreator: state.game.gameCreator,
-  participants: state.game.participants,
+  gameHost: state.game.gameHost,
+  players: state.game.players,
   readyStatus: state.game.readyStatus,
   chatMessages: state.game.chatMessages,
+  score: state.game.score,
+  playLog: state.game.playLog,
+  isGameReady: state.game.isGameReady,
+  currentTrack: state.game.currentTrack,
+  isGameEnded: state.game.isGameEnded,
   loading: state.game.loading,
   error: state.game.error
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateParticipants: updateParticipants(dispatch),
+  updateGameHost: updateGameHost(dispatch),
+  updatePlayersAndReadyStatus: updatePlayersAndReadyStatus(dispatch),
   updateReadyStatus: updateReadyStatus(dispatch),
-  updateGameCreator: updateGameCreator(dispatch),
-  updateChatMessages: updateChatMessages(dispatch)
+  updateChatMessages: updateChatMessages(dispatch),
+  updateGameStatus: updateGameStatus(dispatch),
+  updateCurrentTrack: updateCurrentTrack(dispatch),
+  updateScoreAndPlayLog: updateScoreAndPlayLog(dispatch),
+  updatePlayLog: updatePlayLog(dispatch),
+  updateFinalScore: updateFinalScore(dispatch),
+  resetGameState: resetGameState(dispatch)
 });
 
 GameRoom.propTypes = {
   userId: PropTypes.string.isRequired,
   gameId: PropTypes.string.isRequired,
-  gameCreator: PropTypes.string.isRequired,
-  participants: PropTypes.array.isRequired,
+  gameHost: PropTypes.string.isRequired,
+  players: PropTypes.array.isRequired,
   readyStatus: PropTypes.object.isRequired,
   chatMessages: PropTypes.array.isRequired,
+  score: PropTypes.object.isRequired,
+  playLog: PropTypes.array.isRequired,
+  isGameReady: PropTypes.bool.isRequired,
+  currentTrack: PropTypes.any,
+  isGameEnded: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
+  updatePlayersAndReadyStatus: PropTypes.func,
+  updateReadyStatus: PropTypes.func,
+  updateGameHost: PropTypes.func,
+  updateChatMessages: PropTypes.func,
+  updateCurrentTrack: PropTypes.func,
+  updateScoreAndPlayLog: PropTypes.func,
+  updatePlayLog: PropTypes.func,
+  updateFinalScore: PropTypes.func,
+  updateGameStatus: PropTypes.func,
+  resetGameState: PropTypes.func
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameContainer);

@@ -5,9 +5,13 @@ import PropTypes from 'prop-types';
 
 import * as colors from '../../lib/colors';
 
-const Navbar = ({ logo, children}) => (
+const Navbar = ({
+  isAuthenticated,
+  logo,
+  children
+}) => (
   <NavWrapper>
-    <Link to={localStorage.getItem('token') ? '/games' : '/'}>
+    <Link to={isAuthenticated ? '/waiting' : '/'}>
       <img src={logo} alt='logo'/>
     </Link>
     <LinkWrapper>
@@ -26,8 +30,8 @@ const NavWrapper = styled.nav`
   align-items: center;
   padding: 0 5vw;
 
-  & img {
-    height: 6vh;
+  img {
+    height: 8vh;
   }
 `;
 
@@ -35,7 +39,7 @@ const LinkWrapper = styled.div`
   font-size: 1.5rem;
 
   button {
-    background-color: ${colors.WHITE};
+    background-color: ${colors.MAIN_TEXT_COLOR};
     padding: 0.9rem 1.7rem;
     border: 0;
     border-radius: 2rem;
@@ -44,23 +48,24 @@ const LinkWrapper = styled.div`
   }
 
   button:hover {
-    color: ${colors.WHITE};
-    background-color: ${colors.HIGHLIGHT};
+    color: ${colors.MAIN_TEXT_COLOR};
+    background-color: ${colors.HIGHLIGHT_COLOR};
   }
 
-  & a {
-    background-color: ${colors.WHITE};
+  a {
+    background-color: ${colors.MAIN_TEXT_COLOR};
     padding: 0.9rem 1.7rem;
     border-radius: 2rem;
   }
 
-  & a:hover {
-    color: ${colors.WHITE};
-    background-color: ${colors.HIGHLIGHT};
+  a:hover {
+    color: ${colors.MAIN_TEXT_COLOR};
+    background-color: ${colors.HIGHLIGHT_COLOR};
   }
 `;
 
 Navbar.propTypes = {
+  isAuthenticated: PropTypes.bool,
   logo: PropTypes.string.isRequired,
   children: PropTypes.node
 };

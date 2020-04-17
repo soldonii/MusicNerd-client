@@ -28,16 +28,20 @@ const Signup = ({
     (password.length > 5) &&
     (confirmationPassword.length > 5);
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  const onSubmit = (e, user) => {
+    e.preventDefault();
+    requestSignup(user);
+  };
 
   return (
     loading ?
       <Loading /> :
       <SignupWrapper>
-        <Form title='Sign Up' onSubmit={e => requestSignup(e, user)}>
+        <Form title='Sign Up' onSubmit={e => onSubmit(e, user)}>
           <FormInput
             type='text'
             name='username'
-            placeholder='Username'
+            placeholder='Username (max 8 characters)'
             value={username}
             onChange={onChange}
             required
@@ -89,13 +93,13 @@ const ErrorMessage = styled.p`
   height: 3rem;
   width: 70%;
   text-align: center;
-  color: red;
+  color: ${colors.ERROR_TEXT_COLOR};
 `;
 
 const SubmitButton = styled.input`
   border: none;
   border-radius: 2rem;
-  background-color: ${colors.HIGHLIGHT};
+  background-color: ${colors.HIGHLIGHT_COLOR};
   color: ${colors.MAIN_TEXT_COLOR};
   font-size: 2rem;
   padding: 1rem 1.5rem;

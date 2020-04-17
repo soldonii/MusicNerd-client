@@ -7,14 +7,18 @@ import {
   DESELECT_FAVORITE_ARTIST,
   SAVE_ARTISTS_REQUEST,
   SAVE_ARTISTS_SUCCESS,
-  SAVE_ARTISTS_FAILED
+  SAVE_ARTISTS_FAILED,
+  CLEAR_POST_RESULT,
+  GET_PROFILE_REQUEST,
+  GET_PROFILE_SUCCESS,
+  GET_PROFILE_ERROR
 } from '../constants/index';
 
 export const getArtists = dispatch => async userId => {
   dispatch({ type: GET_ARTISTS_REQUEST, userId });
 
   try {
-    const { data: { artistList, favoriteArtists } } = await axios.get(`http://localhost:8080/users/${userId}/favorites`);
+    const { data: { artistList, favoriteArtists } } = await axios.get(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/favorites`);
 
     const selectedArtists = {};
     favoriteArtists.forEach(artistId => selectedArtists[artistId] = true);
@@ -37,9 +41,24 @@ export const saveFavoriteArtists = dispatch => async (userId, selectedArtists) =
   dispatch({ type: SAVE_ARTISTS_REQUEST });
 
   try {
-    await axios.post(`http://localhost:8080/users/${userId}/favorites`, selectedArtists);
+    await axios.post(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/favorites`, selectedArtists);
     dispatch({ type: SAVE_ARTISTS_SUCCESS });
   } catch (err) {
     dispatch({ type: SAVE_ARTISTS_FAILED, error: err.response.data.errorMessage });
+  }
+};
+
+export const clearPostResult = dispatch => () => {
+  dispatch({ type: CLEAR_POST_RESULT });
+};
+
+export const getProfile = dispatch => async userId => {
+  dispatch({ type: GET_PROFILE_REQUEST });
+
+  try {
+    const { data: userProfile } = await axios.get(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/profile`, userId);
+    dispatch({ type: GET_PROFILE_SUCCESS, userProfile });
+  } catch (err) {
+    dispatch({ type: GET_PROFILE_ERROR, error: err.response.data.errorMessage });
   }
 };

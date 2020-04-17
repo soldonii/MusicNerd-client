@@ -13,25 +13,25 @@ const Login = ({
   loading,
   requestLogin
 }) => {
-  const [ user, setUser ] = useState({
-    email: '',
-    password: '',
-  });
-
+  const [ user, setUser ] = useState({ email: '', password: '' });
   const { email, password } = user;
 
   const checkInputCondition = () => (email.includes('@')) && (password.length > 5);
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
+  const onSubmit = e => {
+    e.preventDefault();
+    requestLogin(user);
+  };
 
   return (
     loading ?
       <Loading /> :
       <LoginWrapper>
-        <Form title='Login' onSubmit={e => requestLogin(e, user)}>
+        <Form title='Login' onSubmit={e => onSubmit(e, user)}>
           <FormInput
             type='email'
             name='email'
-            placeholder='Email address'
+            placeholder='example@example.com'
             value={email}
             onChange={onChange}
             required
@@ -39,7 +39,7 @@ const Login = ({
           <FormInput
             type='password'
             name='password'
-            placeholder='Password'
+            placeholder='Password (over 6 characters)'
             minLength='6'
             value={password}
             onChange={onChange}
@@ -66,13 +66,13 @@ const ErrorMessage = styled.p`
   height: 3rem;
   width: 70%;
   text-align: center;
-  color: red;
+  color: ${colors.ERROR_TEXT_COLOR};
 `;
 
 const SubmitButton = styled.input`
   border: none;
   border-radius: 2rem;
-  background-color: ${colors.HIGHLIGHT};
+  background-color: ${colors.HIGHLIGHT_COLOR};
   color: ${colors.MAIN_TEXT_COLOR};
   font-size: 2rem;
   padding: 1rem 1.5rem;

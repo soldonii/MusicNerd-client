@@ -1,21 +1,24 @@
 import {
-  CREATE_GAME_REQUEST,
-  CREATE_GAME_SUCCESS,
-  CREATE_GAME_FAILED,
   GET_GAMES_REQUEST,
   GET_GAMES_SUCCESS,
   GET_GAMES_FAILURE,
-  ENTER_GAME_REQUEST,
-  ENTER_GAME_SUCCESS,
-  ENTER_GAME_FAILED,
-  CLEAR_WAITING_ERROR
+  CREATE_GAME_REQUEST,
+  CREATE_GAME_SUCCESS,
+  CREATE_GAME_FAILED,
+  JOIN_GAME_REQUEST,
+  JOIN_GAME_SUCCESS,
+  JOIN_GAME_FAILED,
+  CLAER_CREATE_GAME_ERROR
 } from '../constants/index';
 
 const initialState = {
   gameId: '',
   gameList: [],
   loading: false,
-  error: null
+  createGameLoading: false,
+  getGameListError: null,
+  createGameError: null,
+  joinGameError: null
 };
 
 export const waitingReducer = (state = initialState, action) => {
@@ -30,7 +33,8 @@ export const waitingReducer = (state = initialState, action) => {
       return {
         ...state,
         gameList: action.gameList,
-        loading: false
+        loading: false,
+        getGameListError: null
       };
 
     case GET_GAMES_FAILURE:
@@ -38,61 +42,60 @@ export const waitingReducer = (state = initialState, action) => {
         ...state,
         gameList: [],
         loading: false,
-        error: action.error
+        getGameListError: action.error
       };
 
       case CREATE_GAME_REQUEST:
         return {
           ...state,
-          loading: true
+          createGameLoading: true
         };
 
       case CREATE_GAME_SUCCESS:
         return {
           ...state,
           gameId: action.gameId,
-          loading: false,
-          error: null
+          createGameLoading: false,
+          createGameError: null
         };
 
       case CREATE_GAME_FAILED:
         return {
           ...state,
-          loading: false,
+          createGameLoading: false,
           gameId: '',
-          error: action.error
+          createGameError: action.error
         };
 
-    case ENTER_GAME_REQUEST:
+    case JOIN_GAME_REQUEST:
       return {
         ...state,
         loading: true
       };
 
-    case ENTER_GAME_SUCCESS:
+    case JOIN_GAME_SUCCESS:
       return {
         ...state,
         loading: false,
-        error: null,
-        gameId: action.gameId
+        gameId: action.gameId,
+        joinGameError: null
       };
 
-    case ENTER_GAME_FAILED:
+    case JOIN_GAME_FAILED:
       return {
         ...state,
         loading: false,
-        error: action.error,
-        gameId: ''
+        gameId: '',
+        joinGameError: action.error
       };
 
-    case CLEAR_WAITING_ERROR:
+    case CLAER_CREATE_GAME_ERROR:
       return {
         ...state,
-        error: null
+        createGameError: null
       };
 
     default:
       return state;
   }
 };
-

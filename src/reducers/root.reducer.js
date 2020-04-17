@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import { authReducer } from './auth.reducer';
-import { artistReducer } from './artist.reducer';
+import { userReducer } from './user.reducer';
 import { waitingReducer } from './waiting.reducer';
 import { gameReducer } from './game.reducer';
 
 const appReducer = combineReducers({
   auth: authReducer,
-  artist: artistReducer,
+  user: userReducer,
   waiting: waitingReducer,
   game: gameReducer
 });

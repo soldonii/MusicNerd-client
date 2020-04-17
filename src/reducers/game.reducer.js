@@ -93,6 +93,11 @@ export const gameReducer = (state = initialState, action) => {
         players: [],
         readyStatus: {},
         chatMessages: [],
+        score: {},
+        playLog: [],
+        isGameReady: false,
+        currentTrack: '',
+        isGameEnded: false,
         loading: false,
         error: null
       };

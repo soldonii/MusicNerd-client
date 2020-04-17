@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../lib/history';
 import {
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
@@ -35,6 +36,7 @@ export const requestLogin = dispatch => async user => {
 };
 
 export const logout = dispatch => () => {
+  history.push('/');
   dispatch({ type: LOGOUT });
 };
 

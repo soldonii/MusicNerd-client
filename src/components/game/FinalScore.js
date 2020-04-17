@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import Button from '../layout/Button';
 
@@ -72,5 +73,11 @@ const Score = styled.div`
     text-align: left;
   }
 `;
+
+FinalScore.propTypes = {
+  score: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired,
+  gameId: PropTypes.string.isRequired
+};
 
 export default FinalScore;

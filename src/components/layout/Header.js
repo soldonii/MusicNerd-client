@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import * as colors from '../../lib/colors';
 
@@ -18,5 +19,9 @@ const Wrapper = styled.div`
   align-items: center;
   box-shadow: 0 0.4rem 0.2rem -0.2rem ${colors.BOX_SHADOW_COLOR};
 `;
+
+Header.propTypes = {
+  children: PropTypes.node
+};
 
 export default Header;

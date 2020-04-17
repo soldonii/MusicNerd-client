@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -10,6 +10,7 @@ import logo from '../assets/logo.png';
 
 import history from '../lib/history';
 import { setTokenToHeader } from '../lib/auth';
+import { logout } from '../actions/auth.actions';
 import { getArtists, selectArtist, deselectArtist, saveFavoriteArtists, clearPostResult, getProfile } from '../actions/user.actions';
 
 const UserContainer = ({
@@ -24,7 +25,8 @@ const UserContainer = ({
   deselectArtist,
   saveFavoriteArtists,
   clearPostResult,
-  getProfile
+  getProfile,
+  logout
 }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -45,8 +47,13 @@ const UserContainer = ({
   return (
     <Fragment>
       <Navbar logo={logo}>
-        {Object.keys(selectedArtists).length >= 5
-          && <button onClick={() => saveFavoriteArtists(userId, selectedArtists)}>Next</button>}
+        {window.location.pathname.includes('profile') ?
+          <Fragment>
+            <Link to='/waiting'>Game</Link>
+            <button onClick={logout}>Logout</button>
+          </Fragment> :
+          Object.keys(selectedArtists).length >= 5 &&
+            <button onClick={() => saveFavoriteArtists(userId, selectedArtists)}>Next</button>}
       </Navbar>
       <Route exact path={`/users/${userId}/favorites`}>
         <FavoriteArtists
@@ -83,7 +90,8 @@ const mapDispatchToProps = dispatch => ({
   deselectArtist: deselectArtist(dispatch),
   saveFavoriteArtists: saveFavoriteArtists(dispatch),
   clearPostResult: clearPostResult(dispatch),
-  getProfile: getProfile(dispatch)
+  getProfile: getProfile(dispatch),
+  logout: logout(dispatch)
 });
 
 UserContainer.propTypes = {
@@ -98,7 +106,8 @@ UserContainer.propTypes = {
   deselectArtist: PropTypes.func.isRequired,
   saveFavoriteArtists: PropTypes.func.isRequired,
   clearPostResult: PropTypes.func.isRequired,
-  getProfile: PropTypes.func.isRequired
+  getProfile: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

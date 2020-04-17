@@ -139,7 +139,17 @@ GameRoom.propTypes = {
   currentTrack: PropTypes.any,
   isGameEnded: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
+  updatePlayersAndReadyStatus: PropTypes.func,
+  updateReadyStatus: PropTypes.func,
+  updateGameHost: PropTypes.func,
+  updateChatMessages: PropTypes.func,
+  updateCurrentTrack: PropTypes.func,
+  updateScoreAndPlayLog: PropTypes.func,
+  updatePlayLog: PropTypes.func,
+  updateFinalScore: PropTypes.func,
+  updateGameStatus: PropTypes.func,
+  resetGameState: PropTypes.func
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameContainer);

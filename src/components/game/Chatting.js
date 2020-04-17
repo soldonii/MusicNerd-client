@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { css } from 'glamor';
 
@@ -14,7 +15,7 @@ const Chatting = ({
   <Wrapper>
     <ScrollToBottom className={ScrollBarCss}>
       {children.map(msg => (
-        <MessageWrapper key={Math.random()}>
+        <MessageWrapper key={msg.message + Date.now()}>
           <User>{msg.username}</User>
           <Message>{msg.message}</Message>
         </MessageWrapper>
@@ -83,5 +84,12 @@ const Message = styled.p`
   font-size: 1.5rem;
   text-align: left;
 `;
+
+Chatting.propTypes = {
+  message: PropTypes.string.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  onSendButtonClick: PropTypes.func.isRequired,
+  children: PropTypes.array.isRequired
+};
 
 export default Chatting;

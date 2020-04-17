@@ -6,5 +6,8 @@
     "waiting.spec.js",
     "game.spec.js",
     "profile.spec.js"
-  ]
+  ],
+  "env": {
+    "serverURI": "http://localhost:8080"
+  }
 }

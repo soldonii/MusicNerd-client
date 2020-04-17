@@ -60,7 +60,7 @@ const WatingRoom = ({
         <GameListNav>
           <Button onClick={() => setShouldModalOpen(true)}>방 만들기</Button>
         </GameListNav>
-        <GameCardWrapper>
+        <GameCardWrapper loading={loading ? 1 : 0}>
           {loading && <Loading />}
           {!loading && !gameList.length ?
             <h1 style={{ margin: '0 auto', fontSize: '4rem' }}>Please create a game room.</h1> :
@@ -115,7 +115,7 @@ const GameCardWrapper = styled.div`
   height: 90%;
   overflow-x: scroll;
   display: flex;
-  justify-content: flex-start;
+  justify-content: ${props => props.loading ? 'center' : 'flex-start'};
   align-items: center;
   ::-webkit-scrollbar {
     display: none;

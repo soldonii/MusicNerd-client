@@ -1,17 +1,18 @@
 import React, { useEffect, Fragment } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import HomeContainer from '../containers/Home.container';
-import AuthContainer from '../containers/Auth.container';
-import UserContainer from '../containers/User.container';
-import WaitingContainer from '../containers/Waiting.container';
-import GameContainer from '../containers/Game.container';
+import HomeContainer from './Home.container';
+import AuthContainer from './Auth.container';
+import UserContainer from './User.container';
+import WaitingContainer from './Waiting.container';
+import GameContainer from './Game.container';
 
-import ProtectedRoute from './routes/ProtectedRoute';
-import PageNotFound from './PageNotFound';
+import ProtectedRoute from '../components/routes/ProtectedRoute';
+import PageNotFound from '../components/PageNotFound';
 
-import GlobalStyle from './layout/GlobalStyle';
+import GlobalStyle from '../components/layout/GlobalStyle';
 
 import { setTokenToHeader } from '../lib/auth';
 import history from '../lib/history';
@@ -29,14 +30,18 @@ const App = ({ isAuthenticated }) => {
         <Switch>
           <Route exact path='/' component={HomeContainer} />
           <Route path='/auth' component={AuthContainer} />
-          <ProtectedRoute path='/users' component={UserContainer} isLoggedIn={isAuthenticated} />
-          <ProtectedRoute path='/waiting' component={WaitingContainer} isLoggedIn={isAuthenticated} />
-          <ProtectedRoute path='/games' component={GameContainer} isLoggedIn={isAuthenticated} />
+          <ProtectedRoute path='/users' component={UserContainer} isAuthenticated={isAuthenticated} />
+          <ProtectedRoute path='/waiting' component={WaitingContainer} isAuthenticated={isAuthenticated} />
+          <ProtectedRoute path='/games' component={GameContainer} isAuthenticated={isAuthenticated} />
           <Route path='*' component={PageNotFound} />
         </Switch>
       </Router>
     </Fragment>
   );
+};
+
+App.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({

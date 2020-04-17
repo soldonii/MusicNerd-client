@@ -56,7 +56,7 @@ export const getProfile = dispatch => async userId => {
   dispatch({ type: GET_PROFILE_REQUEST });
 
   try {
-    const { data: userProfile } = await axios.get(`process.env.REACT_APP_SERVER_URI/users/${userId}/profile`, userId);
+    const { data: userProfile } = await axios.get(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/profile`, userId);
     dispatch({ type: GET_PROFILE_SUCCESS, userProfile });
   } catch (err) {
     dispatch({ type: GET_PROFILE_ERROR, error: err.response.data.errorMessage });

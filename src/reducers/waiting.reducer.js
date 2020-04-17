@@ -1,5 +1,4 @@
 import {
-  UPDATE_SOCKET,
   GET_GAMES_REQUEST,
   GET_GAMES_SUCCESS,
   GET_GAMES_FAILURE,
@@ -13,7 +12,6 @@ import {
 } from '../constants/index';
 
 const initialState = {
-  socket: {},
   gameId: '',
   gameList: [],
   loading: false,
@@ -25,12 +23,6 @@ const initialState = {
 
 export const waitingReducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_SOCKET:
-      return {
-        ...state,
-        socket: action.socket
-      };
-
     case GET_GAMES_REQUEST:
       return {
         ...state,

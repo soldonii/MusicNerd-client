@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import Loading from './Loading';
 
@@ -67,5 +68,13 @@ const ModalContent = styled.div`
   margin-top: 1rem;
   text-align: center;
 `;
+
+Modal.propTypes = {
+  loading: PropTypes.bool,
+  shouldModalOpen: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node
+};
 
 export default Modal;

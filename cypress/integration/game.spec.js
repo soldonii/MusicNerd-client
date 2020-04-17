@@ -23,7 +23,25 @@ describe('<WaitingContainer />', () => {
   });
 
   it('should render trackcard and can add current track to favorite track list', () => {
-    cy.wait(1000 * 34);
+    cy.wait(1000 * 10);
+    cy.get('[placeholder="Type messages.."]')
+      .type('music is playing..')
+      .should('have.value', 'music is playing..');
+    cy.contains('Send').click();
+
+    cy.wait(1000 * 10);
+    cy.get('[placeholder="Type messages.."]')
+      .type('music ends in 10 sec...')
+      .should('have.value', 'music ends in 10 sec...');
+    cy.contains('Send').click();
+
+    cy.wait(1000 * 6);
+    cy.get('[placeholder="Type messages.."]')
+      .type('...and, now track info card is open!!')
+      .should('have.value', '...and, now track info card is open!!');
+    cy.contains('Send').click();
+
+    cy.wait(1000 * 4);
     cy.get('.coverimg').should('exist');
     cy.get('.heart').click();
 

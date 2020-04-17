@@ -20,4 +20,3 @@ describe('<WaitingContainer />', () => {
     cy.url().should('include', 'game');
   });
 });
-

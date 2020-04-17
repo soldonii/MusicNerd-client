@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import PropTypes from 'prop-types';
 
 import * as colors from '../../lib/colors';
 
@@ -69,5 +70,13 @@ const scoreNeon = keyframes`
     0 0 60px rgba(242, 58, 30, 1),
   }
 `;
+
+PlayerCard.propTypes = {
+  userId: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
+  isReady: PropTypes.bool,
+  hasScored: PropTypes.bool.isRequired
+};
 
 export default PlayerCard;

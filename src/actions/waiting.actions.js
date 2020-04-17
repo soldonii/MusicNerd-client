@@ -1,8 +1,6 @@
 import axios from 'axios';
 import history from '../lib/history';
-import { getSocket } from '../lib/socket';
 import {
-  UPDATE_SOCKET,
   GET_GAMES_REQUEST,
   GET_GAMES_SUCCESS,
   GET_GAMES_FAILURE,
@@ -14,11 +12,6 @@ import {
   JOIN_GAME_FAILED,
   CLAER_CREATE_GAME_ERROR
 } from '../constants/index';
-
-export const updateSocket = dispatch => () => {
-  const socket = getSocket();
-  dispatch({ type: UPDATE_SOCKET, socket });
-};
 
 export const getGames = dispatch => async () => {
   try {

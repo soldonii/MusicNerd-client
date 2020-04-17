@@ -5,7 +5,7 @@ import Chatting from '../Chatting';
 describe('<Chatting /> component', () => {
   const mockSetMessage = jest.fn();
   const mockSubmitMessage = jest.fn();
-  const options = {
+  const props = {
     message: 'random chat message',
     setMessage: mockSetMessage,
     onSendButtonClick: mockSubmitMessage,
@@ -16,7 +16,7 @@ describe('<Chatting /> component', () => {
   };
 
   it('should render form', () => {
-    const wrapper = mount(<Chatting {...options} />);
+    const wrapper = mount(<Chatting {...props} />);
     const form = wrapper.find('form');
     expect(form).toHaveLength(1);
     expect(form.find('input')).toHaveLength(1);

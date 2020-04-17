@@ -6,15 +6,12 @@ import PropTypes from 'prop-types';
 import * as colors from '../../lib/colors';
 
 const Navbar = ({
-  isLoggedIn,
+  isAuthenticated,
   logo,
-  showNext,
-  showProfile,
-  showGames,
   children
 }) => (
   <NavWrapper>
-    <Link to={isLoggedIn ? '/waiting' : '/'}>
+    <Link to={isAuthenticated ? '/waiting' : '/'}>
       <img src={logo} alt='logo'/>
     </Link>
     <LinkWrapper>
@@ -68,6 +65,7 @@ const LinkWrapper = styled.div`
 `;
 
 Navbar.propTypes = {
+  isAuthenticated: PropTypes.bool,
   logo: PropTypes.string.isRequired,
   children: PropTypes.node
 };

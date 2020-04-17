@@ -10,7 +10,7 @@ describe('<Profile />', () => {
   });
 
   after(done => {
-    axios.delete(`${process.env.REACT_APP_SERVER_URI}/auth`);
+    axios.delete(`${Cypress.env().serverURI}/auth`);
     done();
   });
 
@@ -30,10 +30,9 @@ describe('<Profile />', () => {
     cy.scrollTo('bottom', { duration: 2000 });
     cy.scrollTo('top', { duration: 2000 });
 
-    cy.get('[alt=logo]').click();
+    cy.contains('Game').click();
 
     cy.wait(1000);
     cy.contains('Logout').click();
-    cy.get('[alt=logo]').click();
   });
 });

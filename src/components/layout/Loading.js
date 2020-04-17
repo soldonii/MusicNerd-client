@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
+import PropTypes from 'prop-types';
 
 const Loading = ({ color }) => (
   <ReactLoading
@@ -12,6 +13,10 @@ const Loading = ({ color }) => (
 
 Loading.defaultProps = {
   color: '#fff'
+};
+
+Loading.propTypes = {
+  color: PropTypes.string.isRequired
 };
 
 export default Loading;

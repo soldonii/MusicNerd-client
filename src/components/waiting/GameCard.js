@@ -37,6 +37,7 @@ const GameCardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   flex-shrink: 0;
+  cursor: pointer;
 
   h1 {
     margin-top: 2rem;

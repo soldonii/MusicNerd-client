@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { saveFavoriteTrack, deleteFavoriteTrack } from '../../lib/socket';
 
@@ -95,5 +96,10 @@ const CardWrapper = styled.div`
     font-size: 1.2rem;
   }
 `;
+
+TrackCard.propTypes = {
+  track: PropTypes.any,
+  isTrackEnded: PropTypes.bool.isRequired,
+};
 
 export default TrackCard;

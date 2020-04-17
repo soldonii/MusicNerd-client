@@ -12,7 +12,7 @@ import { setTokenToHeader } from '../lib/auth';
 import { connectSocket, disconnectSocket } from '../lib/socket';
 
 import { logout } from '../actions/auth.actions';
-import { createGame, getGames, enterGame, clearCreateGameError, updateSocket } from '../actions/waiting.actions';
+import { createGame, getGames, enterGame, clearCreateGameError } from '../actions/waiting.actions';
 
 const WatingContainer = ({
   isAuthenticated,
@@ -24,7 +24,6 @@ const WatingContainer = ({
   createGameError,
   joinGameError,
   logout,
-  updateSocket,
   getGames,
   createGame,
   enterGame,
@@ -37,7 +36,6 @@ const WatingContainer = ({
 
   useEffect(() => {
     connectSocket();
-    updateSocket();
     getGames();
 
     return () => disconnectSocket();
@@ -99,7 +97,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   logout: logout(dispatch),
-  updateSocket: updateSocket(dispatch),
   getGames: getGames(dispatch),
   createGame: createGame(dispatch),
   enterGame: enterGame(dispatch),
@@ -116,7 +113,6 @@ WatingContainer.propTypes = {
   createGameError: PropTypes.string,
   joinGameError: PropTypes.string,
   logout: PropTypes.func.isRequired,
-  updateSocket: PropTypes.func.isRequired,
   getGames: PropTypes.func.isRequired,
   createGame: PropTypes.func.isRequired,
   enterGame: PropTypes.func.isRequired,

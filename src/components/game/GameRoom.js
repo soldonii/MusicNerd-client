@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Howl } from 'howler';
 import Siriwave from 'siriwave';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import DefaultLayout from '../layout/DefaultLayout';
 import Header from '../layout/Header';
@@ -59,8 +60,7 @@ const GameRoom = ({
     if (currentTrack) {
       track = new Howl({
         src: [currentTrack.audio_url],
-        volume: 0.6,
-        onstop: () => console.log('music stopped')
+        volume: 0.6
       });
 
       if (!siriwave) {
@@ -281,5 +281,14 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+GameRoom.propTypes = {
+  leaveRoom: PropTypes.func.isRequired,
+  onReady: PropTypes.func.isRequired,
+  offReady: PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+  requestGameStart: PropTypes.func.isRequired,
+  requestNewTrack: PropTypes.func.isRequired
+};
 
 export default GameRoom;

@@ -1,4 +1,4 @@
-![cover](./readmeAssets/cover.png);
+![cover](./readmeAssets/cover.png)
 
 # MusicNerd
 

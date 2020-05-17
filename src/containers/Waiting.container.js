@@ -1,4 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -8,7 +9,7 @@ import DefaultLayout from '../components/layout/DefaultLayout';
 import WatingRoom from '../components/waiting/WatingRoom';
 import logo from '../assets/logo.png';
 
-import { setTokenToHeader } from '../lib/auth';
+import setTokenToHeader from '../lib/auth';
 import { connectSocket, disconnectSocket } from '../lib/socket';
 
 import { logout } from '../actions/auth.actions';
@@ -23,12 +24,13 @@ const WatingContainer = ({
   getGameListError,
   createGameError,
   joinGameError,
-  logout,
+  // logout,
   getGames,
   createGame,
   enterGame,
   clearCreateGameError,
 }) => {
+  const dispatch = useDispatch();
   useEffect(() => {
     const token = localStorage.getItem('token');
     setTokenToHeader(token);
@@ -64,7 +66,7 @@ const WatingContainer = ({
     <Fragment>
       <Navbar logo={logo}>
         <Link to={`/users/${userId}/profile`}>Profile</Link>
-        {isAuthenticated ? <button onClick={logout}>Logout</button> : <Link to='/auth/login'>Login</Link>}
+        {isAuthenticated ? <button onClick={dispatch(logout)}>Logout</button> : <Link to='/auth/login'>Login</Link>}
       </Navbar>
       <DefaultLayout>
         <WatingRoom
@@ -96,7 +98,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  logout: logout(dispatch),
+  // logout: logout(dispatch),
   getGames: getGames(dispatch),
   createGame: createGame(dispatch),
   enterGame: enterGame(dispatch),

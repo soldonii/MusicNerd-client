@@ -1,4 +1,6 @@
 import axios from 'axios';
+import setTokenToHeader from '../lib/auth';
+import history from '../lib/history';
 import {
   GET_ARTISTS_REQUEST,
   GET_ARTISTS_SUCCESS,
@@ -8,57 +10,69 @@ import {
   SAVE_ARTISTS_REQUEST,
   SAVE_ARTISTS_SUCCESS,
   SAVE_ARTISTS_FAILED,
-  CLEAR_POST_RESULT,
   GET_PROFILE_REQUEST,
   GET_PROFILE_SUCCESS,
   GET_PROFILE_ERROR
 } from '../constants/index';
 
-export const getArtists = dispatch => async userId => {
-  dispatch({ type: GET_ARTISTS_REQUEST, userId });
+export const getArtists = userId => {
+  return async dispatch => {
+    setTokenToHeader();
 
-  try {
-    const { data: { artistList, favoriteArtists } } = await axios.get(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/favorites`);
+    try {
+      dispatch({ type: GET_ARTISTS_REQUEST, userId });
 
-    const selectedArtists = {};
-    favoriteArtists.forEach(artistId => selectedArtists[artistId] = true);
+      const { data: { artistList, favoriteArtists } }
+        = await axios.get(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/favorites`);
 
-    dispatch({ type: GET_ARTISTS_SUCCESS, artistList, selectedArtists });
-  } catch (err) {
-    dispatch({ type: GET_ARTISTS_FAILED, error: err.response.data.errorMessage });
-  }
+      const selectedArtists = {};
+      favoriteArtists.forEach(artistId => selectedArtists[artistId] = true);
+
+      dispatch({ type: GET_ARTISTS_SUCCESS, artistList, selectedArtists });
+    } catch (err) {
+      dispatch({ type: GET_ARTISTS_FAILED, error: err.response.data.errorMessage });
+    }
+  };
 };
 
-export const selectArtist = dispatch => artistId => {
-  dispatch({ type: SELECT_FAVORITE_ARTIST, artistId });
+export const selectArtist = artistId => {
+  return dispatch => dispatch({ type: SELECT_FAVORITE_ARTIST, artistId });
 };
 
-export const deselectArtist = dispatch => artistId => {
-  dispatch({ type: DESELECT_FAVORITE_ARTIST, artistId });
+export const deselectArtist = artistId => {
+  return dispatch => dispatch({ type: DESELECT_FAVORITE_ARTIST, artistId });
 };
 
-export const saveFavoriteArtists = dispatch => async (userId, selectedArtists) => {
-  dispatch({ type: SAVE_ARTISTS_REQUEST });
+export const saveFavoriteArtists = (userId, selectedArtists) => {
+  return async dispatch => {
+    setTokenToHeader();
 
-  try {
-    await axios.post(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/favorites`, selectedArtists);
-    dispatch({ type: SAVE_ARTISTS_SUCCESS });
-  } catch (err) {
-    dispatch({ type: SAVE_ARTISTS_FAILED, error: err.response.data.errorMessage });
-  }
+    try {
+      dispatch({ type: SAVE_ARTISTS_REQUEST });
+
+      await axios.post(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/favorites`, selectedArtists);
+      dispatch({ type: SAVE_ARTISTS_SUCCESS });
+
+      return history.push('/waiting');
+    } catch (err) {
+      dispatch({ type: SAVE_ARTISTS_FAILED, error: err.response.data.errorMessage });
+    }
+  };
 };
 
-export const clearPostResult = dispatch => () => {
-  dispatch({ type: CLEAR_POST_RESULT });
-};
+export const getProfile = userId => {
+  setTokenToHeader();
 
-export const getProfile = dispatch => async userId => {
-  dispatch({ type: GET_PROFILE_REQUEST });
+  return async dispatch => {
+    dispatch({ type: GET_PROFILE_REQUEST });
 
-  try {
-    const { data: userProfile } = await axios.get(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/profile`, userId);
-    dispatch({ type: GET_PROFILE_SUCCESS, userProfile });
-  } catch (err) {
-    dispatch({ type: GET_PROFILE_ERROR, error: err.response.data.errorMessage });
-  }
+    try {
+      const { data: userProfile }
+        = await axios.get(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/profile`, userId);
+
+      dispatch({ type: GET_PROFILE_SUCCESS, userProfile });
+    } catch (err) {
+      dispatch({ type: GET_PROFILE_ERROR, error: err.response.data.errorMessage });
+    }
+  };
 };

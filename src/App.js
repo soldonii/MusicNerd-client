@@ -13,7 +13,7 @@ import PageNotFound from './components/PageNotFound';
 
 import GlobalStyle from './components/layout/GlobalStyle';
 
-import { setTokenToHeader } from './lib/auth';
+import setTokenToHeader from './lib/auth';
 import history from './lib/history';
 
 const App = () => {

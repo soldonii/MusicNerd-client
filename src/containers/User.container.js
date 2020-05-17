@@ -36,7 +36,7 @@ const UserContainer = () => {
         {window.location.pathname.includes('profile') ?
           <Fragment>
             <Link to='/waiting'>Game</Link>
-            <button onClick={dispatch(logout)}>Logout</button>
+            <button onClick={() => dispatch(logout)}>Logout</button>
           </Fragment> :
           Object.keys(selectedArtists).length >= 5 &&
             <button onClick={() => dispatch(saveFavoriteArtists(userId, selectedArtists))}>Next</button>}

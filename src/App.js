@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -10,19 +10,12 @@ import GameContainer from './containers/Game.container';
 
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import PageNotFound from './components/PageNotFound';
-
 import GlobalStyle from './components/layout/GlobalStyle';
 
-import setTokenToHeader from './lib/auth';
 import history from './lib/history';
 
 const App = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    token && setTokenToHeader(token);
-  }, []);
 
   return (
     <Fragment>

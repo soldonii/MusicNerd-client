@@ -61,12 +61,12 @@ export const saveFavoriteArtists = (userId, selectedArtists) => {
 };
 
 export const getProfile = userId => {
-  setTokenToHeader();
-
   return async dispatch => {
-    dispatch({ type: GET_PROFILE_REQUEST });
+    setTokenToHeader();
 
     try {
+      dispatch({ type: GET_PROFILE_REQUEST });
+
       const { data: userProfile }
         = await axios.get(`${process.env.REACT_APP_SERVER_URI}/users/${userId}/profile`, userId);
 

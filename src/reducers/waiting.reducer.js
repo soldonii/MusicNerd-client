@@ -8,7 +8,7 @@ import {
   JOIN_GAME_REQUEST,
   JOIN_GAME_SUCCESS,
   JOIN_GAME_FAILED,
-  CLAER_CREATE_GAME_ERROR
+  CLEAR_CREATE_GAME_ERROR
 } from '../constants/index';
 
 const initialState = {
@@ -89,7 +89,7 @@ export const waitingReducer = (state = initialState, action) => {
         joinGameError: action.error
       };
 
-    case CLAER_CREATE_GAME_ERROR:
+    case CLEAR_CREATE_GAME_ERROR:
       return {
         ...state,
         createGameError: null

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -25,19 +26,6 @@ import {
 } from '../lib/socket';
 
 const GameContainer = ({
-  userId,
-  gameId,
-  gameHost,
-  players,
-  readyStatus,
-  chatMessages,
-  score,
-  playLog,
-  isGameReady,
-  currentTrack,
-  isGameEnded,
-  loading,
-  error,
   updatePlayersAndReadyStatus,
   updateReadyStatus,
   updateGameHost,
@@ -49,6 +37,20 @@ const GameContainer = ({
   updateGameStatus,
   resetGameState
 }) => {
+  const userId = useSelector(({ auth }) => auth.userId);
+  const gameId = useSelector(({ waiting }) => waiting.gameId);
+  const gameHost = useSelector(({ game }) => game.gameHost);
+  const players = useSelector(({ game }) => game.players);
+  const readyStatus = useSelector(({ game }) => game.readyStatus);
+  const chatMessages = useSelector(({ game }) => game.chatMessages);
+  const score = useSelector(({ game }) => game.score);
+  const playLog = useSelector(({ game }) => game.playLog);
+  const isGameReady = useSelector(({ game }) => game.isGameReady);
+  const currentTrack = useSelector(({ game }) => game.currentTrack);
+  const isGameEnded = useSelector(({ game }) => game.isGameEnded);
+  const loading = useSelector(({ game }) => game.loading);
+  const error = useSelector(({ game }) => game.error);
+
   useEffect(() => {
     if (userId && gameId) {
       joinRoom(userId, gameId);
@@ -97,22 +99,6 @@ const GameContainer = ({
   );
 };
 
-const mapStateToProps = state => ({
-  userId: state.auth.userId,
-  gameId: state.waiting.gameId,
-  gameHost: state.game.gameHost,
-  players: state.game.players,
-  readyStatus: state.game.readyStatus,
-  chatMessages: state.game.chatMessages,
-  score: state.game.score,
-  playLog: state.game.playLog,
-  isGameReady: state.game.isGameReady,
-  currentTrack: state.game.currentTrack,
-  isGameEnded: state.game.isGameEnded,
-  loading: state.game.loading,
-  error: state.game.error
-});
-
 const mapDispatchToProps = dispatch => ({
   updateGameHost: updateGameHost(dispatch),
   updatePlayersAndReadyStatus: updatePlayersAndReadyStatus(dispatch),
@@ -127,19 +113,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 GameRoom.propTypes = {
-  userId: PropTypes.string.isRequired,
-  gameId: PropTypes.string.isRequired,
-  gameHost: PropTypes.string.isRequired,
-  players: PropTypes.array.isRequired,
-  readyStatus: PropTypes.object.isRequired,
-  chatMessages: PropTypes.array.isRequired,
-  score: PropTypes.object.isRequired,
-  playLog: PropTypes.array.isRequired,
-  isGameReady: PropTypes.bool.isRequired,
-  currentTrack: PropTypes.any,
-  isGameEnded: PropTypes.bool.isRequired,
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.string,
   updatePlayersAndReadyStatus: PropTypes.func,
   updateReadyStatus: PropTypes.func,
   updateGameHost: PropTypes.func,
@@ -152,4 +125,4 @@ GameRoom.propTypes = {
   resetGameState: PropTypes.func
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GameContainer);
+export default connect(null, mapDispatchToProps)(GameContainer);

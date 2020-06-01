@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import * as colors from '../../lib/colors';
+import * as SC from './users.styles';
 
 const ArtistCard = ({
   artistId,
@@ -12,12 +13,13 @@ const ArtistCard = ({
   onSelect,
   onDeselect
 }) => {
+  const dispatch = useDispatch();
   const [ isSelected, setIsSelected ] = useState(false);
 
   const onClick = artistId => {
     if (artistId in selectedArtists) {
       setIsSelected(false);
-      return onDeselect(artistId);
+      return dispatch(onDeselect(artistId));
     }
 
     if (Object.keys(selectedArtists).length === 10) {
@@ -25,47 +27,23 @@ const ArtistCard = ({
     }
 
     setIsSelected(true);
-    onSelect(artistId);
+    dispatch(onSelect(artistId));
   };
 
   return (
-    <CardWrapper
+    <SC.ArtistCard.Wrapper
       data-id={artistId}
       onClick={e => onClick(e.currentTarget.dataset.id)}
       style={isSelected || artistId in selectedArtists ? selectedStyle : deselectedStyle}
     >
       <img src={thumbnailUrl} alt="thumbnail"/>
       <h1>{name.toUpperCase()}</h1>
-    </CardWrapper>
+    </SC.ArtistCard.Wrapper>
   );
 };
 
-const selectedStyle = {
-  backgroundImage: colors.SELECTED_CARD_COLOR
-};
-
-const deselectedStyle = {
-  backgroundImage: colors.DESELECTED_CARD_COLOR
-};
-
-const CardWrapper = styled.div`
-  width: 17rem;
-  height: 20rem;
-  padding: 1rem;
-  text-align: center;
-  margin: 1.5rem auto;
-  background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  cursor: pointer;
-
-  img {
-    width: 15rem;
-    height: 15rem;
-  }
-
-  h1 {
-    margin-top: 1rem;
-  }
-`;
+const selectedStyle = { backgroundImage: colors.SELECTED_CARD_COLOR };
+const deselectedStyle = { backgroundImage: colors.DESELECTED_CARD_COLOR };
 
 ArtistCard.propTypes = {
   artistId: PropTypes.string.isRequired,

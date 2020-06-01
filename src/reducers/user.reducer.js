@@ -7,7 +7,6 @@ import {
   SAVE_ARTISTS_REQUEST,
   SAVE_ARTISTS_SUCCESS,
   SAVE_ARTISTS_FAILED,
-  CLEAR_POST_RESULT,
   GET_PROFILE_REQUEST,
   GET_PROFILE_SUCCESS,
   GET_PROFILE_ERROR
@@ -85,25 +84,17 @@ export const userReducer = (state = initialState, action) => {
         loading: false,
         error: null,
         artistList: [],
-        selectedArtists: {},
-        result: 'success'
+        selectedArtists: {}
       };
 
     case SAVE_ARTISTS_FAILED:
       return {
         ...state,
         loading: false,
-        error: action.error,
-        result: 'failure'
+        error: action.error
       };
 
-    case CLEAR_POST_RESULT:
-      return {
-        ...state,
-        result: ''
-      };
-
-    case GET_PROFILE_REQUEST:
+      case GET_PROFILE_REQUEST:
       return {
         ...state,
         loading: true

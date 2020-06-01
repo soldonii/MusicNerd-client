@@ -8,7 +8,6 @@ import {
   LOGOUT,
   CLEAR_AUTH_ERROR,
 } from '../constants/index';
-import { setTokenToHeader } from '../lib/auth';
 
 const initialState = {
   token: '',
@@ -49,9 +48,6 @@ export const authReducer = (state = initialState, action) => {
       };
 
     case LOGIN_SUCCESS:
-      localStorage.setItem('token', action.token);
-      setTokenToHeader(action.token);
-
       return {
         ...state,
         loading: false,
@@ -77,7 +73,6 @@ export const authReducer = (state = initialState, action) => {
       };
 
     case LOGOUT:
-      localStorage.removeItem('token');
       return {
         token: '',
         userId: '',
